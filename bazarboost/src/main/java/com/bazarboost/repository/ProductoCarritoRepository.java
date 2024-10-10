@@ -16,7 +16,7 @@ public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrit
 
     // Verificar si un producto está en el carrito del usuario
     @Query("SELECT CASE WHEN (COUNT(pc) > 0) THEN true ELSE false END " +
-            "FROM ProductosCarrito pc WHERE pc.producto.productoId = :productoId AND pc.usuario.usuarioId = :usuarioId")
+            "FROM ProductoCarrito pc WHERE pc.producto.productoId = :productoId AND pc.usuario.usuarioId = :usuarioId")
     boolean existsInCarrito(@Param("productoId") Integer productoId, @Param("usuarioId") Integer usuarioId);
 
     // Agregar un producto al carrito (método heredado de CrudRepository)
@@ -24,24 +24,24 @@ public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrit
 
     // Eliminar un producto del carrito del usuario
     @Transactional
-    @Query("DELETE FROM ProductosCarrito pc WHERE pc.producto.productoId = :productoId AND pc.usuario.usuarioId = :usuarioId")
+    @Query("DELETE FROM ProductoCarrito pc WHERE pc.producto.productoId = :productoId AND pc.usuario.usuarioId = :usuarioId")
     void deleteByProductoIdAndUsuarioId(@Param("productoId") Integer productoId, @Param("usuarioId") Integer usuarioId);
 
     // Obtener todos los productos en el carrito del usuario
     @Query("SELECT pc, p, (pc.cantidad * p.precio) AS total " +
-            "FROM ProductosCarrito pc JOIN pc.producto p " +
+            "FROM ProductoCarrito pc JOIN pc.producto p " +
             "WHERE pc.usuario.usuarioId = :usuarioId")
     List<Object[]> findProductosCarritoByUsuarioId(@Param("usuarioId") Integer usuarioId);
 
     // Actualizar la cantidad de un producto en el carrito
     @Transactional
-    @Query("UPDATE ProductosCarrito pc SET pc.cantidad = :cantidad " +
+    @Query("UPDATE ProductoCarrito pc SET pc.cantidad = :cantidad " +
             "WHERE pc.producto.productoId = :productoId AND pc.usuario.usuarioId = :usuarioId")
     void updateCantidadInCarrito(@Param("cantidad") Integer cantidad,
                                  @Param("productoId") Integer productoId,
                                  @Param("usuarioId") Integer usuarioId);
     @Transactional
-    @Query("DELETE FROM ProductosCarrito pc WHERE pc.usuario.usuarioId = :usuarioId")
+    @Query("DELETE FROM ProductoCarrito pc WHERE pc.usuario.usuarioId = :usuarioId")
     void deleteProductsCartByUserId(@Param("usuarioId") Integer usuarioId);
 
 }

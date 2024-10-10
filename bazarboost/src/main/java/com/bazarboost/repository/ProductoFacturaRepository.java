@@ -14,9 +14,9 @@ import java.util.List;
 public interface ProductoFacturaRepository extends CrudRepository<ProductoFactura, Integer> {
 
     // Encontrar ventas de productos de un vendedor, incluyendo nombre del cliente
-    @Query("SELECT p.nombre, pf.cantidad, pf.total, f.fecha, u.nombre, u.apellido_paterno " +
+    @Query("SELECT p.nombre, pf.cantidad, pf.total, f.fecha, u.nombre, u.apellidoPaterno " +
             "FROM Producto p " +
-            "JOIN ProductosFacturas pf ON p.productoId = pf.producto.productoId " +
+            "JOIN ProductoFactura pf ON p.productoId = pf.producto.productoId " +
             "JOIN Factura f ON f.facturaId = pf.factura.facturaId " +
             "JOIN Usuario u ON f.usuario.usuarioId = u.usuarioId " +
             "WHERE p.usuario.usuarioId = :usuarioId")

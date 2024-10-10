@@ -28,7 +28,7 @@ public interface ProductoRepository extends CrudRepository<Producto, Integer> {
     void deleteByProductoIdAndUsuarioUsuarioId(Integer productoId, Integer usuarioId);
 
     // Verificar si un producto pertenece a un usuario específico antes de editarlo
-    Optional<Producto> findByIdAndUsuarioId(Integer productoId, Integer usuarioId);
+    Optional<Producto> findByProductoIdAndUsuarioUsuarioId(Integer productoId, Integer usuarioId);
 
     // Encontrar todos los productos que tengan existencia disponible
     @Query("SELECT p FROM Producto p WHERE p.existencia > 0")
@@ -59,7 +59,7 @@ public interface ProductoRepository extends CrudRepository<Producto, Integer> {
             "CASE WHEN (pc.usuario.usuarioId = :usuarioId) THEN true ELSE false END AS inCart, " +
             "(SELECT AVG(r.calificacion) FROM Resenia r WHERE r.producto.productoId = p.productoId) AS promedioCalificacion " +
             "FROM Producto p " +
-            "LEFT JOIN ProductosCarrito pc ON p.productoId = pc.producto.productoId AND pc.usuario.usuarioId = :usuarioId " +
+            "LEFT JOIN ProductoCarrito pc ON p.productoId = pc.producto.productoId AND pc.usuario.usuarioId = :usuarioId " +
             "WHERE p.existencia > 0")
     List<Object[]> findAllProductsWithCartIndicatorAndRating(@Param("usuarioId") Integer usuarioId);
 

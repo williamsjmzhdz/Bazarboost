@@ -4,6 +4,7 @@ import com.bazarboost.model.entity.auxiliar.TipoTarjeta;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 /*
@@ -30,7 +31,7 @@ public class MetodoPago {
     private String numeroTarjeta;
 
     @Column(name = "fecha_expiracion")
-    private YearMonth fechaExpiracion;
+    private LocalDate fechaExpiracion; // Cambio a LocalDate
 
     @Column(name = "tipo_tarjeta")
     @Enumerated(EnumType.STRING)
@@ -42,6 +43,6 @@ public class MetodoPago {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
-
 }
+
 

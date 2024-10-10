@@ -37,6 +37,8 @@ public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer
     @Query("SELECT CASE WHEN mp.fechaExpiracion > CURRENT_DATE THEN true ELSE false END " +
             "FROM MetodoPago mp WHERE mp.metodoPagoId = :metodoPagoId AND mp.usuario.usuarioId = :usuarioId")
     boolean verifyExpirationCard(@Param("metodoPagoId") Integer metodoPagoId,
-                                       @Param("usuarioId") Integer usuarioId);
+                                 @Param("usuarioId") Integer usuarioId);
+
+
 }
 
