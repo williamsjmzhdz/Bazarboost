@@ -1,0 +1,67 @@
+.product-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+.product-info {
+  margin-top: 20px;
+}
+.reviews-section {
+  margin-top: 40px;
+}
+.review-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.review-stars {
+  color: #ffc107;
+}
+
+/* Footer - Usar en todas las plantillas */
+footer {
+  background-color: #343a40;
+  color: white;
+  padding: 20px 0;
+}
+
+footer a {
+  color: #f8f9fa;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para mejorar el diseño responsivo */
+@media (max-width: 767px) {
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group .form-select,
+  .input-group .form-control {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .input-group .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 357px) {
+  /* Ajustes adicionales para centrar botones */
+  .product-info button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .product-info button:last-child {
+    margin-bottom: 0;
+  }
+}

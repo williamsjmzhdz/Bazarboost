@@ -4,95 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bazarboost - Lista de Productos</title>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="estilos/lista_productos.css" />
+
+    <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <!-- Bootstrap Icons -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
-    <style>
-      /* Asegura que el body ocupa toda la pantalla y usa flexbox */
-      html,
-      body {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      }
-
-      /* El contenedor principal debe tomar todo el espacio restante */
-      .main-content {
-        flex: 1;
-      }
-
-      /* Asegura que todas las imágenes se ajusten al tamaño de la tarjeta manteniendo su proporción */
-      .card-img-top {
-        width: 100%;
-        height: 200px;
-        object-fit: contain;
-        border-bottom: 2px solid #e0e0e0; /* Línea divisoria entre imagen y contenido */
-      }
-
-      /* Ajustes de las tarjetas */
-      .card {
-        height: 100%;
-        border: none;
-        border-radius: 8px; /* Bordes más finos */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra un poco más ligera */
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        margin-bottom: 50px; /* Más espacio entre tarjetas */
-      }
-
-      .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      /* Ajustar margen entre tarjetas */
-      .col-lg-4,
-      .col-md-6 {
-        margin-bottom: 50px; /* Más espacio entre columnas */
-      }
-
-      /* Centrar los filtros */
-      .filters-row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .filter-item {
-        margin-right: 15px;
-      }
-
-      /* Estilos adicionales para pantallas pequeñas */
-      @media (max-width: 768px) {
-        .filter-item {
-          margin-bottom: 10px; /* Reduce el margen inferior entre filtros en pantallas pequeñas */
-        }
-      }
-
-      /* Ajustes del footer */
-      footer {
-        background-color: #343a40;
-        color: white;
-        padding: 20px 0;
-      }
-
-      footer a {
-        color: #f8f9fa;
-        text-decoration: none;
-      }
-
-      footer a:hover {
-        text-decoration: underline;
-      }
-    </style>
   </head>
 
   <body>
-    <!-- Navbar -->
+    <!-- Navbar - Usar en todas las plantillas -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <!-- Nombre de la aplicación a la izquierda -->
@@ -112,33 +40,107 @@
         <!-- Links alineados a la derecha -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            <!-- Usar estos enlaces en todas las plantillas -->
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Productos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Facturas</a>
-            </li>
-            <li class="nav-item ms-lg-4">
               <a class="nav-link" href="#">
                 <i class="bi bi-cart"></i> Carrito
                 <!-- Badge de productos en el carrito -->
                 <span class="badge bg-danger">3</span>
               </a>
             </li>
+            <!-- Dropdown Cliente -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="clienteDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Cliente
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
+                <li><a class="dropdown-item" href="#">Direcciones</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Vendedor -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="vendedorDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Vendedor
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="vendedorDropdown">
+                <li><a class="dropdown-item" href="#">Ventas</a></li>
+                <li><a class="dropdown-item" href="#">Productos</a></li>
+                <li><a class="dropdown-item" href="#">Descuentos</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Administrador -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="adminDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Administrador
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                <li><a class="dropdown-item" href="#">Categorias</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item ms-lg-4">
+              <a class="nav-link" href="#">
+                <i class="bi"></i> Williams Jiménez
+              </a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
+    <!-- Fin del Navbar -->
 
     <div class="container my-4 main-content">
+      <!-- Barra de búsqueda -->
+      <div class="row mb-4 justify-content-center">
+        <div class="col-md-8">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              id="searchBar"
+              placeholder="Buscar productos por nombre"
+              aria-label="Buscar productos por nombre"
+            />
+            <button class="btn btn-primary" type="button" id="searchButton">
+              <i class="bi bi-search"></i> Buscar
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Filtros -->
-      <div class="row mb-5 justify-content-center">
-        <div class="col-md-4 filter-item">
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-4">
           <select
-            class="form-select text-center"
+            class="form-select"
             id="categoryFilter"
             aria-label="Filtrar por Categoría"
           >
@@ -146,11 +148,12 @@
             <option value="juguetes">Juguetes</option>
             <option value="electronica">Electrónica</option>
             <option value="ropa">Ropa</option>
+            <!-- Agrega más categorías si es necesario -->
           </select>
         </div>
-        <div class="col-md-4 filter-item">
+        <div class="col-md-4">
           <select
-            class="form-select text-center"
+            class="form-select"
             id="priceSort"
             aria-label="Ordenar por Precio"
           >
@@ -161,247 +164,60 @@
         </div>
       </div>
 
-      <!-- Lista de productos -->
+      <!-- Lista de productos - Reutilizable en páginas relacionadas a productos -->
       <div class="row" id="productList">
         <!-- Producto 1 -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="1"
-          data-nombre="Producto 1"
-          data-precio="100"
-          data-categoria="juguetes"
-          data-existencia="10"
-          data-promedio-calificacion="4.5"
-        >
+        <div class="col-lg-4 col-md-6" data-producto-id="1">
           <div class="card h-100">
             <img
               src="img/producto1.jpg"
               class="card-img-top"
-              alt="Imagen del Producto 1"
+              alt="Producto 1"
             />
             <div class="card-body">
               <h5 class="card-title">Producto 1</h5>
-              <p class="card-text">Este es un breve resumen del producto 1.</p>
+              <p class="card-text">Breve resumen del producto 1.</p>
               <p class="card-text"><strong>Precio: $100.00</strong></p>
               <p class="card-text">Calificación: 4.5 de 5</p>
             </div>
             <div class="card-footer text-center">
-              <button class="btn btn-primary">
+              <button class="btn btn-primary me-2">
                 <i class="bi bi-cart-plus"></i> Agregar al carrito
+              </button>
+              <button class="btn btn-secondary">
+                <i class="bi bi-eye"></i> Ver producto
               </button>
             </div>
           </div>
         </div>
 
         <!-- Producto 2 con botón "Quitar del carrito" -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="2"
-          data-nombre="Producto 2"
-          data-precio="200"
-          data-categoria="electronica"
-          data-existencia="5"
-          data-promedio-calificacion="4.8"
-        >
+        <div class="col-lg-4 col-md-6" data-producto-id="2">
           <div class="card h-100">
             <img
               src="img/producto2.jpg"
               class="card-img-top"
-              alt="Imagen del Producto 2"
+              alt="Producto 2"
             />
             <div class="card-body">
               <h5 class="card-title">Producto 2</h5>
-              <p class="card-text">Este es un breve resumen del producto 2.</p>
+              <p class="card-text">Breve resumen del producto 2.</p>
               <p class="card-text"><strong>Precio: $200.00</strong></p>
               <p class="card-text">Calificación: 4.8 de 5</p>
             </div>
             <div class="card-footer text-center">
-              <button class="btn btn-danger">
+              <button class="btn btn-danger me-2">
                 <i class="bi bi-cart-dash"></i> Quitar del carrito
               </button>
-            </div>
-          </div>
-        </div>
-        <!-- Producto 1 -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="1"
-          data-nombre="Producto 1"
-          data-precio="100"
-          data-categoria="juguetes"
-          data-existencia="10"
-          data-promedio-calificacion="4.5"
-        >
-          <div class="card h-100">
-            <img
-              src="img/producto1.jpg"
-              class="card-img-top"
-              alt="Imagen del Producto 1"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Producto 1</h5>
-              <p class="card-text">Este es un breve resumen del producto 1.</p>
-              <p class="card-text"><strong>Precio: $100.00</strong></p>
-              <p class="card-text">Calificación: 4.5 de 5</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-primary">
-                <i class="bi bi-cart-plus"></i> Agregar al carrito
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 2 con botón "Quitar del carrito" -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="2"
-          data-nombre="Producto 2"
-          data-precio="200"
-          data-categoria="electronica"
-          data-existencia="5"
-          data-promedio-calificacion="4.8"
-        >
-          <div class="card h-100">
-            <img
-              src="img/producto2.jpg"
-              class="card-img-top"
-              alt="Imagen del Producto 2"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Producto 2</h5>
-              <p class="card-text">Este es un breve resumen del producto 2.</p>
-              <p class="card-text"><strong>Precio: $200.00</strong></p>
-              <p class="card-text">Calificación: 4.8 de 5</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-danger">
-                <i class="bi bi-cart-dash"></i> Quitar del carrito
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Producto 1 -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="1"
-          data-nombre="Producto 1"
-          data-precio="100"
-          data-categoria="juguetes"
-          data-existencia="10"
-          data-promedio-calificacion="4.5"
-        >
-          <div class="card h-100">
-            <img
-              src="img/producto1.jpg"
-              class="card-img-top"
-              alt="Imagen del Producto 1"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Producto 1</h5>
-              <p class="card-text">Este es un breve resumen del producto 1.</p>
-              <p class="card-text"><strong>Precio: $100.00</strong></p>
-              <p class="card-text">Calificación: 4.5 de 5</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-primary">
-                <i class="bi bi-cart-plus"></i> Agregar al carrito
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 2 con botón "Quitar del carrito" -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="2"
-          data-nombre="Producto 2"
-          data-precio="200"
-          data-categoria="electronica"
-          data-existencia="5"
-          data-promedio-calificacion="4.8"
-        >
-          <div class="card h-100">
-            <img
-              src="img/producto2.jpg"
-              class="card-img-top"
-              alt="Imagen del Producto 2"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Producto 2</h5>
-              <p class="card-text">Este es un breve resumen del producto 2.</p>
-              <p class="card-text"><strong>Precio: $200.00</strong></p>
-              <p class="card-text">Calificación: 4.8 de 5</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-danger">
-                <i class="bi bi-cart-dash"></i> Quitar del carrito
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Producto 1 -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="1"
-          data-nombre="Producto 1"
-          data-precio="100"
-          data-categoria="juguetes"
-          data-existencia="10"
-          data-promedio-calificacion="4.5"
-        >
-          <div class="card h-100">
-            <img
-              src="img/producto1.jpg"
-              class="card-img-top"
-              alt="Imagen del Producto 1"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Producto 1</h5>
-              <p class="card-text">Este es un breve resumen del producto 1.</p>
-              <p class="card-text"><strong>Precio: $100.00</strong></p>
-              <p class="card-text">Calificación: 4.5 de 5</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-primary">
-                <i class="bi bi-cart-plus"></i> Agregar al carrito
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Producto 2 con botón "Quitar del carrito" -->
-        <div
-          class="col-lg-4 col-md-6"
-          data-producto-id="2"
-          data-nombre="Producto 2"
-          data-precio="200"
-          data-categoria="electronica"
-          data-existencia="5"
-          data-promedio-calificacion="4.8"
-        >
-          <div class="card h-100">
-            <img
-              src="img/producto2.jpg"
-              class="card-img-top"
-              alt="Imagen del Producto 2"
-            />
-            <div class="card-body">
-              <h5 class="card-title">Producto 2</h5>
-              <p class="card-text">Este es un breve resumen del producto 2.</p>
-              <p class="card-text"><strong>Precio: $200.00</strong></p>
-              <p class="card-text">Calificación: 4.8 de 5</p>
-            </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-danger">
-                <i class="bi bi-cart-dash"></i> Quitar del carrito
+              <button class="btn btn-secondary">
+                <i class="bi bi-eye"></i> Ver producto
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Paginación -->
+      <!-- Paginación - Reutilizable en cualquier listado paginado -->
       <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
           <li class="page-item disabled">
@@ -419,7 +235,7 @@
       </nav>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer - Usar en todas las plantillas -->
     <footer class="text-center">
       <div class="container">
         <p class="mb-0">
