@@ -105,7 +105,7 @@ CREATE TABLE MetodosPago (
     metodo_pago_id INT AUTO_INCREMENT,
     nombre_titular VARCHAR(120) NOT NULL,
     numero_tarjeta VARCHAR(20) NOT NULL,
-    fecha_expiracion CHAR(7) NOT NULL,
+    fecha_expiracion DATE NOT NULL,
     tipo_tarjeta ENUM('Débito', 'Crédito') NOT NULL,
     monto DECIMAL(10, 2) NOT NULL,
     usuario_id INT NOT NULL,

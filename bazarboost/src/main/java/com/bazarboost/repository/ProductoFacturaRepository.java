@@ -1,8 +1,11 @@
 package com.bazarboost.repository;
 
 import com.bazarboost.model.entity.ProductoFactura;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -11,21 +14,19 @@ import java.util.List;
  * Alumno: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-public interface ProductoFacturaRepository extends CrudRepository<ProductoFactura, Integer> {
+public interface ProductoFacturaRepository extends PagingAndSortingRepository<ProductoFactura, Integer> {
 
-    // Encontrar ventas de productos de un vendedor, incluyendo nombre del cliente
+    // Encontrar ventas de productos de un vendedor, incluyendo nombre del cliente, con paginación
     @Query("SELECT p.nombre, pf.cantidad, pf.total, f.fecha, u.nombre, u.apellidoPaterno " +
             "FROM Producto p " +
             "JOIN ProductoFactura pf ON p.productoId = pf.producto.productoId " +
             "JOIN Factura f ON f.facturaId = pf.factura.facturaId " +
             "JOIN Usuario u ON f.usuario.usuarioId = u.usuarioId " +
             "WHERE p.usuario.usuarioId = :usuarioId")
-    List<Object[]> getSalesBySeller(@Param("usuarioId") Integer usuarioId);
+    Page<Object[]> getSalesBySeller(@Param("usuarioId") Integer usuarioId, Pageable pageable);
 
     // Obtener todos los productos asociados a una factura específica
     List<ProductoFactura> findByFacturaFacturaId(Integer facturaId);
-
-    // Crear registros de productos asociados a la factura (saveAll() ya está heredado)
 }
 
 
