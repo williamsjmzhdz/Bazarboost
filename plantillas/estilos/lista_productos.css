@@ -1,3 +1,8 @@
+/* Estilos de la lista de productos */
+div#productList {
+  margin: 75px 0 75px 0;
+}
+
 /* Estilos de la imagen del producto */
 .card-img-top {
   width: 100%;
@@ -17,7 +22,7 @@
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-0px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 

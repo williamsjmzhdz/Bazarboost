@@ -10,6 +10,20 @@ body {
   flex: 1;
 }
 
+/* Navbar fija */
+.navbar {
+  position: fixed !important;
+  top: 0;
+  width: 100%;
+  z-index: 1030; /* Asegúrate de que la navbar esté siempre encima de otros elementos */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para efecto flotante */
+}
+
+/* Añadir espacio a la parte superior del contenido principal para evitar que la navbar lo cubra */
+.main-content {
+  margin-top: 70px; /* Ajusta según la altura de la navbar */
+}
+
 /* Navbar - Usar en todas las plantillas */
 .navbar-nav {
   margin-left: auto;
