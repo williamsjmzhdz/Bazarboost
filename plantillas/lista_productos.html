@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bazarboost - Lista de Productos</title>
     <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="estilos/base.css" />
     <link rel="stylesheet" href="estilos/lista_productos.css" />
 
     <!-- Bootstrap CSS -->
@@ -178,7 +179,11 @@
               <h5 class="card-title">Producto 1</h5>
               <p class="card-text">Breve resumen del producto 1.</p>
               <p class="card-text"><strong>Precio: $100.00</strong></p>
-              <p class="card-text">Calificación: 4.5 de 5</p>
+              <div class="average-rating">
+                <span class="review-stars">
+                  <i class="bi bi-star-fill"></i> 4.5 de 5
+                </span>
+              </div>
             </div>
             <div class="card-footer text-center">
               <button class="btn btn-primary me-2">
@@ -203,7 +208,11 @@
               <h5 class="card-title">Producto 2</h5>
               <p class="card-text">Breve resumen del producto 2.</p>
               <p class="card-text"><strong>Precio: $200.00</strong></p>
-              <p class="card-text">Calificación: 4.8 de 5</p>
+              <p class="average-rating">
+                <span class="review-stars">
+                  <i class="bi bi-star-fill"></i> 4.5 de 5
+                </span>
+              </p>
             </div>
             <div class="card-footer text-center">
               <button class="btn btn-danger me-2">

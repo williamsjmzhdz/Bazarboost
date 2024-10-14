@@ -14,6 +14,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="estilos/base.css" />
     <link rel="stylesheet" href="estilos/detalle_producto.css" />
   </head>
   <body>
@@ -129,7 +130,13 @@
           <p><strong>Precio:</strong> $100.00</p>
           <p><strong>Existencia:</strong> 10 unidades disponibles</p>
           <p><strong>Categoría:</strong> Electrónica</p>
-          <p><strong>Calificación promedio:</strong> 4.5 de 5 estrellas</p>
+          <p><strong>Calificación promedio:</strong></p>
+          <div class="average-rating">
+            <span class="review-stars">
+              <i class="bi bi-star-fill"></i> 4.5 de 5
+            </span>
+          </div>
+
           <button class="btn btn-primary me-2">
             <i class="bi bi-cart-plus"></i> Agregar al carrito
           </button>
