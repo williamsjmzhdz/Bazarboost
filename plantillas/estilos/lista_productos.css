@@ -26,6 +26,15 @@ div#productList {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+.card-body .card-title,
+.card-body .card-text {
+  text-align: center;
+}
+
+.card-body .price {
+  color: #777 !important;
+}
+
 /* Añadir espacio entre las tarjetas */
 .col-lg-4,
 .col-md-6 {
