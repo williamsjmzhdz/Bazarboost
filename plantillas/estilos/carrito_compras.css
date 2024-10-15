@@ -1,16 +1,9 @@
 /* Estilos específicos de la vista del carrito */
 
 /* Estilos para el mensaje de advertencia */
-.alert h5 {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-}
 
-.alert h5 i {
-  margin-right: 0.5rem;
+.alert-text {
+  font-style: normal !important;
 }
 
 .alert ul {

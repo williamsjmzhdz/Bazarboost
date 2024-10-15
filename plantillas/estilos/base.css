@@ -34,6 +34,11 @@ body {
   right: 0;
 }
 
+/* Aseguramos que el contenido no quede debajo de la barra de navegación */
+#bodyContainer {
+  padding-top: 100px; /* Ajusta este valor según la altura de tu navbar */
+}
+
 /* Footer - Usar en todas las plantillas */
 footer {
   background-color: #343a40;
