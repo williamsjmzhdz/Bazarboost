@@ -1,7 +1,6 @@
 /* Estilos específicos de la vista del carrito */
 
 /* Estilos para el mensaje de advertencia */
-
 .alert-text {
   font-style: normal !important;
 }
@@ -29,18 +28,26 @@
   text-align: center;
 }
 
-.table tbody td {
+.table td {
   vertical-align: middle;
-}
-
-.cantidad {
-  max-width: 80px;
+  text-align: center;
 }
 
 .btn-cell {
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
+
+/* Ajuste para celdas de cantidad */
+.cantidad {
+  width: 60px;
+  text-align: center;
+}
+
+/* Ajustes para el modal */
+.modal .modal-dialog-centered {
+  max-width: 400px;
+}
+
 .d-flex {
   margin-top: 20px;
 }

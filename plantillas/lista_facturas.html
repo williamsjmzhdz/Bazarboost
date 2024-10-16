@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bazarboost - Lista de Facturas</title>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="estilos/base.css" />
+    <link rel="stylesheet" href="estilos/lista_facturas.css" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Navbar - Usar en todas las plantillas -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Bazarboost</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-cart"></i> Carrito
+                <span class="badge bg-danger">3</span>
+              </a>
+            </li>
+            <!-- Usuario Dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Williams Jiménez
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                <li><a class="dropdown-item" href="#">Mis Compras</a></li>
+                <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Fin de la Navbar -->
+
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Lista de Facturas</h2>
+
+      <!-- Sección de Ordenación -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="w-100">
+          <select
+            class="form-select"
+            id="orderBy"
+            aria-label="Ordenar Facturas"
+          >
+            <option value="" selected disabled>
+              Selecciona un criterio de ordenamiento
+            </option>
+            <option value="dateAsc">
+              Fecha (de la más antigua a la más reciente)
+            </option>
+            <option value="dateDesc">
+              Fecha (de la más reciente a la más antigua)
+            </option>
+            <option value="amountAsc">Monto (de menor a mayor)</option>
+            <option value="amountDesc">Monto (de mayor a menor)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Lista de Facturas -->
+      <div class="list-group">
+        <!-- Factura 1 -->
+        <a
+          href="detalle_factura.html"
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <h6 class="mb-0">Fecha: 12/10/2024</h6>
+          </div>
+          <div class="fw-bold">$150.00</div>
+        </a>
+        <!-- Factura 2 -->
+        <a
+          href="detalle_factura.html"
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <h6 class="mb-0">Fecha: 08/09/2024</h6>
+          </div>
+          <div class="fw-bold">$200.00</div>
+        </a>
+        <!-- Factura 3 -->
+        <a
+          href="detalle_factura.html"
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+        >
+          <div>
+            <h6 class="mb-0">Fecha: 05/07/2024</h6>
+          </div>
+          <div class="fw-bold">$75.00</div>
+        </a>
+        <!-- Agrega más facturas según sea necesario -->
+      </div>
+    </div>
+
+    <!-- Footer - Usar en todas las plantillas -->
+    <footer class="text-center mt-5">
+      <div class="container">
+        <p class="mb-0">
+          &copy; 2024 Bazarboost. Todos los derechos reservados.
+        </p>
+        <p>
+          <a href="#">Términos y Condiciones</a> |
+          <a href="#">Política de Privacidad</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

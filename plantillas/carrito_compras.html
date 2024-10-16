@@ -23,9 +23,7 @@
     <!-- Navbar - Usar en todas las plantillas -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <!-- Nombre de la aplicación a la izquierda -->
         <a class="navbar-brand" href="#">Bazarboost</a>
-        <!-- Botón de toggler para móviles -->
         <button
           class="navbar-toggler"
           type="button"
@@ -37,17 +35,14 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- Links alineados a la derecha -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <!-- Usar estos enlaces en todas las plantillas -->
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Inicio</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-cart"></i> Carrito
-                <!-- Badge de productos en el carrito -->
                 <span class="badge bg-danger">3</span>
               </a>
             </li>
@@ -65,53 +60,9 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
                 <li><a class="dropdown-item" href="#">Facturas</a></li>
-
                 <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
                 <li><a class="dropdown-item" href="#">Direcciones</a></li>
               </ul>
-            </li>
-
-            <!-- Dropdown Vendedor -->
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="vendedorDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Vendedor
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="vendedorDropdown">
-                <li><a class="dropdown-item" href="#">Ventas</a></li>
-                <li><a class="dropdown-item" href="#">Productos</a></li>
-                <li><a class="dropdown-item" href="#">Descuentos</a></li>
-              </ul>
-            </li>
-
-            <!-- Dropdown Administrador -->
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="adminDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Administrador
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
-                <li><a class="dropdown-item" href="#">Usuarios</a></li>
-                <li><a class="dropdown-item" href="#">Categorias</a></li>
-              </ul>
-            </li>
-
-            <li class="nav-item ms-lg-4">
-              <a class="nav-link" href="#">
-                <i class="bi"></i> Williams Jiménez
-              </a>
             </li>
           </ul>
         </div>
@@ -123,19 +74,18 @@
       <h2 class="mb-4">Carrito de Compras</h2>
 
       <!-- Sección para mensajes de advertencia -->
-      <div class="alert alert-warning" id="warning-message">
-        <i class="bi bi-exclamation-circle alert-text"
-          > No hay suficiente existencia para los siguientes productos:</i
+      <div class="alert alert-warning d-none" id="warning-message-existencia">
+        <i class="bi bi-exclamation-circle alert-text"></i>
+          No hay suficiente existencia para los siguientes productos:</i
         >
         <ul>
           <li><strong>Shampoo</strong> - Existencia: 3</li>
         </ul>
       </div>
-      <div class="alert alert-warning" id="warning-message">
+      <div class="alert alert-warning d-none" id="warning-message-cantidad">
         <i class="bi bi-exclamation-circle alert-text"></i>
-          Algunas cantidades ingresadas no son válidas. Verifica los productos y
-          asegúrate de que cada cantidad sea al menos 1.</i
-        >
+        Algunas cantidades ingresadas no son válidas. Verifica los productos y
+        asegúrate de que cada cantidad sea al menos 1.
       </div>
 
       <!-- Tabla de productos en el carrito -->
@@ -145,8 +95,12 @@
             <tr>
               <th>Producto</th>
               <th>Precio Unitario</th>
+              <th>Descuento Unitario</th>
               <th>Cantidad</th>
-              <th>Total</th>
+              <th>Total (sin descuento)</th>
+              <th>Descuento Total</th>
+              <!-- Nueva columna de descuento total -->
+              <th>Total Final</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -154,6 +108,7 @@
             <tr data-producto-id="1">
               <td>Producto 1</td>
               <td>$100.00</td>
+              <td>10% ($10.00)</td>
               <td>
                 <input
                   type="number"
@@ -163,6 +118,9 @@
                 />
               </td>
               <td>$100.00</td>
+              <td>$10.00</td>
+              <!-- Descuento total (10 * 1) -->
+              <td>$90.00</td>
               <td class="btn-cell">
                 <button
                   class="btn btn-danger btn-sm"
@@ -176,6 +134,7 @@
             <tr data-producto-id="2">
               <td>Producto 2</td>
               <td>$200.00</td>
+              <td>5% ($10.00)</td>
               <td>
                 <input
                   type="number"
@@ -185,6 +144,9 @@
                 />
               </td>
               <td>$400.00</td>
+              <td>$20.00</td>
+              <!-- Descuento total (10 * 2) -->
+              <td>$380.00</td>
               <td class="btn-cell">
                 <button
                   class="btn btn-danger btn-sm"
@@ -198,10 +160,10 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="3" class="text-end">
+              <td colspan="6" class="text-end">
                 <strong>Total del carrito:</strong>
               </td>
-              <td><strong id="precioTotal">$500.00</strong></td>
+              <td><strong id="precioTotal">$470.00</strong></td>
               <td></td>
             </tr>
           </tfoot>

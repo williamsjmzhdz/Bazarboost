@@ -12,6 +12,12 @@
   margin-top: 20px;
 }
 
+/* Highlight the discounted price */
+.discount-price {
+  color: #dc3545; /* Red color to highlight discount */
+  font-weight: bold;
+}
+
 .average-rating {
   font-size: 18px;
   font-weight: bold;

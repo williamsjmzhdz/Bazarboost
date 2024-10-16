@@ -179,7 +179,7 @@
             <div class="card-body">
               <h5 class="card-title">Producto 1</h5>
               <p class="card-text">Breve resumen del producto 1.</p>
-              <p class="card-text price"><strong>Precio: $100.00</strong></p>
+              <p class="card-text"><strong>Precio: $100.00</strong></p>
               <div class="average-rating">
                 <span class="review-stars">
                   <i class="bi bi-star-fill"></i> 4.5 de 5
@@ -218,6 +218,46 @@
             <div class="card-footer text-center">
               <button class="btn btn-danger me-2">
                 <i class="bi bi-cart-dash"></i> Quitar del carrito
+              </button>
+              <button class="btn btn-secondary">
+                <i class="bi bi-eye"></i> Ver producto
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto con descuento -->
+        <div class="col-lg-4 col-md-6" data-producto-id="3">
+          <div class="card h-100">
+            <img
+              src="img/producto1.jpg"
+              class="card-img-top"
+              alt="Producto con descuento"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Producto con descuento</h5>
+              <p class="card-text">
+                Descripción breve del producto con descuento.
+              </p>
+              <p class="card-text">
+                <del class="price-del">Precio: $150.00</del>
+                <!-- Precio anterior tachado -->
+                <br />
+                <small><strong>Descuento de primavera</strong></small>
+                <br />
+                Precio con descuento: <strong class="discount">$120.00</strong>
+                <br />
+                Descuento aplicado: <strong class="discount">20% - $30</strong>
+              </p>
+              <div class="average-rating">
+                <span class="review-stars">
+                  <i class="bi bi-star-fill"></i> 4.7 de 5
+                </span>
+              </div>
+            </div>
+            <div class="card-footer text-center">
+              <button class="btn btn-primary me-2">
+                <i class="bi bi-cart-plus"></i> Agregar al carrito
               </button>
               <button class="btn btn-secondary">
                 <i class="bi bi-eye"></i> Ver producto
