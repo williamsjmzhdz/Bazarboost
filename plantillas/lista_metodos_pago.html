@@ -117,11 +117,16 @@
       </div>
     </nav>
     <!-- Fin del Navbar -->
-    >
 
     <!-- Main content -->
     <div class="container my-4 main-content" id="bodyContainer">
       <h2 class="mb-4">Métodos de Pago</h2>
+
+      <!-- Sección para mensajes de error -->
+      <div class="alert alert-danger" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i> No se pudo eliminar el método
+        de pago debido a un error inesperado. Inténtelo de nuevo más tarde.
+      </div>
 
       <!-- Botón para agregar nuevo método de pago -->
       <div class="d-flex justify-content-end mb-3 add-pay-method-container">
@@ -161,7 +166,11 @@
                 <button class="btn btn-primary btn-sm">
                   <i class="bi bi-pencil"></i> Editar
                 </button>
-                <button class="btn btn-danger btn-sm">
+                <button
+                  class="btn btn-danger btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmDeleteModal"
+                >
                   <i class="bi bi-trash"></i> Eliminar
                 </button>
               </td>
@@ -183,13 +192,55 @@
                 <button class="btn btn-primary btn-sm">
                   <i class="bi bi-pencil"></i> Editar
                 </button>
-                <button class="btn btn-danger btn-sm">
+                <button
+                  class="btn btn-danger btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmDeleteModal"
+                >
                   <i class="bi bi-trash"></i> Eliminar
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Modal de confirmación para eliminar -->
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-labelledby="confirmDeleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">
+              Confirmar Eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            ¿Estás seguro de que deseas eliminar este método de pago?
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-danger">Eliminar</button>
+          </div>
+        </div>
       </div>
     </div>
 
