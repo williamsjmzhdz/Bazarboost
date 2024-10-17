@@ -122,7 +122,17 @@
     <div class="container my-4 main-content" id="bodyContainer">
       <h2 class="mb-4">Métodos de Pago</h2>
 
-      <!-- Sección para mensajes de error -->
+      <!-- Sección para mensajes de éxito -->
+      <div
+        class="alert alert-success d-flex align-items-center"
+        id="success-alert"
+        role="alert"
+      >
+        <i class="bi bi-check-circle me-2"></i>
+        <div>¡Éxito! El método de pago fue creado.</div>
+      </div>
+
+      <!-- Sección para mensajes de advertencia -->
       <div class="alert alert-danger" id="warning-danger">
         <i class="bi bi-exclamation-triangle"></i> No se pudo eliminar el método
         de pago debido a un error inesperado. Inténtelo de nuevo más tarde.

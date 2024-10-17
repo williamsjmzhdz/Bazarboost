@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bazarboost - Pago del Carrito</title>
-    <!-- Estilos personalizados -->
+    <title>Crear o Editar Método de Pago</title>
     <link rel="stylesheet" href="estilos/base.css" />
-    <link rel="stylesheet" href="estilos/pago_carrito.css" />
+    <link rel="stylesheet" href="estilos/crear_editar_metodo_pago.css" />
 
     <!-- Bootstrap CSS -->
     <link
@@ -66,7 +65,6 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
                 <li><a class="dropdown-item" href="#">Facturas</a></li>
-
                 <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
                 <li><a class="dropdown-item" href="#">Direcciones</a></li>
               </ul>
@@ -119,74 +117,102 @@
       </div>
     </nav>
     <!-- Fin del Navbar -->
+
+    <!-- Contenido principal -->
     <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4">Pago del Carrito</h2>
+      <h2 class="mb-4">Crear o Editar Método de Pago</h2>
 
-      <!-- Sección para mensajes de advertencia -->
-      <div class="alert alert-warning" id="warning-message">
-        <i class="bi bi-exclamation-circle-fill"></i> La tarjeta seleccionada ha
-        expirado. Por favor selecciona otro método de pago. No tienes fondos
-        suficientes en el método de pago seleccionado.
-      </div>
-      <div class="alert alert-warning" id="warning-message">
-        <i class="bi bi-exclamation-circle-fill"></i> No tienes fondos
-        suficientes en el método de pago seleccionado.
+      <!-- Mensajes de Advertencia -->
+      <div class="alert alert-warning" id="warning-alert">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span id="alert-message">Error en los datos del formulario.</span>
       </div>
 
-      <!-- Sección de Selección de Dirección de Envío -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h4 class="mb-0">Dirección de Envío</h4>
+      <!-- Formulario para Método de Pago -->
+      <form id="metodo-pago-form">
+        <!-- Nombre del Titular -->
+        <div class="mb-3">
+          <label for="nombreTitular" class="form-label"
+            >Nombre del Titular</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="nombreTitular"
+            placeholder="Ingresa el nombre del titular de la tarjeta"
+            required
+          />
         </div>
-        <div class="card-body">
-          <select class="form-select" aria-label="Seleccionar Dirección">
-            <option selected>Selecciona tu dirección de envío</option>
-            <option value="1">Calle Falsa 123, Ciudad Ejemplo</option>
-            <option value="2">Avenida Siempre Viva 742, Springfield</option>
-            <option value="3">Calle Luna, Calle Sol, Ciudad X</option>
+
+        <!-- Número de Tarjeta -->
+        <div class="mb-3">
+          <label for="numeroTarjeta" class="form-label"
+            >Número de Tarjeta</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="numeroTarjeta"
+            placeholder="Ingresa el número de tarjeta"
+            maxlength="19"
+            pattern="[0-9]{13,19}"
+            required
+          />
+        </div>
+
+        <!-- Fecha de Expiración -->
+        <div class="mb-3">
+          <label for="fechaExpiracion" class="form-label"
+            >Fecha de Expiración</label
+          >
+          <input
+            type="month"
+            class="form-control"
+            id="fechaExpiracion"
+            required
+          />
+        </div>
+
+        <!-- Tipo de Tarjeta -->
+        <div class="mb-3">
+          <label for="tipoTarjeta" class="form-label">Tipo de Tarjeta</label>
+          <select class="form-select" id="tipoTarjeta" required>
+            <option value="" selected>Selecciona el tipo de tarjeta</option>
+            <option value="Crédito">Crédito</option>
+            <option value="Débito">Débito</option>
           </select>
         </div>
-      </div>
 
-      <!-- Sección de Selección de Método de Pago -->
-      <div class="card mb-4">
-        <div class="card-header">
-          <h4 class="mb-0">Método de Pago</h4>
+        <!-- Monto Disponible -->
+        <div class="mb-3">
+          <label for="montoDisponible" class="form-label"
+            >Monto Disponible</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            id="montoDisponible"
+            placeholder="Ingresa el monto disponible"
+            min="0"
+            step="0.01"
+            required
+          />
         </div>
-        <div class="card-body">
-          <select class="form-select" aria-label="Seleccionar Método de Pago">
-            <option selected>Selecciona tu método de pago</option>
-            <option value="1">
-              Visa - Terminada en 1234 (Expira: 12/2024)
-            </option>
-            <option value="2">
-              MasterCard - Terminada en 5678 (Expira: 06/2025)
-            </option>
-            <option value="3">
-              Amex - Terminada en 9876 (Expira: 09/2023)
-            </option>
-          </select>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between" id="buttonsContainer">
+          <a href="lista_metodos_pago.html" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la Lista de Métodos de
+            Pago
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Guardar Cambios
+          </button>
         </div>
-      </div>
-
-      <!-- Mensajes de Error (Ocultos por defecto) -->
-      <div class="alert alert-danger d-none" id="error-message">
-        <i class="bi bi-exclamation-triangle"></i> No se pudo procesar el pago.
-        Verifica los datos e inténtalo de nuevo.
-      </div>
-
-      <!-- Botones -->
-      <div class="d-flex justify-content-between">
-        <a href="carrito_compras.html" class="btn btn-secondary">
-          <i class="bi bi-arrow-left"></i> Volver al carrito
-        </a>
-        <button class="btn btn-primary" id="pagarCarrito">
-          <i class="bi bi-credit-card"></i> Pagar carrito
-        </button>
-      </div>
+      </form>
     </div>
 
-    <!-- Footer - Usar en todas las plantillas -->
+    <!-- Footer -->
     <footer class="text-center mt-5">
       <div class="container">
         <p class="mb-0">
