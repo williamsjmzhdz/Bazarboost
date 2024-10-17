@@ -1,6 +1,6 @@
 ### Descripción de la Vista de **Crear/Editar Descuento**
 
-**Nombre de la Vista**: `editar_crear_descuento.html`
+**Nombre de la Vista**: `crear_editar_descuento.html`
 
 **Descripción**:
 

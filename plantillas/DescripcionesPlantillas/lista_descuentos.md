@@ -1,6 +1,6 @@
 ### Descripción de la Vista del **Panel de Administración de Descuentos del Vendedor**
 
-**Nombre de la Vista**: `panel_administracion_descuentos.html`
+**Nombre de la Vista**: `lista_descuentos.html`
 
 **Descripción**:
 

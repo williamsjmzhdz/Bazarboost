@@ -6,7 +6,7 @@ En lugar de un **input de texto** para ingresar la URL de la imagen, la vista te
 
 ### Descripción de la Vista de **Editar/Crear Producto** (ajustada)
 
-**Nombre de la Vista**: `editar_crear_producto.html`
+**Nombre de la Vista**: `crear_editar_producto.html`
 
 **Descripción**:
 

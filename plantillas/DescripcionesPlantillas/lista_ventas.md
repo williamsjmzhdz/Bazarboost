@@ -1,6 +1,6 @@
 ### Descripción de la Vista de **Ventas del Vendedor**
 
-**Nombre de la Vista**: `panel_ventas_vendedor.html`
+**Nombre de la Vista**: `lista_ventas.html`
 
 **Descripción**:
 

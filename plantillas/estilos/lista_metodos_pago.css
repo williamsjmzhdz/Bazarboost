@@ -1,0 +1,61 @@
+/* Scroll horizontal para tablas */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Estilo responsive para móviles */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody tr {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .table tbody td:last-child {
+    justify-content: center;
+  }
+
+  .table tbody td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 50%;
+  }
+}
+
+/* Estilos para móviles */
+@media (max-width: 768px) {
+  .btn + .btn {
+    margin-left: 10px; /* Espacio lateral entre botones */
+  }
+
+  .add-pay-method-container {
+    justify-content: start !important;
+  }
+}
+
+/* Ajustes de márgenes en tabletas */
+@media (min-width: 769px) and (max-width: 1199px) {
+  td .btn {
+    width: 100%; /* Añadir espacio entre el botón y el siguiente elemento */
+  }
+
+  td .btn:first-child {
+    margin-bottom: 0.5rem;
+  }
+}

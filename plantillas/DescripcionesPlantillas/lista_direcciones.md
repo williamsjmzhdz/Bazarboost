@@ -1,6 +1,6 @@
 ### Descripción de la Vista de **Administración de Direcciones**
 
-**Nombre de la Vista**: `panel_administracion_direcciones.html`
+**Nombre de la Vista**: `lista_direcciones.html`
 
 **Descripción**:
 

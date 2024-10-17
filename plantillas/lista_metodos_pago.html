@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carrito de Compras - Bazarboost</title>
-    <!-- Enlace al archivo CSS base y carrito_compras -->
-    <link href="estilos/base.css" rel="stylesheet" />
-    <link href="estilos/carrito_compras.css" rel="stylesheet" />
+    <title>Lista de Métodos de Pago</title>
+    <link rel="stylesheet" href="estilos/base.css" />
+    <link rel="stylesheet" href="estilos/lista_metodos_pago.css" />
+
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -117,158 +117,84 @@
       </div>
     </nav>
     <!-- Fin del Navbar -->
+    >
 
+    <!-- Main content -->
     <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4">Carrito de Compras</h2>
+      <h2 class="mb-4">Métodos de Pago</h2>
 
-      <!-- Sección para mensajes de advertencia -->
-      <div class="alert alert-warning d-none" id="warning-message-existencia">
-        <i class="bi bi-exclamation-circle alert-text"></i>
-          No hay suficiente existencia para los siguientes productos:</i
-        >
-        <ul>
-          <li><strong>Shampoo</strong> - Existencia: 3</li>
-        </ul>
-      </div>
-      <div class="alert alert-warning d-none" id="warning-message-cantidad">
-        <i class="bi bi-exclamation-circle alert-text"></i>
-        Algunas cantidades ingresadas no son válidas. Verifica los productos y
-        asegúrate de que cada cantidad sea al menos 1.
+      <!-- Botón para agregar nuevo método de pago -->
+      <div class="d-flex justify-content-end mb-3 add-pay-method-container">
+        <button class="btn btn-success">
+          <i class="bi bi-plus-lg"></i> Agregar Método de Pago
+        </button>
       </div>
 
-      <!-- Tabla de productos en el carrito -->
+      <!-- Tabla de métodos de pago con scroll horizontal -->
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-hover align-middle">
           <thead class="table-dark">
             <tr>
-              <th>Producto</th>
-              <th>Precio Unitario</th>
-              <th>Descuento Unitario</th>
-              <th>Cantidad</th>
-              <th>Total (sin descuento)</th>
-              <th>Descuento Total</th>
-              <!-- Nueva columna de descuento total -->
-              <th>Total Final</th>
-              <th>Acciones</th>
+              <th scope="col">Nombre del Titular</th>
+              <th scope="col">Número de Tarjeta</th>
+              <th scope="col">Fecha de Expiración</th>
+              <th scope="col">Tipo de Tarjeta</th>
+              <th scope="col">Monto Disponible</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr data-producto-id="1">
-              <td>Producto 1</td>
-              <td>$100.00</td>
-              <td>10% ($10.00)</td>
-              <td>
-                <input
-                  type="number"
-                  class="form-control cantidad"
-                  value="1"
-                  min="1"
-                />
-              </td>
-              <td>$100.00</td>
-              <td>$10.00</td>
-              <!-- Descuento total (10 * 1) -->
-              <td>$90.00</td>
-              <td class="btn-cell">
-                <button
-                  class="btn btn-danger btn-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#confirmDeleteModal"
-                >
+            <tr
+              data-nombre-titular="Williams Jiménez"
+              data-label="Nombre del Titular"
+              data-numero-tarjeta="1234"
+              data-fecha-expiracion="12/2024"
+              data-tipo-tarjeta="Crédito"
+              data-monto="1500.00"
+            >
+              <td data-label="Nombre del Titular">Williams Jiménez</td>
+              <td data-label="Número de Tarjeta">**** **** **** 1234</td>
+              <td data-label="Fecha de Expiración">12/2024</td>
+              <td data-label="Tipo de Tarjeta">Crédito</td>
+              <td data-label="Monto Disponible">$1500.00</td>
+              <td data-label="Acciones">
+                <button class="btn btn-primary btn-sm">
+                  <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn btn-danger btn-sm">
                   <i class="bi bi-trash"></i> Eliminar
                 </button>
               </td>
             </tr>
-            <tr data-producto-id="2">
-              <td>Producto 2</td>
-              <td>$200.00</td>
-              <td>5% ($10.00)</td>
-              <td>
-                <input
-                  type="number"
-                  class="form-control cantidad"
-                  value="2"
-                  min="1"
-                />
-              </td>
-              <td>$400.00</td>
-              <td>$20.00</td>
-              <!-- Descuento total (10 * 2) -->
-              <td>$380.00</td>
-              <td class="btn-cell">
-                <button
-                  class="btn btn-danger btn-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#confirmDeleteModal"
-                >
+            <tr
+              data-nombre-titular="John Doe"
+              data-label="Nombre del Titular"
+              data-numero-tarjeta="5678"
+              data-fecha-expiracion="06/2025"
+              data-tipo-tarjeta="Débito"
+              data-monto="2000.00"
+            >
+              <td data-label="Nombre del Titular">John Doe</td>
+              <td data-label="Número de Tarjeta">**** **** **** 5678</td>
+              <td data-label="Fecha de Expiración">06/2025</td>
+              <td data-label="Tipo de Tarjeta">Débito</td>
+              <td data-label="Monto Disponible">$2000.00</td>
+              <td data-label="Acciones">
+                <button class="btn btn-primary btn-sm">
+                  <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn btn-danger btn-sm">
                   <i class="bi bi-trash"></i> Eliminar
                 </button>
               </td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="6" class="text-end">
-                <strong>Total del carrito:</strong>
-              </td>
-              <td><strong id="precioTotal">$470.00</strong></td>
-              <td></td>
-            </tr>
-          </tfoot>
         </table>
       </div>
-
-      <!-- Botones de acción -->
-      <div class="d-flex justify-content-between">
-        <a href="lista_productos.html" class="btn btn-secondary">
-          <i class="bi bi-arrow-left"></i> Volver a la lista de productos
-        </a>
-        <button class="btn btn-primary" id="procederPago">
-          Proceder al pago <i class="bi bi-credit-card"></i>
-        </button>
-      </div>
     </div>
 
-    <!-- Modal de confirmación para eliminar producto -->
-    <div
-      class="modal fade"
-      id="confirmDeleteModal"
-      tabindex="-1"
-      aria-labelledby="confirmDeleteModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmDeleteModalLabel">
-              Confirmar eliminación
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            ¿Estás seguro de que deseas eliminar este producto del carrito?
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-danger">Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer - Usar en todas las plantillas -->
-    <footer class="text-center">
+    <!-- Footer -->
+    <footer class="text-center mt-5">
       <div class="container">
         <p class="mb-0">
           &copy; 2024 Bazarboost. Todos los derechos reservados.

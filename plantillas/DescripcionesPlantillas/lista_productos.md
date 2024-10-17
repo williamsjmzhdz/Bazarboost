@@ -1,6 +1,6 @@
 ### Descripción de la Vista del **Panel de Administración de Productos del Vendedor**:
 
-**Nombre de la Vista**: `panel_administracion_productos.html`
+**Nombre de la Vista**: `lista_productos.html`
 
 **Descripción**:
 

@@ -1,6 +1,6 @@
 ### Descripción de la Vista del **Panel de Administración de Usuarios**:
 
-**Nombre de la Vista**: `panel_administracion_usuarios.html`
+**Nombre de la Vista**: `lista_usuarios.html`
 
 **Descripción**:
 
