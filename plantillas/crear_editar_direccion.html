@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bazarboost - Crear/Editar método de pago</title>
+    <title>Bazarboost - Crear/Editar dirección</title>
     <link rel="stylesheet" href="estilos/base.css" />
     <link
       rel="stylesheet"
@@ -121,9 +121,8 @@
     </nav>
     <!-- Fin del Navbar -->
 
-    <!-- Contenido principal -->
     <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4">Crear/Editar método de pago</h2>
+      <h2 class="mb-4">Crear/Editar dirección</h2>
 
       <!-- Mensajes de Advertencia -->
       <div class="alert alert-warning" id="warning-alert">
@@ -131,85 +130,78 @@
         <span id="alert-message">Error en los datos del formulario.</span>
       </div>
 
-      <!-- Formulario para Método de Pago -->
-      <form id="metodo-pago-form">
-        <!-- Nombre del Titular -->
+      <!-- Formulario para crear/editar dirección -->
+      <form id="direccionForm">
         <div class="mb-3">
-          <label for="nombreTitular" class="form-label"
-            >Nombre del Titular</label
-          >
+          <label for="estado" class="form-label">Estado</label>
           <input
             type="text"
             class="form-control"
-            id="nombreTitular"
-            placeholder="Ingresa el nombre del titular de la tarjeta"
+            id="estado"
+            placeholder="Ingrese el estado"
             required
           />
         </div>
-
-        <!-- Número de Tarjeta -->
         <div class="mb-3">
-          <label for="numeroTarjeta" class="form-label"
-            >Número de Tarjeta</label
-          >
+          <label for="ciudad" class="form-label">Ciudad</label>
           <input
             type="text"
             class="form-control"
-            id="numeroTarjeta"
-            placeholder="Ingresa el número de tarjeta"
-            maxlength="19"
-            pattern="[0-9]{13,19}"
+            id="ciudad"
+            placeholder="Ingrese la ciudad"
             required
           />
         </div>
-
-        <!-- Fecha de Expiración -->
         <div class="mb-3">
-          <label for="fechaExpiracion" class="form-label"
-            >Fecha de Expiración</label
-          >
+          <label for="colonia" class="form-label">Colonia</label>
           <input
-            type="month"
+            type="text"
             class="form-control"
-            id="fechaExpiracion"
+            id="colonia"
+            placeholder="Ingrese la colonia"
             required
           />
         </div>
-
-        <!-- Tipo de Tarjeta -->
         <div class="mb-3">
-          <label for="tipoTarjeta" class="form-label">Tipo de Tarjeta</label>
-          <select class="form-select" id="tipoTarjeta" required>
-            <option value="" selected>Selecciona el tipo de tarjeta</option>
-            <option value="Crédito">Crédito</option>
-            <option value="Débito">Débito</option>
-          </select>
+          <label for="calle" class="form-label">Calle</label>
+          <input
+            type="text"
+            class="form-control"
+            id="calle"
+            placeholder="Ingrese la calle"
+            required
+          />
         </div>
-
-        <!-- Monto Disponible -->
         <div class="mb-3">
-          <label for="montoDisponible" class="form-label"
-            >Monto Disponible</label
+          <label for="numero_domicilio" class="form-label"
+            >Número de domicilio</label
           >
           <input
             type="number"
             class="form-control"
-            id="montoDisponible"
-            placeholder="Ingresa el monto disponible"
-            min="0"
-            step="0.01"
+            id="numero_domicilio"
+            placeholder="Ingrese el número de domicilio"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="codigo_postal" class="form-label">Código postal</label>
+          <input
+            type="text"
+            class="form-control"
+            id="codigo_postal"
+            placeholder="Ingrese el código postal"
             required
           />
         </div>
 
         <!-- Botones de acción -->
-        <div class="d-flex justify-content-between" id="buttonsContainer">
-          <a href="lista_metodos_pago.html" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Volver a la Lista de Métodos de
-            Pago
+        <div id="buttonsContainer" class="d-flex justify-content-between">
+          <a href="lista_direcciones.html" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la lista de direcciones
           </a>
           <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save"></i> Guardar Cambios
+            <i class="bi bi-save"></i> Guardar dirección
           </button>
         </div>
       </form>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bazarboost - Crear/Editar método de pago</title>
+    <title>Lista de Direcciones</title>
     <link rel="stylesheet" href="estilos/base.css" />
     <link
       rel="stylesheet"
-      href="estilos/base_crear_editar_direccion_metodo_pago.css"
+      href="estilos/base_listas_metodos_pago_direcciones.css"
     />
 
     <!-- Bootstrap CSS -->
@@ -121,98 +121,111 @@
     </nav>
     <!-- Fin del Navbar -->
 
-    <!-- Contenido principal -->
+    <!-- Main content -->
     <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4">Crear/Editar método de pago</h2>
+      <h2 class="mb-4">Direcciones</h2>
 
-      <!-- Mensajes de Advertencia -->
-      <div class="alert alert-warning" id="warning-alert">
-        <i class="bi bi-exclamation-circle-fill"></i>
-        <span id="alert-message">Error en los datos del formulario.</span>
+      <!-- Sección para mensajes de éxito -->
+      <div
+        class="alert alert-success d-flex align-items-center"
+        id="success-alert"
+        role="alert"
+      >
+        <i class="bi bi-check-circle me-2"></i>
+        <div>¡Éxito! La dirección fue creada.</div>
       </div>
 
-      <!-- Formulario para Método de Pago -->
-      <form id="metodo-pago-form">
-        <!-- Nombre del Titular -->
-        <div class="mb-3">
-          <label for="nombreTitular" class="form-label"
-            >Nombre del Titular</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="nombreTitular"
-            placeholder="Ingresa el nombre del titular de la tarjeta"
-            required
-          />
-        </div>
+      <!-- Sección para mensajes de advertencia -->
+      <div class="alert alert-danger" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i> No se pudo eliminar la
+        dirección debido a un error inesperado. Inténtelo de nuevo más tarde.
+      </div>
 
-        <!-- Número de Tarjeta -->
-        <div class="mb-3">
-          <label for="numeroTarjeta" class="form-label"
-            >Número de Tarjeta</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="numeroTarjeta"
-            placeholder="Ingresa el número de tarjeta"
-            maxlength="19"
-            pattern="[0-9]{13,19}"
-            required
-          />
-        </div>
+      <!-- Botón para agregar nueva dirección -->
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-success">
+          <i class="bi bi-plus-lg"></i> Agregar Dirección
+        </button>
+      </div>
 
-        <!-- Fecha de Expiración -->
-        <div class="mb-3">
-          <label for="fechaExpiracion" class="form-label"
-            >Fecha de Expiración</label
-          >
-          <input
-            type="month"
-            class="form-control"
-            id="fechaExpiracion"
-            required
-          />
-        </div>
+      <!-- Tabla de direcciones con scroll horizontal -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Estado</th>
+              <th scope="col">Ciudad</th>
+              <th scope="col">Colonia</th>
+              <th scope="col">Calle</th>
+              <th scope="col">Número</th>
+              <th scope="col">Código Postal</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-label="Estado" data-estado="CDMX">
+              <td data-label="Estado">CDMX</td>
+              <td data-label="Ciudad">Ciudad de México</td>
+              <td data-label="Colonia">Roma Norte</td>
+              <td data-label="Calle">Álvaro Obregón</td>
+              <td data-label="Número">200</td>
+              <td data-label="Código Postal">06700</td>
+              <td data-label="Acciones">
+                <button class="btn btn-primary btn-sm">
+                  <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmDeleteModal"
+                >
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </td>
+            </tr>
+            <!-- Más filas de direcciones -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-        <!-- Tipo de Tarjeta -->
-        <div class="mb-3">
-          <label for="tipoTarjeta" class="form-label">Tipo de Tarjeta</label>
-          <select class="form-select" id="tipoTarjeta" required>
-            <option value="" selected>Selecciona el tipo de tarjeta</option>
-            <option value="Crédito">Crédito</option>
-            <option value="Débito">Débito</option>
-          </select>
+    <!-- Modal de confirmación de eliminación -->
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-labelledby="confirmDeleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">
+              Confirmar Eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            ¿Estás seguro de que deseas eliminar esta dirección? Esta acción no
+            se puede deshacer.
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-danger">Eliminar</button>
+          </div>
         </div>
-
-        <!-- Monto Disponible -->
-        <div class="mb-3">
-          <label for="montoDisponible" class="form-label"
-            >Monto Disponible</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            id="montoDisponible"
-            placeholder="Ingresa el monto disponible"
-            min="0"
-            step="0.01"
-            required
-          />
-        </div>
-
-        <!-- Botones de acción -->
-        <div class="d-flex justify-content-between" id="buttonsContainer">
-          <a href="lista_metodos_pago.html" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Volver a la Lista de Métodos de
-            Pago
-          </a>
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save"></i> Guardar Cambios
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
 
     <!-- Footer -->

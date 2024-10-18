@@ -43,10 +43,6 @@
   .btn + .btn {
     margin-left: 10px; /* Espacio lateral entre botones */
   }
-
-  .add-pay-method-container {
-    justify-content: start !important;
-  }
 }
 
 /* Ajustes de márgenes en tabletas */
