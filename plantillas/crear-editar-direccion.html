@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BazarBoost - Crear/Editar Dirección</title>
+    <link rel="stylesheet" href="estilos/base.css" />
+    <link
+      rel="stylesheet"
+      href="estilos/base-crear-editar-direccion-metodo-pago.css"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Navbar - Usar en todas las plantillas -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <!-- Nombre de la aplicación a la izquierda -->
+        <a class="navbar-brand" href="#">BazarBoost</a>
+        <!-- Botón de toggler para móviles -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Links alineados a la derecha -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <!-- Usar estos enlaces en todas las plantillas -->
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-cart"></i> Carrito
+                <!-- Badge de productos en el carrito -->
+                <span class="badge bg-danger">3</span>
+              </a>
+            </li>
+            <!-- Dropdown Cliente -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="clienteDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Cliente
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                <li><a class="dropdown-item" href="#">Facturas</a></li>
+                <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
+                <li><a class="dropdown-item" href="#">Direcciones</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Vendedor -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="vendedorDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Vendedor
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="vendedorDropdown">
+                <li><a class="dropdown-item" href="#">Ventas</a></li>
+                <li><a class="dropdown-item" href="#">Productos</a></li>
+                <li><a class="dropdown-item" href="#">Descuentos</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Administrador -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="adminDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Administrador
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                <li><a class="dropdown-item" href="#">Categorias</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item ms-lg-4">
+              <a class="nav-link" href="#">
+                <i class="bi"></i> Williams Jiménez
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Fin del Navbar -->
+
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Crear/Editar dirección</h2>
+
+      <!-- Mensajes de Advertencia -->
+      <div class="alert alert-warning" id="warning-alert">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <span id="alert-message">Error en los datos del formulario.</span>
+      </div>
+
+      <!-- Formulario para crear/editar dirección -->
+      <form id="direccionForm">
+        <div class="mb-3">
+          <label for="estado" class="form-label">Estado</label>
+          <input
+            type="text"
+            class="form-control"
+            id="estado"
+            placeholder="Ingrese el estado"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="ciudad" class="form-label">Ciudad</label>
+          <input
+            type="text"
+            class="form-control"
+            id="ciudad"
+            placeholder="Ingrese la ciudad"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="colonia" class="form-label">Colonia</label>
+          <input
+            type="text"
+            class="form-control"
+            id="colonia"
+            placeholder="Ingrese la colonia"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="calle" class="form-label">Calle</label>
+          <input
+            type="text"
+            class="form-control"
+            id="calle"
+            placeholder="Ingrese la calle"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="numero_domicilio" class="form-label"
+            >Número de domicilio</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            id="numero_domicilio"
+            placeholder="Ingrese el número de domicilio"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="codigo_postal" class="form-label">Código postal</label>
+          <input
+            type="text"
+            class="form-control"
+            id="codigo_postal"
+            placeholder="Ingrese el código postal"
+            required
+          />
+        </div>
+
+        <!-- Botones de acción -->
+        <div id="buttonsContainer" class="d-flex justify-content-between">
+          <a href="lista_direcciones.html" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la lista de direcciones
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Guardar dirección
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center mt-5">
+      <div class="container">
+        <p class="mb-0">
+          &copy; 2024 BazarBoost. Todos los derechos reservados.
+        </p>
+        <p>
+          <a href="#">Términos y Condiciones</a> |
+          <a href="#">Política de Privacidad</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

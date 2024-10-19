@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle del Producto - Bazarboost</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Enlace a Bootstrap Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="estilos/base.css" />
+    <link rel="stylesheet" href="estilos/detalle-producto.css" />
+  </head>
+  <body>
+    <!-- Navbar - Usar en todas las plantillas -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <!-- Nombre de la aplicación a la izquierda -->
+        <a class="navbar-brand" href="#">Bazarboost</a>
+        <!-- Botón de toggler para móviles -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Links alineados a la derecha -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <!-- Usar estos enlaces en todas las plantillas -->
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-cart"></i> Carrito
+                <!-- Badge de productos en el carrito -->
+                <span class="badge bg-danger">3</span>
+              </a>
+            </li>
+            <!-- Dropdown Cliente -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="clienteDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Cliente
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                <li><a class="dropdown-item" href="#">Facturas</a></li>
+
+                <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
+                <li><a class="dropdown-item" href="#">Direcciones</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Vendedor -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="vendedorDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Vendedor
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="vendedorDropdown">
+                <li><a class="dropdown-item" href="#">Ventas</a></li>
+                <li><a class="dropdown-item" href="#">Productos</a></li>
+                <li><a class="dropdown-item" href="#">Descuentos</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Administrador -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="adminDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Administrador
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                <li><a class="dropdown-item" href="#">Categorias</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item ms-lg-4">
+              <a class="nav-link" href="#">
+                <i class="bi"></i> Williams Jiménez
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Fin del Navbar -->
+
+    <div class="container mt-5" id="bodyContainer">
+      <div class="row">
+        <div class="col-md-6">
+          <img src="img/producto1.jpg" alt="Producto 1" class="product-image" />
+        </div>
+        <div class="col-md-6 product-info">
+          <h2>Nombre del Producto</h2>
+          <p>
+            <strong>Descripción:</strong> Breve descripción del producto,
+            destacando sus características más importantes.
+          </p>
+          <p><strong>Precio:</strong> $100.00</p>
+          <p>
+            <strong>Precio con descuento:</strong>
+            <p><strong>Precio con descuento:</strong> <span style="color: #dc3545;">$90.00</span> <small>(10% de descuento aplicado - <strong>Descuento de Temporada</strong>)</small></p>
+          </p>
+          <p><strong>Existencia:</strong> 10 unidades disponibles</p>
+          <p><strong>Categoría:</strong> Electrónica</p>
+          <p><strong>Calificación promedio:</strong></p>
+          <div class="average-rating">
+            <span class="review-stars">
+              <i class="bi bi-star-fill"></i> 4.5 de 5
+            </span>
+          </div>
+
+          <button class="btn btn-primary me-2">
+            <i class="bi bi-cart-plus"></i> Agregar al carrito
+          </button>
+          <button class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+          </button>
+        </div>
+      </div>
+
+      <!-- Agregar nueva reseña -->
+      <div class="mt-4">
+        <h5>Deja tu reseña</h5>
+        <div class="input-group mb-3">
+          <select class="form-select" aria-label="Calificación">
+            <option selected>Calificación</option>
+            <option value="1">1 estrella</option>
+            <option value="2">2 estrellas</option>
+            <option value="3">3 estrellas</option>
+            <option value="4">4 estrellas</option>
+            <option value="5">5 estrellas</option>
+          </select>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Escribe un comentario"
+          />
+          <button class="btn btn-success" type="button">Enviar reseña</button>
+        </div>
+
+        <!-- Reseña del usuario actual con botones de editar/eliminar -->
+        <div class="review-item">
+          <div class="d-flex justify-content-between">
+            <strong>Tú</strong>
+            <span class="review-stars"
+              ><i class="bi bi-star-fill"></i> 4 estrellas</span
+            >
+          </div>
+          <p>Me gustó el producto, pero podría mejorar en algunos aspectos.</p>
+          <small class="text-muted">Fecha: 15/11/2024</small>
+          <div class="mt-2 text-end">
+            <button
+              class="btn btn-danger btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteModal"
+            >
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de confirmación para eliminar reseña -->
+      <div
+        class="modal fade"
+        id="deleteModal"
+        tabindex="-1"
+        aria-labelledby="deleteModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteModalLabel">
+                Confirmar eliminación
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              ¿Estás seguro de que deseas eliminar esta reseña? Esta acción no
+              se puede deshacer.
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancelar
+              </button>
+              <button type="button" class="btn btn-danger">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de reseñas -->
+      <div class="reviews-section">
+        <h4>Reseñas de otros usuarios</h4>
+
+        <!-- Reseña individual -->
+        <div class="review-item">
+          <div class="d-flex justify-content-between">
+            <strong>Usuario 1</strong>
+            <span class="review-stars"
+              ><i class="bi bi-star-fill"></i> 4 estrellas</span
+            >
+          </div>
+          <p>¡Gran producto! Muy satisfecho con mi compra.</p>
+          <small class="text-muted">Fecha: 12/10/2024</small>
+        </div>
+
+        <!-- Otra reseña individual -->
+        <div class="review-item">
+          <div class="d-flex justify-content-between">
+            <strong>Usuario 2</strong>
+            <span class="review-stars"
+              ><i class="bi bi-star-fill"></i> 5 estrellas</span
+            >
+          </div>
+          <p>El mejor producto que he comprado este año.</p>
+          <small class="text-muted">Fecha: 05/11/2024</small>
+        </div>
+
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true"
+                >Anterior</a
+              >
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Siguiente</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Footer - Usar en todas las plantillas -->
+    <footer class="text-center">
+      <div class="container">
+        <p class="mb-0">
+          &copy; 2024 Bazarboost. Todos los derechos reservados.
+        </p>
+        <p>
+          <a href="#">Términos y Condiciones</a> |
+          <a href="#">Política de Privacidad</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
