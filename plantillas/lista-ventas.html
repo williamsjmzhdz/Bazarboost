@@ -118,7 +118,30 @@
 
     <!-- Main content -->
     <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4">Mis ventas</h2>
+      <h2 class="mb-4">Ventas</h2>
+
+      <!-- Sección de Ordenación -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="w-100">
+          <select
+            class="form-select"
+            id="orderBy"
+            aria-label="Ordenar Facturas"
+          >
+            <option value="" selected disabled>
+              Selecciona un criterio de ordenamiento
+            </option>
+            <option value="dateAsc">
+              Fecha (de la más antigua a la más reciente)
+            </option>
+            <option value="dateDesc">
+              Fecha (de la más reciente a la más antigua)
+            </option>
+            <option value="amountAsc">Monto (de menor a mayor)</option>
+            <option value="amountDesc">Monto (de mayor a menor)</option>
+          </select>
+        </div>
+      </div>
 
       <!-- Tabla de ventas con scroll horizontal -->
       <div class="table-responsive">

@@ -1,3 +1,7 @@
+#buttonsContainer {
+  margin-top: 2.5rem !important;
+}
+
 /* Para los botones en pantallas pequeñas */
 @media (max-width: 510px) {
   #buttonsContainer {
