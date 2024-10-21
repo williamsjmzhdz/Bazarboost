@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BazarBoost - Direcciones</title>
+    <title>BazarBoost - Crear/Editar Descuento</title>
     <link rel="stylesheet" href="estilos/base.css" />
-    <link rel="stylesheet" href="estilos/base-listas.css" />
+    <link rel="stylesheet" href="estilos/base-creacion-edicion.css" />
 
     <!-- Bootstrap CSS -->
     <link
@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <!-- Nombre de la aplicación a la izquierda -->
-        <a class="navbar-brand" href="#">Bazarboost</a>
+        <a class="navbar-brand" href="#">BazarBoost</a>
         <!-- Botón de toggler para móviles -->
         <button
           class="navbar-toggler"
@@ -118,111 +118,54 @@
     </nav>
     <!-- Fin del Navbar -->
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4">Direcciones</h2>
-
-      <!-- Sección para mensajes de éxito -->
-      <div
-        class="alert alert-success d-flex align-items-center"
-        id="success-alert"
-        role="alert"
-      >
-        <i class="bi bi-check-circle me-2"></i>
-        <div>¡Éxito! La dirección fue creada.</div>
-      </div>
+      <h2 class="mb-4">Crear/Editar Descuento</h2>
 
       <!-- Sección para mensajes de advertencia -->
-      <div class="alert alert-danger" id="warning-danger">
-        <i class="bi bi-exclamation-triangle"></i> No se pudo eliminar la
-        dirección debido a un error inesperado. Inténtelo de nuevo más tarde.
+      <div class="alert alert-danger d-none" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i> Por favor, completa todos los
+        campos obligatorios antes de guardar.
       </div>
 
-      <!-- Botón para agregar nueva dirección -->
-      <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-success">
-          <i class="bi bi-plus-lg"></i> Agregar Dirección
-        </button>
-      </div>
-
-      <!-- Tabla de direcciones con scroll horizontal -->
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th scope="col">Estado</th>
-              <th scope="col">Ciudad</th>
-              <th scope="col">Colonia</th>
-              <th scope="col">Calle</th>
-              <th scope="col">Número</th>
-              <th scope="col">Código Postal</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr data-label="Estado" data-estado="CDMX">
-              <td data-label="Estado">CDMX</td>
-              <td data-label="Ciudad">Ciudad de México</td>
-              <td data-label="Colonia">Roma Norte</td>
-              <td data-label="Calle">Álvaro Obregón</td>
-              <td data-label="Número">200</td>
-              <td data-label="Código Postal">06700</td>
-              <td data-label="Acciones">
-                <button class="btn btn-primary btn-sm">
-                  <i class="bi bi-pencil"></i> Editar
-                </button>
-                <button
-                  class="btn btn-danger btn-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#confirmDeleteModal"
-                >
-                  <i class="bi bi-trash"></i> Eliminar
-                </button>
-              </td>
-            </tr>
-            <!-- Más filas de direcciones -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Modal de confirmación de eliminación -->
-    <div
-      class="modal fade"
-      id="confirmDeleteModal"
-      tabindex="-1"
-      aria-labelledby="confirmDeleteModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="confirmDeleteModalLabel">
-              Confirmar Eliminación
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            ¿Estás seguro de que deseas eliminar esta dirección? Esta acción no
-            se puede deshacer.
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-danger">Eliminar</button>
-          </div>
+      <!-- Formulario de creación/edición -->
+      <form action="#" method="POST">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre del Descuento</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nombre"
+            name="nombre"
+            placeholder="Ingresa el nombre del descuento"
+            required
+          />
         </div>
-      </div>
+
+        <div class="mb-3">
+          <label for="porcentaje" class="form-label">Porcentaje (%)</label>
+          <input
+            type="number"
+            class="form-control"
+            id="porcentaje"
+            name="porcentaje"
+            placeholder="Ingresa el porcentaje de descuento"
+            min="0"
+            max="100"
+            required
+          />
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between" id="buttonsContainer">
+          <a href="lista_descuentos.html" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la lista de descuentos
+          </a>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> Guardar Descuento
+          </button>
+        </div>
+      </form>
     </div>
 
     <!-- Footer -->

@@ -23,7 +23,9 @@
     <!-- Navbar - Usar en todas las plantillas -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">BazarBoost</a>
+        <!-- Nombre de la aplicación a la izquierda -->
+        <a class="navbar-brand" href="#">Bazarboost</a>
+        <!-- Botón de toggler para móviles -->
         <button
           class="navbar-toggler"
           type="button"
@@ -35,14 +37,17 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- Links alineados a la derecha -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
+            <!-- Usar estos enlaces en todas las plantillas -->
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Inicio</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">
                 <i class="bi bi-cart"></i> Carrito
+                <!-- Badge de productos en el carrito -->
                 <span class="badge bg-danger">3</span>
               </a>
             </li>
@@ -60,10 +65,11 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
                 <li><a class="dropdown-item" href="#">Facturas</a></li>
-                <li><a class="dropdown-item" href="#">Métodos de pago</a></li>
+                <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
                 <li><a class="dropdown-item" href="#">Direcciones</a></li>
               </ul>
             </li>
+
             <!-- Dropdown Vendedor -->
             <li class="nav-item dropdown">
               <a
@@ -82,6 +88,25 @@
                 <li><a class="dropdown-item" href="#">Descuentos</a></li>
               </ul>
             </li>
+
+            <!-- Dropdown Administrador -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="adminDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Administrador
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                <li><a class="dropdown-item" href="#">Categorias</a></li>
+              </ul>
+            </li>
+
             <li class="nav-item ms-lg-4">
               <a class="nav-link" href="#">
                 <i class="bi"></i> Williams Jiménez
