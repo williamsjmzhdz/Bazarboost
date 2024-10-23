@@ -5,6 +5,10 @@
 
 /* Estilo responsive para móviles */
 @media (max-width: 768px) {
+  .table > :not(caption) > * > * {
+    box-shadow: none !important;
+  }
+
   .navbar-brand {
     font-size: 1.25rem;
   }
@@ -16,7 +20,6 @@
   .table tbody tr {
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid #dee2e6;
     margin-bottom: 1rem;
     padding: 1rem;
   }
