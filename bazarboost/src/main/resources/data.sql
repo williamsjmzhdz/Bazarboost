@@ -35,11 +35,11 @@ INSERT INTO Descuentos (porcentaje, nombre, usuario_id) VALUES
 
 -- Inserciones en la tabla Productos
 INSERT INTO Productos (nombre, descripcion, precio, existencia, imagen_url, usuario_id, descuento_id, categoria_id) VALUES
-('Smartphone', 'Último modelo con pantalla AMOLED', 699.99, 50, 'img/smartphone.jpg', 1, 1, 1),
-('Camiseta', 'Camiseta 100% algodón', 19.99, 200, 'img/camiseta.jpg', 2, NULL, 2),
-('Sofá', 'Sofá de tres plazas', 499.99, 10, 'img/sofa.jpg', 3, 3, 3),
-('Libro de Java', 'Guía avanzada de Java', 29.99, 100, 'img/libro_java.jpg', 4, NULL, 5),
-('Juguete Robot', 'Robot de juguete interactivo', 79.99, 30, 'img/robot.jpg', 5, 5, 4);
+('Smartphone', 'Último modelo con pantalla AMOLED', 699.99, 50, 'smartphone.jpg', 1, 1, 1),
+('Camiseta', 'Camiseta 100% algodón', 19.99, 200, 'camiseta.jpg', 2, NULL, 2),
+('Sofá', 'Sofá de tres plazas', 499.99, 10, 'sofa.jpg', 3, 3, 3),
+('Libro de Java', 'Guía avanzada de Java', 29.99, 100, 'libro_java.jpg', 4, NULL, 5),
+('Juguete Robot', 'Robot de juguete interactivo', 79.99, 30, 'robot.jpg', 5, 5, 4);
 
 -- Inserciones en la tabla UsuariosRoles
 INSERT INTO UsuariosRoles (usuario_id, rol_id) VALUES

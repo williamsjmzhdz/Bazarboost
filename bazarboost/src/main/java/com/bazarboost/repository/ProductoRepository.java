@@ -10,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -54,4 +55,8 @@ public interface ProductoRepository extends PagingAndSortingRepository<Producto,
     // Ordenar todos los productos por precio descendente que tengan existencia con paginación
     @Query("SELECT p FROM Producto p WHERE p.existencia > 0 ORDER BY p.precio DESC")
     Page<Producto> sortAllByPriceDescendingWithStock(Pageable pageable);
+
+    // Búsqueda de productos cuyo nombre contenga un texto específico (ignora mayúsculas/minúsculas)
+    List<Producto> findByNombreContainingIgnoreCase(String nombre);
+
 }
