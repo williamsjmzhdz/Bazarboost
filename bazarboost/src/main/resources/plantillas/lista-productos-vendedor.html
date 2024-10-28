@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout :: commonHead"></head>
+
+
+
+  <!-- Definir el fragmento con el título y los estilos específicos -->
+  <th:block th:fragment="headExtras">
+    <title>BazarBoost - Productos</title>
+    <link rel="stylesheet" href="/estilos/base.css" />
+    <link rel="stylesheet" href="/estilos/base-listas.css" />
+  </th:block>
+
+  <body>
+    <!-- Navbar - Usar en todas las plantillas -->
+    <div th:insert="layout :: navbar"></div>
+    <!-- Fin del Navbar -->
+
+    <!-- Main Content -->
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Productos</h2>
+
+      <!-- Sección para mensajes de éxito -->
+      <div
+        class="alert alert-success d-flex align-items-center d-none"
+        id="success-alert"
+        role="alert"
+      >
+        <i class="bi bi-check-circle me-2"></i>
+        <div>¡Éxito! El producto fue creado.</div>
+      </div>
+
+      <!-- Sección para mensajes de advertencia -->
+      <div class="alert alert-danger d-none" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span id="warning-message">No se pudo eliminar el producto debido a un error inesperado. Inténtelo de nuevo más tarde.</span>
+      </div>
+
+      <!-- Botón para añadir un nuevo producto -->
+      <div class="d-flex justify-content-end mb-3">
+        <a href="/productos/vendedor/crear" class="btn btn-success">
+          <i class="bi bi-plus-lg"></i> Añadir Producto
+        </a>
+      </div>
+
+
+      <!-- Tabla de productos -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Nombre del Producto</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Descuento</th>
+              <th scope="col">Existencia</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="productos-tbody">
+            <!-- Productos cargados dinámicamente aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">
+              Confirmar Eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            ¿Estás seguro de que deseas eliminar este producto? Esta acción no
+            se puede deshacer.
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-danger">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:insert="layout :: footer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Función para cargar los productos del vendedor
+      function cargarProductosVendedor() {
+        const url = new URL('/productos/mis-productos', window.location.origin);
+        fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              // Maneja diferentes códigos de error
+              if (response.status === 404) {
+                return response.text().then(errorMessage => {
+                  mostrarMensajeError("No se encontraron productos para el vendedor."); // Mensaje amigable para el usuario
+                  console.error(`Error 404: ${errorMessage}`); // Detalles técnicos en consola
+                  throw new Error(`404 Not Found: ${errorMessage}`);
+                });
+              } else {
+                mostrarMensajeError("Ocurrió un error al cargar los productos. Inténtelo más tarde.");
+                console.error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
+                throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
+              }
+            }
+            return response.json();
+          })
+          .then(data => {
+            const productosTbody = document.getElementById('productos-tbody');
+            productosTbody.innerHTML = ''; // Limpiar el contenido anterior
+
+            data.forEach(producto => {
+              const descuentoTexto = producto.descuentoPorcentaje > 0
+                ? `${producto.descuentoPorcentaje}% ($${producto.descuentoValor.toFixed(2)})`
+                : 'Sin descuento';
+
+              const productoHtml = `
+                <tr data-producto-id="${producto.id}">
+                  <td data-label="Nombre del Producto">${producto.nombre}</td>
+                  <td data-label="Precio">$${producto.precio.toFixed(2)}</td>
+                  <td data-label="Descuento">${descuentoTexto}</td>
+                  <td data-label="Existencia">${producto.existencia}</td>
+                  <td data-label="Acciones">
+                    <button class="btn btn-primary btn-sm">
+                      <i class="bi bi-pencil"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </td>
+                </tr>`;
+              productosTbody.insertAdjacentHTML('beforeend', productoHtml);
+            });
+          })
+          .catch(error => {
+            console.error('Error al cargar productos:', error); // Log detallado en la consola
+          });
+      }
+
+      // Función para mostrar un mensaje de error amigable al usuario
+      function mostrarMensajeError(mensaje) {
+        const warningElement = document.getElementById('warning-danger');
+        const warningMessage = document.getElementById('warning-message');
+        warningMessage.textContent = mensaje; // Actualiza solo el texto del mensaje
+        warningElement.classList.remove('d-none'); // Quita la clase 'd-none' para mostrar el mensaje
+      }
+
+      // Cargar productos al cargar la página
+      window.onload = () => {
+        cargarProductosVendedor();
+      };
+    </script>
+
+  </body>
+</html>

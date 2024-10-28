@@ -1,11 +1,10 @@
-package com.bazarboost.model.entity;
+package com.bazarboost.model;
 
-import com.bazarboost.model.entity.auxiliar.TipoTarjeta;
+import com.bazarboost.model.auxiliar.TipoTarjeta;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 
 /*
  * Alumno: Francisco Williams Jiménez Hernández

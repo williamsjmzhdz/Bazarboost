@@ -1,4 +1,4 @@
-package com.bazarboost.model.entity;
+package com.bazarboost.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

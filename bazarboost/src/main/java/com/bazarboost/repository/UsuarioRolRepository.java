@@ -1,6 +1,6 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.UsuarioRol;
+import com.bazarboost.model.UsuarioRol;
 import org.springframework.data.repository.CrudRepository;
 
 /*

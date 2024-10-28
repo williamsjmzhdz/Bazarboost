@@ -1,62 +1,50 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.Categoria;
-import com.bazarboost.model.entity.Producto;
-import com.bazarboost.model.entity.Usuario;
+import com.bazarboost.model.Producto;
+import com.bazarboost.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /*
- * Alumno: Francisco Williams Jiménez Hernández
+ * Autor: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-public interface ProductoRepository extends PagingAndSortingRepository<Producto, Integer> {
+public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
-    // Encontrar todos los productos de un usuario específico
-    Page<Producto> findByUsuario(Usuario usuario, Pageable pageable);
+    /**
+     * Busca productos con filtros opcionales de nombre, categoría, y orden por precio.
+     * Devuelve solo productos con existencia disponible y aplica paginación.
+     *
+     * @param keyword   palabra clave para buscar en el nombre del producto (opcional).
+     * @param categoria categoría del producto para filtrar (opcional).
+     * @param orden     orden de precio, "asc" para ascendente o "desc" para descendente (opcional).
+     * @param pageable  objeto de paginación para limitar los resultados y establecer el tamaño de página.
+     * @return una página de productos que cumplen con los filtros y orden especificados.
+     */
+    @Query("SELECT p FROM Producto p " +
+            "WHERE (:keyword IS NULL OR LOWER(p.nombre) LIKE %:keyword%) " +
+            "AND (:categoria IS NULL OR p.categoria.nombre = :categoria) " +
+            "AND p.existencia > 0 " +
+            "ORDER BY " +
+            "CASE WHEN :orden = 'asc' THEN p.precio END ASC, " +
+            "CASE WHEN :orden = 'desc' THEN p.precio END DESC")
+    Page<Producto> buscarProductosConFiltros(
+            @Param("keyword") String keyword,
+            @Param("categoria") String categoria,
+            @Param("orden") String orden,
+            Pageable pageable);
 
-    // Crear o editar un producto (método heredado de CrudRepository)
-    // save() ya está heredado de CrudRepository.
-
-    // Eliminar un producto de un usuario específico
-    @Transactional
-    void deleteByProductoIdAndUsuarioUsuarioId(Integer productoId, Integer usuarioId);
-
-    // Verificar si un producto pertenece a un usuario específico antes de editarlo
-    Optional<Producto> findByProductoIdAndUsuarioUsuarioId(Integer productoId, Integer usuarioId);
-
-    // Encontrar todos los productos que tengan existencia disponible con paginación
-    @Query("SELECT p FROM Producto p WHERE p.existencia > 0")
-    Page<Producto> findAllWithExistence(Pageable pageable);
-
-    // Encontrar productos por categoría que tengan existencia con paginación
-    @Query("SELECT p FROM Producto p WHERE p.categoria = :categoria AND p.existencia > 0")
-    Page<Producto> searchByCategoryWithExistence(@Param("categoria") Categoria categoria, Pageable pageable);
-
-    // Filtrar productos por categoría y ordenar por precio ascendente (productos con existencia) con paginación
-    @Query("SELECT p FROM Producto p WHERE p.categoria = :categoria AND p.existencia > 0 ORDER BY p.precio ASC")
-    Page<Producto> searchByCategoryOrderByPriceAscendingWithStock(@Param("categoria") Categoria categoria, Pageable pageable);
-
-    // Filtrar productos por categoría y ordenar por precio descendente (productos con existencia) con paginación
-    @Query("SELECT p FROM Producto p WHERE p.categoria = :categoria AND p.existencia > 0 ORDER BY p.precio DESC")
-    Page<Producto> searchByCategoryOrderByPriceDescendingWithStock(@Param("categoria") Categoria categoria, Pageable pageable);
-
-    // Ordenar todos los productos por precio ascendente que tengan existencia con paginación
-    @Query("SELECT p FROM Producto p WHERE p.existencia > 0 ORDER BY p.precio ASC")
-    Page<Producto> sortAllByPriceAscendingWithStock(Pageable pageable);
-
-    // Ordenar todos los productos por precio descendente que tengan existencia con paginación
-    @Query("SELECT p FROM Producto p WHERE p.existencia > 0 ORDER BY p.precio DESC")
-    Page<Producto> sortAllByPriceDescendingWithStock(Pageable pageable);
-
-    // Búsqueda de productos cuyo nombre contenga un texto específico (ignora mayúsculas/minúsculas)
-    List<Producto> findByNombreContainingIgnoreCase(String nombre);
+    /**
+     * Encuentra todos los productos asociados a un usuario específico.
+     *
+     * @param usuario Usuario cuyos productos se desean obtener.
+     * @return        Lista de productos asociados al usuario.
+     */
+    List<Producto> findByUsuario(Usuario usuario);
 
 }

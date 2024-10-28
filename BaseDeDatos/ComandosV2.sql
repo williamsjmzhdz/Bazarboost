@@ -67,8 +67,7 @@ CREATE TABLE Productos (
     usuario_id INT NOT NULL,
     descuento_id INT,
     categoria_id INT,
-    CONSTRAINT PK_Productos PRIMARY KEY (producto_id),
-    CONSTRAINT UQ_Productos_nombre UNIQUE (nombre),
+    CONSTRAINT PK_Productos PRIMARY KEY (producto_id),productos
     CONSTRAINT FK_Productos_usuario_id FOREIGN KEY (usuario_id) REFERENCES Usuarios(usuario_id) ON DELETE CASCADE,
     CONSTRAINT FK_Productos_descuento_id FOREIGN KEY (descuento_id) REFERENCES Descuentos(descuento_id) ON DELETE SET NULL,
     CONSTRAINT FK_Productos_categoria_id FOREIGN KEY (categoria_id) REFERENCES Categorias(categoria_id) ON DELETE SET NULL,

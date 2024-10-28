@@ -1,0 +1,3 @@
+Si el proyecto se ejecuta en otro ambiente, es necesario actualizar la ruta de almacenamiento de las imágenes. Actualmente, la configuración apunta a una ruta específica de mi máquina local. Para adaptarlo a otros entornos, modifica la ruta hasta el directorio src/main/resources/estaticos/img del proyecto, según corresponda al ambiente en el que se esté ejecutando.
+# Ruta para almacenamiento de imágenes en application.properties
+app.imagenes.directorio=C:/Users/Alumno/Documents/ArchivosDiplomadoJava/Bazarboost/bazarboost/src/main/resources/estaticos/img

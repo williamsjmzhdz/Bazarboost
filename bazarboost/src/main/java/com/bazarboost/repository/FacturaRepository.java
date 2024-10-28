@@ -1,6 +1,6 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.Factura;
+import com.bazarboost.model.Factura;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;

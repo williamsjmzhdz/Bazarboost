@@ -1,6 +1,6 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.ProductoCarrito;
+import com.bazarboost.model.ProductoCarrito;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

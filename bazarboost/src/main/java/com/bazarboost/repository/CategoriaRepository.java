@@ -1,6 +1,7 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.Categoria;
+import com.bazarboost.model.Categoria;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 /*
- * Alumno: Francisco Williams Jiménez Hernández
+ * Autor: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-public interface CategoriaRepository extends CrudRepository<Categoria, Integer> {
+public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     // Encontrar todas las categorías
     List<Categoria> findAll();

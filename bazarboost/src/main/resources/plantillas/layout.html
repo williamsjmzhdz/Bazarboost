@@ -1,0 +1,103 @@
+<!-- layout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="commonHead">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 16%22><text y=%2214%22 font-size=%2214%22>⚡</text></svg>" type="image/svg+xml">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <!-- Incluir el fragmento headExtras específico -->
+    <th:block th:replace="~{crear-editar-producto :: headExtras}"></th:block>
+</head>
+
+<body>
+    <!-- Fragmento de Navbar -->
+    <th:block th:fragment="navbar">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">BazarBoost</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/productos}" th:classappend="${requestURI == '/productos'} ? 'active'">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/carrito}" th:classappend="${requestURI == '/carrito'} ? 'active'">
+                                <i class="bi bi-cart"></i> Carrito
+                                <span class="badge bg-danger">3</span>
+                            </a>
+                        </li>
+
+                        <!-- Dropdown Cliente -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="clienteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                               th:classappend="${(requestURI != null) and (requestURI.startsWith('/facturas') || requestURI.startsWith('/metodos-pago') || requestURI.startsWith('/direcciones'))} ? 'active'">
+                                Cliente
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                                <li><a class="dropdown-item" th:href="@{/facturas}" th:classappend="${requestURI.startsWith('/facturas')} ? 'active'">Facturas</a></li>
+                                <li><a class="dropdown-item" th:href="@{/metodos-pago}" th:classappend="${requestURI.startsWith('/metodos-pago')} ? 'active'">Métodos de pago</a></li>
+                                <li><a class="dropdown-item" th:href="@{/direcciones}" th:classappend="${requestURI.startsWith('/direcciones')} ? 'active'">Direcciones</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Dropdown Vendedor -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="vendedorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                               th:classappend="${(requestURI != null) and (requestURI.startsWith('/ventas') || requestURI.startsWith('/productos/vendedor') || requestURI.startsWith('/descuentos'))} ? 'active'">
+                                Vendedor
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="vendedorDropdown">
+                                <li><a class="dropdown-item" th:href="@{/ventas}" th:classappend="${requestURI.startsWith('/ventas')} ? 'active'">Ventas</a></li>
+                                <li><a class="dropdown-item" th:href="@{/productos/vendedor}" th:classappend="${requestURI.startsWith('/productos/vendedor')} ? 'active'">Productos</a></li>
+                                <li><a class="dropdown-item" th:href="@{/descuentos}" th:classappend="${requestURI.startsWith('/descuentos')} ? 'active'">Descuentos</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Dropdown Administrador -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                               th:classappend="${(requestURI != null) and (requestURI.startsWith('/usuarios') || requestURI.startsWith('/categorias'))} ? 'active'">
+                                Administrador
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                <li><a class="dropdown-item" th:href="@{/usuarios}" th:classappend="${requestURI.startsWith('/usuarios')} ? 'active'">Usuarios</a></li>
+                                <li><a class="dropdown-item" th:href="@{/categorias}" th:classappend="${requestURI.startsWith('/categorias')} ? 'active'">Categorías</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item ms-lg-4">
+                            <a class="nav-link" href="#">
+                                <i class="bi"></i> Williams Jiménez
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </th:block>
+
+
+    <!-- Fragmento de Footer -->
+    <th:block th:fragment="footer">
+        <!-- Footer -->
+        <footer class="text-center mt-5">
+            <div class="container">
+                <p class="mb-0">
+                    &copy; 2024 Bazarboost. Todos los derechos reservados.
+                </p>
+                <p>
+                    <a href="#">Términos y Condiciones</a> |
+                    <a href="#">Política de Privacidad</a>
+                </p>
+            </div>
+        </footer>
+    </th:block>
+</body>
+</html>

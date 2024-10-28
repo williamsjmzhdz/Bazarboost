@@ -1,4 +1,4 @@
-package com.bazarboost.model.entity.auxiliar;
+package com.bazarboost.model.auxiliar;
 
 public enum TipoTarjeta {
     Débito,

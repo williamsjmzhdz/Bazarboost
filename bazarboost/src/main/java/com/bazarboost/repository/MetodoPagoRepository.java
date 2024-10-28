@@ -1,6 +1,6 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.MetodoPago;
+import com.bazarboost.model.MetodoPago;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -1,13 +1,12 @@
-package com.bazarboost.model.entity;
+package com.bazarboost.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 /*
- * Alumno: Francisco Williams Jiménez Hernández
+ * Autor: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-
 @Entity
 @Table(name = "Productos")
 @Data
@@ -46,4 +45,5 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+    
 }

@@ -1,4 +1,4 @@
-package com.bazarboost.model.entity;
+package com.bazarboost.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,16 +9,16 @@ import lombok.*;
  * */
 
 @Entity
-@Table(name = "ProductosCarrito")
+@Table(name = "ProductosFacturas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoCarrito {
+public class ProductoFactura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "producto_carrito_id")
-    private Integer productoCarritoId;
+    @Column(name = "producto_factura_id")
+    private Integer productoFacturaId;
 
     @Column(name = "cantidad")
     private Integer cantidad;
@@ -27,8 +27,8 @@ public class ProductoCarrito {
     private Double total;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @JoinColumn(name = "factura_id")
+    private Factura factura;
 
     @ManyToOne
     @JoinColumn(name = "producto_id")

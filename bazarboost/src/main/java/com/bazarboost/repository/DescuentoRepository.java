@@ -1,7 +1,8 @@
 package com.bazarboost.repository;
 
-import com.bazarboost.model.entity.Descuento;
-import com.bazarboost.model.entity.Usuario;
+import com.bazarboost.model.Descuento;
+import com.bazarboost.model.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,23 +10,28 @@ import java.util.List;
 import java.util.Optional;
 
 /*
- * Alumno: Francisco Williams Jiménez Hernández
+ * Autor: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-public interface DescuentoRepository extends CrudRepository<Descuento, Integer> {
+public interface DescuentoRepository extends JpaRepository<Descuento, Integer> {
 
-    // Buscar todos los descuentos de un usuario
+    /**
+     * Obtiene todos los descuentos asociados a un usuario específico.
+     *
+     * @param usuario Usuario cuyos descuentos se desean obtener.
+     * @return Lista de descuentos asociados al usuario.
+     */
     List<Descuento> findByUsuario(Usuario usuario);
 
-    // Buscar un descuento por su ID y por usuario
+    /**
+     * Encuentra un descuento por su ID y el ID del usuario al que pertenece.
+     *
+     * @param descuentoId El ID del descuento.
+     * @param usuarioId El ID del usuario dueño del descuento.
+     * @return Un Optional con el descuento encontrado o vacío si no coincide.
+     */
     Optional<Descuento> findByDescuentoIdAndUsuarioUsuarioId(Integer descuentoId, Integer usuarioId);
 
-    // Crear o editar un descuento (método heredado de CrudRepository)
-    // save() ya está heredado de CrudRepository.
-
-    // Eliminar un descuento de un usuario específico
-    @Transactional
-    void deleteByDescuentoIdAndUsuarioUsuarioId(Integer descuentoId, Integer usuarioId);
 }
 
 
