@@ -60,7 +60,6 @@
           <label for="categoriaProducto" class="form-label">Categoría</label>
           <select class="form-select" id="categoriaProducto" name="categoriaId" required>
             <option value="" selected disabled>Seleccione una Categoría</option>
-            <option value="-1">Sin categoría</option>
             <option th:each="categoria : ${categorias}" th:value="${categoria.categoriaId}" th:text="${categoria.nombre}"></option>
           </select>
         </div>
@@ -81,7 +80,7 @@
 
         <!-- Botones -->
         <div class="d-flex justify-content-between" id="buttonsContainer">
-          <a href="lista-productos-vendedor.html" type="button" class="btn btn-secondary">
+          <a href="/productos/vendedor" type="button" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Volver a la lista de productos
           </a>
           <button type="submit" class="btn btn-primary">

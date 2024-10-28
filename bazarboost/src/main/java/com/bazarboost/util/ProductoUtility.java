@@ -15,7 +15,7 @@ public class ProductoUtility {
     public boolean guardarImagenProducto(Producto producto, MultipartFile imagenArchivo) throws IOException {
         if (!imagenArchivo.isEmpty()) {
             String nombreArchivo = imagenArchivo.getOriginalFilename();
-            imagenArchivo.transferTo(new File(directorioImagenes + nombreArchivo));
+            imagenArchivo.transferTo(new File(directorioImagenes + "/" + nombreArchivo));
             producto.setImagenUrl(nombreArchivo);
             return true;
         }

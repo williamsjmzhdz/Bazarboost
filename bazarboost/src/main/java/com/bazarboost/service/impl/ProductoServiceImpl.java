@@ -14,7 +14,9 @@ import com.bazarboost.service.ProductoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -46,8 +48,21 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public Page<Producto> buscarProductosConFiltros(String keyword, String categoria, String orden, Pageable pageable) {
-        return productoRepository.buscarProductosConFiltros(keyword, categoria, orden, pageable);
+
+        // Ajusta el orden en el pageable según el valor de `orden`
+        Sort sort = Sort.by("precio");
+        if ("asc".equalsIgnoreCase(orden)) {
+            sort = sort.ascending();
+        } else if ("desc".equalsIgnoreCase(orden)) {
+            sort = sort.descending();
+        }
+
+        // Crea un nuevo Pageable con la ordenación especificada
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        return productoRepository.buscarProductosConFiltros(keyword, categoria, sortedPageable);
     }
+
 
     @Override
     public List<ProductoVendedorDTO> obtenerProductosPorVendedor(Integer vendedorId) {

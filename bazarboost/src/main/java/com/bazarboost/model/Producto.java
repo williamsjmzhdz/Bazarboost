@@ -40,8 +40,6 @@ public class Producto {
     @Column(name = "existencia")
     private Integer existencia;
 
-    @NotBlank(message = "La URL de la imagen no puede estar vacía")
-    @Length(max = 255, message = "La URL de la imagen no puede superar los 255 caracteres")
     @Column(name = "imagen_url")
     private String imagenUrl;
 

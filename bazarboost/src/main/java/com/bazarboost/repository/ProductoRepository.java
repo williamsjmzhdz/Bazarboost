@@ -16,28 +16,31 @@ import java.util.List;
  * */
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
+
     /**
-     * Busca productos con filtros opcionales de nombre, categoría, y orden por precio.
-     * Devuelve solo productos con existencia disponible y aplica paginación.
+     * Consulta para buscar productos con filtros opcionales de palabra clave y categoría,
+     * y una restricción de existencia disponible.
+     * La consulta admite paginación para facilitar la gestión de resultados extensos.
      *
-     * @param keyword   palabra clave para buscar en el nombre del producto (opcional).
-     * @param categoria categoría del producto para filtrar (opcional).
-     * @param orden     orden de precio, "asc" para ascendente o "desc" para descendente (opcional).
-     * @param pageable  objeto de paginación para limitar los resultados y establecer el tamaño de página.
-     * @return una página de productos que cumplen con los filtros y orden especificados.
+     * - Filtra por palabra clave en el nombre del producto si se proporciona (`:keyword`).
+     *   La búsqueda es insensible a mayúsculas y minúsculas.
+     * - Filtra por categoría específica si se proporciona (`:categoria`).
+     * - Solo incluye productos con existencia mayor a cero (`p.existencia > 0`).
+     *
+     * @param keyword   Palabra clave para buscar en el nombre del producto (opcional).
+     * @param categoria Nombre de la categoría del producto para filtrar (opcional).
+     * @param pageable  Objeto Pageable para aplicar paginación a la consulta.
+     * @return          Una página de productos que cumplen con los filtros especificados.
      */
     @Query("SELECT p FROM Producto p " +
             "WHERE (:keyword IS NULL OR LOWER(p.nombre) LIKE %:keyword%) " +
             "AND (:categoria IS NULL OR p.categoria.nombre = :categoria) " +
-            "AND p.existencia > 0 " +
-            "ORDER BY " +
-            "CASE WHEN :orden = 'asc' THEN p.precio END ASC, " +
-            "CASE WHEN :orden = 'desc' THEN p.precio END DESC")
+            "AND p.existencia > 0")
     Page<Producto> buscarProductosConFiltros(
             @Param("keyword") String keyword,
             @Param("categoria") String categoria,
-            @Param("orden") String orden,
             Pageable pageable);
+
 
     /**
      * Encuentra todos los productos asociados a un usuario específico.
