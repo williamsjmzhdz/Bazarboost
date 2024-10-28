@@ -2,6 +2,8 @@ package com.bazarboost.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /*
  * Autor: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
@@ -11,9 +13,9 @@ public class ProductoVendedorDTO {
 
     private Integer productoId;
     private String nombre;
-    private Double precio;
+    private BigDecimal precio;
     private Integer existencia;
     private Integer descuentoPorcentaje;
-    private Double descuentoValor;
+    private BigDecimal descuentoValor;
 
 }

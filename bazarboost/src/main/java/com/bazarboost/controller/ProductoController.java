@@ -12,6 +12,7 @@ import com.bazarboost.service.ProductoService;
 import com.bazarboost.service.UsuarioService;
 import com.bazarboost.util.ProductoUtility;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.modelmapper.internal.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -76,12 +78,26 @@ public class ProductoController {
 
     @PostMapping("/crear")
     public String crearProducto(
-            @ModelAttribute Producto producto,
+            @Valid @ModelAttribute("producto") Producto producto,
+            BindingResult resultado,
             @RequestParam("categoriaId") Integer categoriaId,
             @RequestParam(value = "descuentoId", required = false) Integer descuentoId,
             @RequestParam("imagenArchivo") MultipartFile imagenArchivo,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request,
+            Model model
     ) throws IOException {
+
+        if (resultado.hasErrors()) {
+            model.addAttribute("modo", "crear");
+            model.addAttribute("producto", producto);
+            model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
+            model.addAttribute("descuentos", descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
+            model.addAttribute("requestURI", request.getRequestURI());
+            model.addAttribute("errores", resultado.getAllErrors());
+            return "crear-editar-producto";
+        }
+
         producto.setUsuario(usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL));
         producto.setCategoria(categoriaService.obtenerCategoriaPorId(categoriaId));
         producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuario(descuentoId, VENDEDOR_ID_TEMPORAL));

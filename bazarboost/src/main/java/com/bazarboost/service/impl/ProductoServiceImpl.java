@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /*
@@ -70,10 +72,15 @@ public class ProductoServiceImpl implements ProductoService {
         if (producto.getDescuento() != null) {
             int porcentaje = producto.getDescuento().getPorcentaje();
             dto.setDescuentoPorcentaje(porcentaje);
-            dto.setDescuentoValor(producto.getPrecio() * porcentaje / 100);
+            dto.setDescuentoValor(
+                    producto.getPrecio()
+                            .multiply(BigDecimal.valueOf(porcentaje))
+                            .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP)
+            );
+
         } else {
             dto.setDescuentoPorcentaje(0);
-            dto.setDescuentoValor(0.0);
+            dto.setDescuentoValor(BigDecimal.valueOf(0.0));
         }
 
         return dto;

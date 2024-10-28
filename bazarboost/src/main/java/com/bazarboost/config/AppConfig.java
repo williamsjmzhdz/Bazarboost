@@ -1,6 +1,5 @@
 package com.bazarboost.config;
 
-import com.bazarboost.model.Producto;
 import com.bazarboost.util.ProductoUtility;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
