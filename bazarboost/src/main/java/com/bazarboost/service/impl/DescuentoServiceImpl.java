@@ -52,6 +52,11 @@ public class DescuentoServiceImpl implements DescuentoService {
         return descuentoRepository.findByDescuentoIdAndUsuarioUsuarioId(id, usuarioId).orElse(null);
     }
 
+    @Override
+    public Descuento crearDescuento(Descuento descuento) {
+        return descuentoRepository.save(descuento);
+    }
+
     private DescuentoVendedorDTO convertirADescuentoVendedorDTO(Descuento descuento) {
         return modelMapper.map(descuento, DescuentoVendedorDTO.class);
     }

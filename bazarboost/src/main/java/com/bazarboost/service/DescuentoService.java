@@ -32,5 +32,14 @@ public interface DescuentoService {
      */
     Descuento obtenerDescuentoPorIdYUsuario(Integer id, Integer usuarioId);
 
+    /**
+     * Crea y guarda un nuevo descuento en el sistema.
+     *
+     * @param descuento Objeto {@link Descuento} con los datos del nuevo descuento.
+     * @return El {@link Descuento} creado con su ID asignado.
+     */
+    Descuento crearDescuento(Descuento descuento);
+
+
 
 }

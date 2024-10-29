@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+  <head th:replace="~{layout :: commonHead}"></head>
+
+  <!-- Definir el fragmento con el título y los estilos específicos -->
+  <th:block th:fragment="headExtras">
+    <title>BazarBoost - Buscar Productos</title>
+    <link rel="stylesheet" href="/estilos/base.css">
+    <link rel="stylesheet" href="/estilos/base-creacion-edicion.css">
+  </th:block>
+
+  <body>
+
+    <!-- Incluir el Navbar -->
+    <div th:insert="~{layout :: navbar}"></div>
+
+    <!-- Main Content -->
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4" th:text="${modo == 'crear' ? 'Crear Descuento' : 'Editar Descuento'}"></h2>
+
+      <!-- Sección para mensajes de error -->
+      <div class="alert alert-danger d-none" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span id="warning-message"></span>
+      </div>
+
+      <!-- Formulario de creación/edición -->
+      <form>
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre del Descuento</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nombre"
+            name="nombre"
+            placeholder="Ingresa el nombre del descuento"
+            maxlength="40"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="porcentaje" class="form-label">Porcentaje (%)</label>
+          <input
+            type="number"
+            class="form-control"
+            id="porcentaje"
+            name="porcentaje"
+            placeholder="Ingresa el porcentaje de descuento"
+            min="1"
+            max="100"
+            required
+          />
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between" id="buttonsContainer">
+          <a href="/descuentos" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la lista de descuentos
+          </a>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> Guardar Descuento
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div th:insert="~{layout :: footer}"></div>
+    <script src="/js/crear-editar-descuento.js"></script>
+    <script src="/js/mensajes-estado.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+</html>

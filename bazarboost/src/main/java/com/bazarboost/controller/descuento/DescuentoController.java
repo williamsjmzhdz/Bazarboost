@@ -16,4 +16,11 @@ public class DescuentoController {
         return "lista-descuentos";
     }
 
+    @GetMapping("/crear")
+    public String crearDescuento(Model model, HttpServletRequest request) {
+        model.addAttribute("requestURI", request.getRequestURI());
+        model.addAttribute("modo", "crear");
+        return "crear-editar-descuento";
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.bazarboost.service.impl;
 
+import com.bazarboost.exception.UsuarioNoEncontradoException;
 import com.bazarboost.model.Usuario;
 import com.bazarboost.repository.UsuarioRepository;
 import com.bazarboost.service.UsuarioService;
@@ -14,7 +15,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario obtenerUsuarioPorId(Integer usuarioId) {
-        return usuarioRepository.findById(usuarioId).orElse(null);
+        return usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado"));
     }
 
 }

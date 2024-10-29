@@ -35,9 +35,9 @@
 
       <!-- Botón para añadir un nuevo descuento -->
       <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-success">
+        <a href="/descuentos/crear" class="btn btn-success">
           <i class="bi bi-plus-lg"></i> Añadir Descuento
-        </button>
+        </a>
       </div>
 
       <!-- Tabla de descuentos -->
@@ -97,73 +97,13 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/lista-descuentos.js"></script>
+    <script src="/js/mensajes-estado.js"></script>
     <script>
-      // Función para cargar los descuentos del vendedor
-      function cargarDescuentosVendedor() {
-        const url = new URL('/descuentos/mis-descuentos', window.location.origin);
-        fetch(url)
-          .then(response => {
-            if (!response.ok) {
-              // Maneja diferentes códigos de error
-              if (response.status === 404) {
-                return response.text().then(errorMessage => {
-                  mostrarMensajeError("No se encontraron descuentos para el vendedor."); // Mensaje amigable para el usuario
-                  console.error(`Error 404: ${errorMessage}`); // Detalles técnicos en consola
-                  throw new Error(`404 Not Found: ${errorMessage}`);
-                });
-              } else {
-                mostrarMensajeError("Ocurrió un error inesperado al cargar los productos. Inténtelo más tarde.");
-                console.error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
-                throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
-              }
-            }
-            return response.json();
-          })
-          .then(data => {
-            const descuentosTbody = document.getElementById('descuentos-tbody');
-            descuentosTbody.innerHTML = ''; // Limpiar el contenido anterior
-
-            data.forEach(descuento => {
-              const descuentoHTML = `
-                <tr
-                 data-descuento-id="${descuento.descuentoId}"
-                 data-nombre="${descuento.nombre}"
-                 data-porcentaje="${descuento.porcentaje}"
-                >
-                  <td data-label="Nombre del Descuento">${descuento.nombre}</td>
-                  <td data-label="Porcentaje">${descuento.porcentaje}</td>
-                  <td data-label="Acciones">
-                    <button class="btn btn-primary btn-sm">
-                      <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button
-                      class="btn btn-danger btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalConfirmDelete"
-                    >
-                      <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                  </td>
-                </tr>`;
-              descuentosTbody.insertAdjacentHTML('beforeend', descuentoHTML);
-            });
-          })
-          .catch(error => {
-            console.error('Error inesperado al cargar descuentos:', error); // Log detallado en la consola
-          });
-      }
-
-      // Función para mostrar un mensaje de error amigable al usuario
-      function mostrarMensajeError(mensaje) {
-        const warningElement = document.getElementById('warning-danger');
-        const warningMessage = document.getElementById('warning-message');
-        warningMessage.textContent = mensaje; // Actualiza solo el texto del mensaje
-        warningElement.classList.remove('d-none'); // Quita la clase 'd-none' para mostrar el mensaje
-      }
-
-      // Cargar productos al cargar la página
+      // Cargar productos y verificar el mensaje de éxito al cargar la página
       window.onload = () => {
-        cargarDescuentosVendedor();
+          cargarDescuentosVendedor();
+          mostrarMensajeExito();
       };
     </script>
   </body>
