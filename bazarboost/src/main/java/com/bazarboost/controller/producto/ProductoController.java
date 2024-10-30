@@ -64,6 +64,12 @@ public class ProductoController {
         return "crear-editar-producto";
     }
 
+    @GetMapping("/detalle-producto/{id}")
+    public String mostrarDestalleProducto(Model model, HttpServletRequest request, @PathVariable Integer id) {
+        model.addAttribute("requestURI", request.getRequestURI());
+        return "detalle-producto";
+    }
+
     /* ============================= OPERACIONES DE PRODUCTO ============================= */
 
     @PostMapping("/crear")

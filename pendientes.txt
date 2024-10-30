@@ -4,3 +4,4 @@ Vista: lista-productos.html
 - Mostrar descuento dinámico
 - Mejorar el DTO para que no devuelva todos los datos de 
 cada producto solo los necesarios
+- Arreglar la paginación de reseñas en detalle-producto.html

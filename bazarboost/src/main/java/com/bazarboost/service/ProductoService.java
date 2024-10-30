@@ -1,19 +1,12 @@
 package com.bazarboost.service;
 
+import com.bazarboost.dto.ProductoDetalladoDTO;
 import com.bazarboost.dto.ProductoVendedorDTO;
-import com.bazarboost.model.Categoria;
-import com.bazarboost.model.Descuento;
 import com.bazarboost.model.Producto;
-import com.bazarboost.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 /*
  * Autor: Francisco Williams Jiménez Hernández
@@ -53,4 +46,18 @@ public interface ProductoService {
      */
     void guardarProducto(Producto producto, Integer vendedorId);
 
+    /**
+     * Obtiene el detalle de un producto en la base de datos, incluyendo la información de la categoría y las reseñas.
+     *
+     * Este método recupera el detalle completo de un producto, incluyendo su categoría y reseñas. La reseña del usuario
+     * actual (si existe) se recupera por separado, mientras que las reseñas de otros usuarios se obtienen de forma
+     * paginada según el `Pageable` especificado.
+     *
+     * @param productoId El ID del producto en la base de datos.
+     * @param usuarioId El ID del usuario que consulta el detalle del producto.
+     * @param pageable  El objeto Pageable que especifica la página actual y el tamaño para la paginación de las reseñas de otros usuarios.
+     * @return Un objeto ProductoDetalleDTO que contiene toda la información detallada del producto.
+     */
+    ProductoDetalladoDTO obtenerProductoDetalle(Integer productoId, Integer usuarioId, Pageable pageable);
+;
 }

@@ -3,7 +3,7 @@
 function crearDescuento(event) {
     event.preventDefault();
 
-    const url = new URL('/descuentos/crear', window.location.origin);
+    const url = new URL('/api/descuentos/crear', window.location.origin);
     const nombre = document.getElementById('nombre').value;
     const porcentaje = parseInt(document.getElementById('porcentaje').value);
 
@@ -25,7 +25,7 @@ function crearDescuento(event) {
                 });
             } else if (response.status === 400) {
                 return response.json().then(validationErrors => {
-                    mostrarErroresDeValidacion(validationErrors);
+                    mostrarListaErrores(validationErrors);
                     throw new Error(`Errores de validación: ${validationErrors.join(", ")}`);
                 });
             } else {

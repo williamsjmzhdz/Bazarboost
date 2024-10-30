@@ -1,5 +1,6 @@
 package com.bazarboost.controller.producto;
 
+import com.bazarboost.dto.ProductoDetalladoDTO;
 import com.bazarboost.dto.ProductoVendedorDTO;
 import com.bazarboost.dto.ProductosPaginadosDTO;
 import com.bazarboost.model.Producto;
@@ -23,10 +24,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("/productos")
+@RequestMapping("/api/productos")
 public class ProductoRestController {
 
-    private static final Integer VENDEDOR_ID_TEMPORAL = 1;
+    private static final Integer USUARIO_ID_TEMPORAL = 1;
+    private static final Integer TAMANIO_PAGINA_RESENIAS = 10;
+
 
     @Autowired
     private ProductoService productoService;
@@ -73,7 +76,20 @@ public class ProductoRestController {
     @GetMapping("/mis-productos")
     @ResponseBody
     public List<ProductoVendedorDTO> obtenerMisProductos() {
-        return productoService.obtenerProductosPorVendedor(VENDEDOR_ID_TEMPORAL);
+        return productoService.obtenerProductosPorVendedor(USUARIO_ID_TEMPORAL);
     }
+
+    @GetMapping("/detalle-producto/{id}")
+    @ResponseBody
+    public ResponseEntity<ProductoDetalladoDTO> obtenerProductoDetalle(
+            @PathVariable Integer id,
+            @RequestParam(value = "page", defaultValue = "0") int page) {
+
+        Pageable pageable = PageRequest.of(page, TAMANIO_PAGINA_RESENIAS);
+        ProductoDetalladoDTO detalleDTO = productoService.obtenerProductoDetalle(id, USUARIO_ID_TEMPORAL, pageable);
+
+        return ResponseEntity.ok().body(detalleDTO);
+    }
+
 
 }

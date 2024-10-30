@@ -7,8 +7,17 @@ function mostrarMensajeError(mensaje) {
     warningElement.classList.remove('d-none');
 }
 
+function mostrarMensajeErrorSolo(mensaje) {
+    const warningElement = document.getElementById('warning-danger');
+    const warningMessage = document.getElementById('warning-message');
+    warningMessage.textContent = mensaje;
+    warningElement.classList.remove('d-none');
 
-function mostrarErroresDeValidacion(errores) {
+    document.getElementById('bodyContainer').style.height = "100%";
+}
+
+
+function mostrarListaErrores(errores) {
     const warningElement = document.getElementById('warning-danger');
     warningElement.innerHTML = `
         <i class="bi bi-exclamation-triangle"></i> No se pudo completar la acción. Solucione los siguientes errores:
@@ -25,7 +34,7 @@ function mostrarErroresDeValidacion(errores) {
     warningElement.classList.remove('d-none');
 }
 
-function mostrarMensajeExito() {
+function mostrarMensajeExitoURL() {
     const urlParams = new URLSearchParams(window.location.search);
     const mensajeExito = urlParams.get('mensajeExito');
     if (mensajeExito) {
@@ -46,4 +55,39 @@ function mostrarMensajeExito() {
             }, 500);
         }, 5000);
     }
+}
+
+// Función para mostrar mensaje de éxito en el contenedor de reseñas
+function mostrarMensajeExitoReview(mensaje) {
+    const successElement = document.getElementById('review-success-alert');
+    successElement.querySelector('div').textContent = mensaje;
+    successElement.classList.remove('d-none');
+
+    // Ocultar automáticamente después de 5 segundos
+    setTimeout(() => {
+        successElement.classList.add('fade-out');
+
+        setTimeout(() => {
+            successElement.classList.add('d-none');
+            successElement.classList.remove('fade-out');
+        }, 500);
+    }, 5000);
+}
+
+// Función para mostrar mensaje de error en el contenedor de reseñas
+function mostrarMensajeErrorReview(mensaje) {
+    const warningElement = document.getElementById('review-warning-danger');
+    const warningMessage = document.getElementById('review-warning-message');
+    warningMessage.textContent = mensaje;
+    warningElement.classList.remove('d-none');
+
+    // Ocultar automáticamente después de 5 segundos
+    setTimeout(() => {
+        warningElement.classList.add('fade-out');
+
+        setTimeout(() => {
+            warningElement.classList.add('d-none');
+            warningElement.classList.remove('fade-out');
+        }, 500);
+    }, 5000);
 }

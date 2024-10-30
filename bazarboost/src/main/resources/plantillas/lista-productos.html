@@ -106,7 +106,7 @@
           const categoria = filtroCategoria.value || null;
           const orden = ordenPrecio.value || null;
 
-          const url = new URL('/productos/filtrados', window.location.origin);
+          const url = new URL('/api/productos/filtrados', window.location.origin);
           url.searchParams.append('page', paginaActual);
 
           if (palabraClave) url.searchParams.append('keyword', palabraClave);
@@ -130,7 +130,7 @@
                   const productoHtml = `
                     <div class="col-lg-4 col-md-6">
                       <div class="card h-100">
-                        <img src="/productos/imagenes/${producto.imagenUrl}" class="card-img-top" alt="${producto.nombre}" />
+                        <img src="/api/productos/imagenes/${producto.imagenUrl}" class="card-img-top" alt="${producto.nombre}" />
                         <div class="card-body">
                           <h5 class="card-title">${producto.nombre}</h5>
                           <p class="card-text">${producto.descripcion}</p>
@@ -142,12 +142,12 @@
                           </div>
                         </div>
                         <div class="card-footer text-center">
-                          <button class="btn btn-primary me-2">
+                          <a class="btn btn-primary me-2" role="button">
                             <i class="bi bi-cart-plus"></i> Agregar al carrito
-                          </button>
-                          <button class="btn btn-secondary">
+                          </a>
+                          <a class="btn btn-secondary" href="/productos/detalle-producto/${producto.productoId}">
                             <i class="bi bi-eye"></i> Ver producto
-                          </button>
+                          </a>
                         </div>
                       </div>
                     </div>`;

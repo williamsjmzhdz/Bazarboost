@@ -132,11 +132,35 @@ INSERT INTO Facturas (fecha, subtotal, total, porcentaje_impuestos, usuario_id, 
 
 -- Inserciones en la tabla Resenias
 INSERT INTO Resenias (comentario, calificacion, usuario_id, producto_id) VALUES
-('Excelente producto', 5, 1, 1),
-('Buena calidad', 4, 2, 2),
-('Cómodo y práctico', 4, 3, 3),
-('Muy útil para aprender Java', 5, 4, 4),
-('Divertido y educativo', 5, 5, 5);
+-- Producto 1 (nuevas reseñas, excluyendo la de usuario_id = 1)
+('Muy satisfecho con la compra', 4, 2, 1),
+('Buena calidad de construcción', 5, 3, 1),
+('Cumple con las expectativas', 4, 4, 1),
+('Buen producto pero algo costoso', 3, 5, 1),
+
+-- Producto 2 (nuevas reseñas, excluyendo la de usuario_id = 2)
+('Excelente durabilidad', 5, 1, 2),
+('Funciona muy bien', 4, 3, 2),
+('Gran compra, lo recomiendo', 5, 4, 2),
+('Satisface mis necesidades', 4, 5, 2),
+
+-- Producto 3 (nuevas reseñas, excluyendo la de usuario_id = 3)
+('Muy útil para el día a día', 5, 1, 3),
+('Calidad superior', 4, 2, 3),
+('Excelente funcionamiento', 5, 4, 3),
+('Buena inversión', 4, 5, 3),
+
+-- Producto 4 (nuevas reseñas, excluyendo la de usuario_id = 4)
+('Material muy didáctico', 5, 1, 4),
+('Perfecto para aprendizaje', 5, 2, 4),
+('Contenido bien estructurado', 4, 3, 4),
+('Altamente recomendable', 5, 5, 4),
+
+-- Producto 5 (nuevas reseñas, excluyendo la de usuario_id = 5)
+('Fantástico producto educativo', 5, 1, 5),
+('Excelente para el aprendizaje', 4, 2, 5),
+('Muy interactivo y didáctico', 5, 3, 5),
+('Lo uso constantemente', 4, 4, 5);
 
 -- Inserciones en la tabla ProductosCarrito
 INSERT INTO ProductosCarrito (cantidad, total, usuario_id, producto_id) VALUES

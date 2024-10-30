@@ -111,73 +111,7 @@
     <script>
       // Función para cargar los productos del vendedor
       function cargarProductosVendedor() {
-        const url = new URL('/productos/mis-productos', window.location.origin);
-        fetch(url)
-          .then(response => {
-            if (!response.ok) {
-              // Maneja diferentes códigos de error
-              if (response.status === 404) {
-                return response.text().then(errorMessage => {
-                  mostrarMensajeError("No se encontraron productos para el vendedor."); // Mensaje amigable para el usuario
-                  console.error(`Error 404: ${errorMessage}`); // Detalles técnicos en consola
-                  throw new Error(`404 Not Found: ${errorMessage}`);
-                });
-              } else {
-                mostrarMensajeError("Ocurrió un error al cargar los productos. Inténtelo más tarde.");
-                console.error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
-                throw new Error(`HTTP error! status: ${response.status}, message: ${response.statusText}`);
-              }
-            }
-            return response.json();
-          })
-          .then(data => {
-            const productosTbody = document.getElementById('productos-tbody');
-            productosTbody.innerHTML = ''; // Limpiar el contenido anterior
-
-            data.forEach(producto => {
-              const descuentoTexto = producto.descuentoPorcentaje > 0
-                ? `${producto.descuentoPorcentaje}% ($${producto.descuentoValor.toFixed(2)})`
-                : 'Sin descuento';
-
-              const productoHtml = `
-                <tr data-producto-id="${producto.id}">
-                  <td data-label="Nombre del Producto">${producto.nombre}</td>
-                  <td data-label="Precio">$${producto.precio.toFixed(2)}</td>
-                  <td data-label="Descuento">${descuentoTexto}</td>
-                  <td data-label="Existencia">${producto.existencia}</td>
-                  <td data-label="Acciones">
-                    <button class="btn btn-primary btn-sm">
-                      <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                      <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                  </td>
-                </tr>`;
-              productosTbody.insertAdjacentHTML('beforeend', productoHtml);
-            });
-          })
-          .catch(error => {
-            console.error('Error al cargar productos:', error); // Log detallado en la consola
-          });
-      }
-
-      // Función para mostrar un mensaje de error amigable al usuario
-      function mostrarMensajeError(mensaje) {
-        const warningElement = document.getElementById('warning-danger');
-        const warningMessage = document.getElementById('warning-message');
-        warningMessage.textContent = mensaje; // Actualiza solo el texto del mensaje
-        warningElement.classList.remove('d-none'); // Quita la clase 'd-none' para mostrar el mensaje
-      }
-
-      // Cargar productos al cargar la página
-      window.onload = () => {
-        cargarProductosVendedor();
-      };
-    </script>    <script>
-      // Función para cargar los productos del vendedor
-      function cargarProductosVendedor() {
-        const url = new URL('/productos/mis-productos', window.location.origin);
+        const url = new URL('/api/productos/mis-productos', window.location.origin);
         fetch(url)
           .then(response => {
             if (!response.ok) {

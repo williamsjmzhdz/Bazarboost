@@ -1,0 +1,116 @@
+/* Estilos específicos de la vista de detalle del producto */
+
+.product-image {
+  width: 645px;
+  height: auto;
+  min-height: 451px;
+  max-height: 645px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.product-info {
+  margin-top: 20px;
+}
+
+/* Highlight the discounted price */
+.discount-price {
+  color: #dc3545; /* Red color to highlight discount */
+  font-weight: bold;
+}
+
+.average-rating {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.review-stars {
+  color: #ffc107; /* Color amarillo de las estrellas */
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.reviews-section {
+  margin-top: 40px;
+}
+
+.review-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.review-stars {
+  color: #ffc107;
+}
+
+.d-flex {
+  margin-top: 20px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 1399px) {
+    .product-image {
+      width: 535px;
+      height: auto;
+      min-height: 341px;
+    }
+}
+
+/* Estilos responsivos */
+@media (max-width: 1199px) {
+    .product-image {
+      width: 435px;
+      height: auto;
+      min-height: 241px;
+    }
+}
+
+/* Estilos responsivos */
+@media (max-width: 991px) {
+    .product-image {
+      width: 335px;
+      height: auto;
+      min-height: 141px;
+    }
+}
+
+@media (max-width: 767px) {
+    .product-image {
+      width: 100%;
+      height: auto;
+      min-height: 0px;
+    }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .input-group .form-select,
+  .input-group .form-control {
+    margin-bottom: 10px !important;
+    width: auto;
+    height: 38px;
+  }
+
+  .input-group .btn {
+    border-radius: 5px !important;
+  }
+}
+
+@media (max-width: 357px) {
+  /* Ajustes adicionales para centrar botones */
+  .product-info button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .product-info button:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -6,7 +6,6 @@ import com.bazarboost.model.Usuario;
 import com.bazarboost.service.DescuentoService;
 import com.bazarboost.service.UsuarioService;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +15,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/descuentos")
+@RequestMapping("/api/descuentos")
 public class DescuentoRestController {
 
-    private static final Integer VENDEDOR_ID_TEMPORAL = 13;
+    private static final Integer VENDEDOR_ID_TEMPORAL = 1;
 
     @Autowired
     private DescuentoService descuentoService;
