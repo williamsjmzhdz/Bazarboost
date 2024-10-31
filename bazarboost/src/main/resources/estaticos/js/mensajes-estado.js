@@ -1,5 +1,3 @@
-// mensajes-estado.js
-
 function mostrarMensajeError(mensaje) {
     const warningElement = document.getElementById('warning-danger');
     const warningMessage = document.getElementById('warning-message');
@@ -57,9 +55,9 @@ function mostrarMensajeExitoURL() {
     }
 }
 
-// Función para mostrar mensaje de éxito en el contenedor de reseñas
-function mostrarMensajeExitoReview(mensaje) {
-    const successElement = document.getElementById('review-success-alert');
+// Función para mostrar mensaje de éxito
+function mostrarMensajeExito(mensaje) {
+    const successElement = document.getElementById('success-alert');
     successElement.querySelector('div').textContent = mensaje;
     successElement.classList.remove('d-none');
 
@@ -74,10 +72,10 @@ function mostrarMensajeExitoReview(mensaje) {
     }, 5000);
 }
 
-// Función para mostrar mensaje de error en el contenedor de reseñas
+// Función para mostrar mensaje de error
 function mostrarMensajeErrorReview(mensaje) {
-    const warningElement = document.getElementById('review-warning-danger');
-    const warningMessage = document.getElementById('review-warning-message');
+    const warningElement = document.getElementById('warning-danger');
+    const warningMessage = document.getElementById('warning-message');
     warningMessage.textContent = mensaje;
     warningElement.classList.remove('d-none');
 
@@ -91,3 +89,23 @@ function mostrarMensajeErrorReview(mensaje) {
         }, 500);
     }, 5000);
 }
+
+function mostrarMensajeErrorDesaparece(mensaje) {
+    const warningElement = document.getElementById('warning-danger');
+    const warningMessage = document.getElementById('warning-message');
+    warningMessage.textContent = mensaje;
+    warningElement.classList.remove('d-none');
+
+    // Scroll automático hacia la parte superior para ver el mensaje
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Ocultar el mensaje después de 5 segundos
+    setTimeout(() => {
+        warningElement.classList.add('fade-out');
+        setTimeout(() => {
+            warningElement.classList.add('d-none');
+            warningElement.classList.remove('fade-out');
+        }, 500);
+    }, 5000);
+}
+

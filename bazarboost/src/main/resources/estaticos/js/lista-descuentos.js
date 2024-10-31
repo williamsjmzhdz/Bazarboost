@@ -1,5 +1,3 @@
-// lista-descuentos.js
-
 function cargarDescuentosVendedor() {
     const url = new URL('/api/descuentos/mis-descuentos', window.location.origin);
     fetch(url)

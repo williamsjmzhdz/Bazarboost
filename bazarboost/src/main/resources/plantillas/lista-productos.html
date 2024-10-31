@@ -45,9 +45,24 @@
     </div>
   </div>
 
-  <!-- Lista de productos -->
-  <div class="row" id="productList">
+  <!-- Sección para mensajes de éxito -->
+  <div
+          class="alert alert-success d-flex d-none align-items-center"
+          id="success-alert"
+          role="alert"
+  >
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div></div>
   </div>
+
+  <!-- Sección para mensajes de error -->
+  <div class="alert alert-danger d-none" id="warning-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    <span id="warning-message"></span>
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="row" id="productList"></div>
 
   <!-- Paginación -->
   <nav aria-label="Page navigation example">
@@ -67,147 +82,10 @@
 
 <div th:insert="layout :: footer"></div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Script para la búsqueda asíncrona de productos -->
-<script th:inline="javascript">
-  const barraBusqueda = document.getElementById('searchBar');
-  const filtroCategoria = document.getElementById('categoryFilter');
-  const ordenPrecio = document.getElementById('priceSort');
-  const listaProductos = document.getElementById('productList');
-  const contenedorPaginacion = document.querySelector('.pagination');
-
-  let paginaActual = 0;
-
-  function obtenerProductos() {
-    const palabraClave = barraBusqueda.value || null;
-    const categoria = filtroCategoria.value || null;
-    const orden = ordenPrecio.value || null;
-
-    const url = new URL('/api/productos/filtrados', window.location.origin);
-    url.searchParams.append('page', paginaActual);
-
-    if (palabraClave) url.searchParams.append('keyword', palabraClave);
-    if (categoria) url.searchParams.append('categoria', categoria);
-    if (orden) url.searchParams.append('orden', orden);
-
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        actualizarListaProductos(data.productos);
-        actualizarPaginacion(data);
-      });
-  }
-
-  function formatearPrecio(precio) {
-    return precio.toFixed(2);
-  }
-
-  function actualizarListaProductos(productos) {
-    listaProductos.innerHTML = '';
-    if (productos.length > 0) {
-      productos.forEach(producto => {
-        const precioFinal = formatearPrecio(producto.precioFinalConDescuento);
-        const precioOriginal = formatearPrecio(producto.precio);
-
-        const productoHtml = `
-          <div class="col-lg-4 col-md-6">
-            <div class="card h-100">
-              <img src="/api/productos/imagenes/${producto.imagenUrl}" class="card-img-top" alt="${producto.nombre}" />
-              <div class="card-body">
-                <h5 class="card-title">${producto.nombre}</h5>
-                <p class="card-text">${producto.descripcion}</p>
-                ${producto.porcentajeDescuento ? `
-                  <p class="card-text">
-                    <del>Precio: $${precioOriginal}</del> <strong> $${precioFinal}</strong>
-                    <span class="text-success">(${producto.porcentajeDescuento}% Descuento)</span>
-                  </p>
-                ` : `
-                  <p class="card-text"><strong>Precio: $${precioOriginal}</strong></p>
-                `}
-                <div class="average-rating">
-                  <span class="review-stars">
-                    <i class="bi bi-star-fill"></i> ${producto.calificacionPromedio} de 5
-                  </span>
-                </div>
-              </div>
-              <div class="card-footer text-center">
-                ${producto.esProductoPropio ? `` : `
-                  <a class="btn ${producto.estaEnCarrito ? 'btn-danger' : 'btn-primary'} me-2" role="button">
-                    <i class="bi ${producto.estaEnCarrito ? 'bi-cart-dash' : 'bi-cart-plus'}"></i>
-                    ${producto.estaEnCarrito ? 'Quitar del carrito' : 'Agregar al carrito'}
-                  </a>
-                `}
-                <a class="btn btn-secondary" href="/productos/detalle-producto/${producto.productoId}">
-                  <i class="bi bi-eye"></i> Ver producto
-                </a>
-              </div>
-            </div>
-          </div>`;
-        listaProductos.insertAdjacentHTML('beforeend', productoHtml);
-      });
-    } else {
-      listaProductos.innerHTML = '<div class="no-products-message text-center">No se encontraron productos.</div>';
-    }
-  }
-
-  function actualizarPaginacion(data) {
-    contenedorPaginacion.innerHTML = '';
-    const totalPaginas = data.totalPaginas;
-    const paginaActual = data.paginaActual;
-
-    const prevDisabled = paginaActual === 0 ? 'disabled' : '';
-    contenedorPaginacion.insertAdjacentHTML('beforeend', `
-      <li class="page-item ${prevDisabled}">
-          <a class="page-link" href="#" onclick="cambiarPagina(${paginaActual - 1})">Anterior</a>
-      </li>
-    `);
-
-    const maxBotonesPagina = 5;
-    const inicioPagina = Math.max(0, paginaActual - Math.floor(maxBotonesPagina / 2));
-    const finPagina = Math.min(totalPaginas, inicioPagina + maxBotonesPagina);
-
-    for (let i = inicioPagina; i < finPagina; i++) {
-      const claseActiva = i === paginaActual ? 'active' : '';
-      contenedorPaginacion.insertAdjacentHTML('beforeend', `
-        <li class="page-item ${claseActiva}">
-            <a class="page-link" href="#" onclick="cambiarPagina(${i})">${i + 1}</a>
-        </li>
-      `);
-    }
-
-    const nextDisabled = paginaActual === totalPaginas - 1 ? 'disabled' : '';
-    contenedorPaginacion.insertAdjacentHTML('beforeend', `
-      <li class="page-item ${nextDisabled}">
-          <a class="page-link" href="#" onclick="cambiarPagina(${paginaActual + 1})">Siguiente</a>
-      </li>
-    `);
-  }
-
-  function cambiarPagina(pagina) {
-    if (pagina >= 0) {
-      paginaActual = pagina;
-      obtenerProductos();
-    }
-  }
-
-  barraBusqueda.addEventListener('input', () => {
-    paginaActual = 0;
-    obtenerProductos();
-  });
-
-  filtroCategoria.addEventListener('change', () => {
-    paginaActual = 0;
-    obtenerProductos();
-  });
-
-  ordenPrecio.addEventListener('change', () => {
-    paginaActual = 0;
-    obtenerProductos();
-  });
-
-  obtenerProductos();
-</script>
+<script src="/js/lista-productos.js"></script>
+<script src="/js/mensajes-estado.js"></script>
+<script src="/js/paginacion.js"></script>
+<script src="/js/boton-carrito.js"></script>
 </body>
 </html>

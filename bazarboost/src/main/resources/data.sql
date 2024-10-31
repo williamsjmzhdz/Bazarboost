@@ -170,6 +170,7 @@ INSERT INTO ProductosCarrito (cantidad, total, usuario_id, producto_id) VALUES
 (3, 89.97, 4, 5),
 (2, 59.98, 5, 4);
 
+
 -- Inserciones en la tabla ProductosFacturas
 INSERT INTO ProductosFacturas (cantidad, total, factura_id, producto_id) VALUES
 (1, 699.99, 1, 1),

@@ -262,7 +262,7 @@ function submitReview() {
   const productId = window.location.pathname.split('/').pop();
 
   if (!calificacion || !comentario) {
-    mostrarMensajeErrorReview('Por favor, completa la calificación y el comentario.');
+    mostrarMensajeError('Por favor, completa la calificación y el comentario.');
     return;
   }
 
@@ -289,7 +289,7 @@ function submitReview() {
   .then(response => response.json().then(data => ({ status: response.status, data })))
   .then(({ status, data }) => {
     if ((isEdit && status === 200) || (!isEdit && status === 201)) {
-      mostrarMensajeExitoReview(`Reseña ${isEdit ? 'actualizada' : 'enviada'} con éxito.`);
+      mostrarMensajeExito(`Reseña ${isEdit ? 'actualizada' : 'enviada'} con éxito.`);
       renderMyReview(data);
 
       // Actualizar la calificación promedio en el DOM
@@ -299,7 +299,7 @@ function submitReview() {
     }
   })
   .catch(error => {
-    mostrarMensajeErrorReview(error.message);
+    mostrarMensajeError(error.message);
   });
 }
 
@@ -315,7 +315,7 @@ function deleteReview(reseniaId) {
     }
   })
   .then(data => {
-    mostrarMensajeExitoReview('Reseña eliminada con éxito.');
+    mostrarMensajeExito('Reseña eliminada con éxito.');
 
     // Cerrar el modal de confirmación de eliminación
     const deleteModal = document.getElementById('deleteModal');
@@ -331,7 +331,7 @@ function deleteReview(reseniaId) {
     actualizarCalificacionPromedio(data.calificacionPromedioActualizada);
   })
   .catch(error => {
-    mostrarMensajeErrorReview(error.message);
+    mostrarMensajeError(error.message);
   });
 }
 

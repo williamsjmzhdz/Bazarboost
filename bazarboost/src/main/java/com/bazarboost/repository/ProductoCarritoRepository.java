@@ -1,12 +1,12 @@
 package com.bazarboost.repository;
 
+import com.bazarboost.model.Producto;
 import com.bazarboost.model.ProductoCarrito;
+import com.bazarboost.model.Usuario;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 /*
  * Alumno: Francisco Williams Jiménez Hernández
@@ -22,6 +22,24 @@ public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrit
      * @return true si el producto está en el carrito del usuario, false en caso contrario.
      */
     boolean existsByProductoProductoIdAndUsuarioUsuarioId(Integer productoId, Integer usuarioId);
+
+    /**
+     * Busca un producto en el carrito de un usuario específico.
+     *
+     * @param usuario el usuario que tiene el carrito.
+     * @param producto el producto a buscar en el carrito.
+     * @return un Optional con el ProductoCarrito si existe.
+     */
+    Optional<ProductoCarrito> findByUsuarioAndProducto(Usuario usuario, Producto producto);
+
+    /**
+     * Calcula el total de productos en el carrito de un usuario.
+     *
+     * @param usuarioId el ID del usuario.
+     * @return el número total de productos en el carrito
+     */
+    @Query("SELECT SUM(pc.cantidad) FROM ProductoCarrito pc WHERE pc.usuario.id = :usuarioId")
+    Integer totalProductosEnCarrito(Integer usuarioId);
 
 }
 

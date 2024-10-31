@@ -1,5 +1,3 @@
-// crear-editar-descuento.js
-
 function crearDescuento(event) {
     event.preventDefault();
 

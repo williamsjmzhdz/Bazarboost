@@ -7,7 +7,6 @@ import lombok.*;
  * Alumno: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-
 @Entity
 @Table(name = "ProductosCarrito")
 @Data
