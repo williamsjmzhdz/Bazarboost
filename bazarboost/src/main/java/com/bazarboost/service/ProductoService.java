@@ -2,8 +2,8 @@ package com.bazarboost.service;
 
 import com.bazarboost.dto.ProductoDetalladoDTO;
 import com.bazarboost.dto.ProductoVendedorDTO;
+import com.bazarboost.dto.ProductosPaginadosDTO;
 import com.bazarboost.model.Producto;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -13,20 +13,6 @@ import java.util.List;
  * Proyecto: Bazarboost
  * */
 public interface ProductoService {
-
-    /**
-     * Obtiene una página de productos que coinciden con los filtros especificados.
-     *
-     * @param keyword   Palabra clave para buscar en el nombre del producto;
-     *                  si es null o vacío, se omite este filtro.
-     * @param categoria Nombre de la categoría para filtrar productos;
-     *                  si es null, se omite este filtro.
-     * @param orden     Orden de los resultados por precio ("asc" para ascendente,
-     *                  "desc" para descendente); si es null, no se aplica ordenamiento.
-     * @param pageable  Parámetros de paginación y tamaño de página.
-     * @return          Página de productos que cumplen con los filtros y criterios de orden.
-     */
-    Page<Producto> buscarProductosConFiltros(String keyword, String categoria, String orden, Pageable pageable);
 
     /**
      * Obtiene todos los productos asociados a un vendedor específico.
@@ -59,5 +45,21 @@ public interface ProductoService {
      * @return Un objeto ProductoDetalleDTO que contiene toda la información detallada del producto.
      */
     ProductoDetalladoDTO obtenerProductoDetalle(Integer productoId, Integer usuarioId, Pageable pageable);
-;
+
+    /**
+     * Obtiene una página de productos que coinciden con los filtros especificados.
+     *
+     * @param keyword   Palabra clave para buscar en el nombre del producto;
+     *                  si es null o vacío, se omite este filtro.
+     * @param categoria Nombre de la categoría para filtrar productos;
+     *                  si es null, se omite este filtro.
+     * @param orden     Orden de los resultados por precio ("asc" para ascendente,
+     *                  "desc" para descendente); si es null, no se aplica ordenamiento.
+     * @param page      Número de página.
+     * @param usuarioId ID del usuario actual para verificar si el producto está en su carrito.
+     * @return          Página de productos que cumplen con los filtros y criterios de orden.
+     */
+    ProductosPaginadosDTO buscarProductosConFiltros(String keyword, String categoria, String orden, int page, Integer usuarioId);
+
+
 }

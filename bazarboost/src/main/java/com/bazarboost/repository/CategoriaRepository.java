@@ -14,18 +14,15 @@ import java.util.Optional;
  * */
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
-    // Encontrar todas las categorías
-    List<Categoria> findAll();
+    /**
+     * Verifica si existe una categoría con el nombre especificado.
+     *
+     * @param nombre Nombre de la categoría a buscar.
+     * @return true si existe una categoría con el nombre dado, false en caso contrario.
+     */
+    boolean existsByNombre(String nombre);
 
-    // Buscar una categoría por su ID
-    Optional<Categoria> findById(Integer categoriaId);
-
-    // Eliminar una categoría por su ID
-    @Transactional
-    void deleteById(Integer categoriaId);
-
-    // Crear o editar una categoría (método heredado de CrudRepository)
-    // save() ya está heredado de CrudRepository.
 }
+
 
 

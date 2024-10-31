@@ -8,6 +8,9 @@ import com.bazarboost.exception.AccesoDenegadoException;
 import com.bazarboost.exception.ProductoNoEncontradoException;
 import com.bazarboost.exception.ReseniaNoEncontradaException;
 import com.bazarboost.exception.UsuarioNoEncontradoException;
+import com.bazarboost.model.Producto;
+
+import java.math.BigDecimal;
 
 
 public interface ReseniaService {
@@ -53,5 +56,18 @@ public interface ReseniaService {
      * @throws AccesoDenegadoException si el usuario autenticado no es el propietario de la reseña.
      */
     CalificacionPromedioDTO eliminarResenia(Integer reseniaId, Integer usuarioId);
+
+
+    /**
+     * Calcula la calificación promedio de un producto específico en base a las reseñas asociadas.
+     *
+     * Este método consulta las reseñas del producto proporcionado y calcula el promedio de
+     * las calificaciones. Si el producto no tiene reseñas, retorna un valor de 0.
+     *
+     * @param producto El producto para el cual se desea calcular la calificación promedio.
+     * @return Un BigDecimal con la calificación promedio redondeada a un decimal; si no hay
+     *         reseñas, retorna BigDecimal.ZERO.
+     */
+    BigDecimal calcularCalificacionPromedio(Producto producto);
 
 }

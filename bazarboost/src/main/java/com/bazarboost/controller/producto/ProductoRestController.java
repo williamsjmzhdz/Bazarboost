@@ -45,17 +45,15 @@ public class ProductoRestController {
             @RequestParam(value = "orden", required = false) String orden,
             @RequestParam(value = "page", defaultValue = "0") int page
     ) {
-
-        Pageable pageable = PageRequest.of(page, 9);
-        Page<Producto> productosPaginados = productoService.buscarProductosConFiltros(keyword, categoria, orden, pageable);
-
-        return new ProductosPaginadosDTO(
-                productosPaginados.getContent(),
-                productosPaginados.getNumber(),
-                productosPaginados.getTotalPages(),
-                productosPaginados.getTotalElements()
-        );
+        System.out.println("PARÁMETROS POR DEFAULT");
+        System.out.println(keyword);
+        System.out.println(categoria);
+        System.out.println(orden);
+        System.out.println(page);
+        // Simplemente llamamos al servicio y retornamos el resultado
+        return productoService.buscarProductosConFiltros(keyword, categoria, orden, page, USUARIO_ID_TEMPORAL);
     }
+
     @GetMapping("/imagenes/{nombreImagen}")
     public ResponseEntity<Resource> obtenerImagen(@PathVariable String nombreImagen) throws IOException {
         Path rutaImagen = Paths.get(directorioImagenes).resolve(nombreImagen);

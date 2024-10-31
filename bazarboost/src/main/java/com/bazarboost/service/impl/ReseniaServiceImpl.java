@@ -124,7 +124,8 @@ public class ReseniaServiceImpl implements ReseniaService {
         return dto;
     }
 
-    private BigDecimal calcularCalificacionPromedio(Producto producto) {
+    @Override
+    public BigDecimal calcularCalificacionPromedio(Producto producto) {
         Double promedioCalificacion = reseniaRepository.obtenerCalificacionPromedio(producto.getProductoId());
 
         if (promedioCalificacion != null) {

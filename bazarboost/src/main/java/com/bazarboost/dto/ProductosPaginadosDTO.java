@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ProductosPaginadosDTO {
-    private List<Producto> productos;
+    private List<ProductoListadoDTO> productos;
     private int paginaActual;
     private int totalPaginas;
     private long totalElementos;

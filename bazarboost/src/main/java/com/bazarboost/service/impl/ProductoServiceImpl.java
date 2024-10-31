@@ -1,11 +1,14 @@
 package com.bazarboost.service.impl;
 
 import com.bazarboost.dto.*;
+import com.bazarboost.exception.CategoriaNoEncontradaException;
+import com.bazarboost.exception.OrdenNoValidoException;
 import com.bazarboost.exception.ProductoNoEncontradoException;
-import com.bazarboost.model.*;
 import com.bazarboost.exception.UsuarioNoEncontradoException;
+import com.bazarboost.model.*;
 import com.bazarboost.repository.*;
 import com.bazarboost.service.ProductoService;
+import com.bazarboost.service.ReseniaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +22,6 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
@@ -42,23 +41,102 @@ public class ProductoServiceImpl implements ProductoService {
     private ReseniaRepository reseniaRepository;
 
     @Autowired
+    private ProductoCarritoRepository productoCarritoRepository;
+
+    @Autowired
+    private ReseniaService reseniaService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public Page<Producto> buscarProductosConFiltros(String keyword, String categoria, String orden, Pageable pageable) {
+    public ProductosPaginadosDTO buscarProductosConFiltros(String keyword, String categoria, String orden, int page, Integer usuarioId) {
 
-        Sort sort;
-        if ("asc".equalsIgnoreCase(orden)) {
-            sort = Sort.by("precio").ascending();
-        } else if ("desc".equalsIgnoreCase(orden)) {
-            sort = Sort.by("precio").descending();
-        } else {
-            sort = Sort.by("id").descending();
+        // Validar existencia de la categoría si se proporciona
+        if (categoria != null && !categoria.isEmpty()) {
+            boolean categoriaExiste = categoriaRepository.existsByNombre(categoria);
+            if (!categoriaExiste) {
+                throw new CategoriaNoEncontradaException("La categoría '" + categoria + "' no fue encontrada.");
+            }
         }
 
-        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        // Verificar si el usuario existe antes de proceder con la operación
+        if (!usuarioRepository.existsById(usuarioId)) {
+            throw new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado.");
+        }
 
-        return productoRepository.buscarProductosConFiltros(keyword, categoria, sortedPageable);
+        // Validar que el valor de "orden" sea "ASC", "DESC" o NULL
+        if (orden != null && !orden.equalsIgnoreCase("ASC") && !orden.equalsIgnoreCase("DESC")) {
+            throw new OrdenNoValidoException("El parámetro de orden solo puede ser 'ASC' o 'DESC'.");
+        }
+
+        // Recuperar todos los productos que cumplen los filtros sin paginar
+        List<Producto> productosFiltrados = productoRepository.buscarProductosConFiltros(keyword, categoria);
+
+        // Mapear a DTO y calcular el precio con descuento
+        List<ProductoListadoDTO> productosListadoDTO = productosFiltrados.stream()
+                .map(producto -> mapearAProductoListadoDTO(producto, usuarioId))
+                .sorted((p1, p2) -> {
+                    if ("asc".equalsIgnoreCase(orden)) {
+                        return p1.getPrecioFinalConDescuento().compareTo(p2.getPrecioFinalConDescuento());
+                    } else if ("desc".equalsIgnoreCase(orden)) {
+                        return p2.getPrecioFinalConDescuento().compareTo(p1.getPrecioFinalConDescuento());
+                    } else {
+                        // Ordenamiento por ID descendente si `orden` es NULL
+                        return p2.getProductoId().compareTo(p1.getProductoId());
+                    }
+                })
+                .collect(Collectors.toList());
+
+        // Aplicar la paginación después del ordenamiento
+        int pageSize = 9; // Número de elementos por página
+        int start = Math.min(page * pageSize, productosListadoDTO.size());
+        int end = Math.min(start + pageSize, productosListadoDTO.size());
+        List<ProductoListadoDTO> productosPaginadosOrdenados = productosListadoDTO.subList(start, end);
+
+        // Retornar el DTO de paginación con los productos mapeados y la información de paginación
+        return new ProductosPaginadosDTO(
+                productosPaginadosOrdenados,
+                page,
+                (int) Math.ceil((double) productosListadoDTO.size() / pageSize),
+                productosListadoDTO.size()
+        );
+    }
+
+
+
+    private ProductoListadoDTO mapearAProductoListadoDTO(Producto producto, Integer usuarioId) {
+        ProductoListadoDTO dto = new ProductoListadoDTO();
+        dto.setProductoId(producto.getProductoId());
+        dto.setNombre(producto.getNombre());
+        dto.setDescripcion(producto.getDescripcion());
+        dto.setPrecio(producto.getPrecio());
+        dto.setImagenUrl(producto.getImagenUrl());
+        dto.setPorcentajeDescuento(producto.getDescuento() != null ? producto.getDescuento().getPorcentaje() : null);
+        dto.setNombreDescuento(producto.getDescuento() != null ? producto.getDescuento().getNombre() : null);
+        dto.setPrecioFinalConDescuento(calcularPrecioConDescuento(producto));
+        dto.setCalificacionPromedio(reseniaService.calcularCalificacionPromedio(producto));
+        dto.setEstaEnCarrito(checarSiEstaEnCarrito(producto, usuarioId));
+        dto.setEsProductoPropio(checarSiEsProductoPropio(producto, usuarioId));
+        return dto;
+    }
+
+    private BigDecimal calcularPrecioConDescuento(Producto producto) {
+        if (producto.getDescuento() != null) {
+            BigDecimal descuento = producto.getPrecio().multiply(
+                    BigDecimal.valueOf(producto.getDescuento().getPorcentaje()).divide(BigDecimal.valueOf(100))
+            );
+            return producto.getPrecio().subtract(descuento);
+        }
+        return producto.getPrecio();
+    }
+
+    private boolean checarSiEstaEnCarrito(Producto producto, Integer usuarioId) {
+        return productoCarritoRepository.existsByProductoProductoIdAndUsuarioUsuarioId(producto.getProductoId(), usuarioId);
+    }
+
+    private boolean checarSiEsProductoPropio(Producto producto, Integer usuarioId) {
+        return producto.getUsuario().getUsuarioId().equals(usuarioId);
     }
 
     @Override
@@ -85,12 +163,8 @@ public class ProductoServiceImpl implements ProductoService {
                 .orElseThrow(() -> new ProductoNoEncontradoException("Producto con ID " + productoId + " no encontrado"));
 
         Categoria categoria = producto.getCategoria();
-
         Descuento descuento = producto.getDescuento();
-
-        Resenia miResenia = reseniaRepository.findByProductoIdAndUsuarioId(productoId, usuarioId)
-                .orElse(null);
-
+        Resenia miResenia = reseniaRepository.findByProductoIdAndUsuarioId(productoId, usuarioId).orElse(null);
         Page<Resenia> otrasResenias = reseniaRepository.findByProductoIdAndUsuarioIdNot(productoId, usuarioId, pageable);
 
         return convertirAProductoDetalladoDTO(producto, categoria, descuento, miResenia, otrasResenias);
@@ -118,20 +192,14 @@ public class ProductoServiceImpl implements ProductoService {
     private ProductoDetalladoDTO convertirAProductoDetalladoDTO(Producto producto, Categoria categoria, Descuento descuento,
                                                                 Resenia miResenia, Page<Resenia> otrasResenias) {
         ProductoDetalladoDTO productoDetalladoDTO = new ProductoDetalladoDTO();
-
-        // Mapear propiedades básicas del producto
         modelMapper.map(producto, productoDetalladoDTO);
-
-        // Establecer el nombre de la categoría
         productoDetalladoDTO.setNombreCategoria(categoria.getNombre());
 
-        // Mapear descuento si existe
         if (descuento != null) {
             DescuentoDTO descuentoDTO = modelMapper.map(descuento, DescuentoDTO.class);
             productoDetalladoDTO.setDescuento(descuentoDTO);
         }
 
-        // Calcular y establecer el precio con descuento
         if (producto.getDescuento() != null) {
             BigDecimal precioConDescuento = producto.getPrecio()
                     .multiply(BigDecimal.valueOf(100 - producto.getDescuento().getPorcentaje()))
@@ -139,27 +207,19 @@ public class ProductoServiceImpl implements ProductoService {
             productoDetalladoDTO.setPrecioConDescuento(precioConDescuento);
         }
 
-        // Mapear mi reseña si existe
         if (miResenia != null) {
             ReseniaDTO miReseniaDTO = modelMapper.map(miResenia, ReseniaDTO.class);
-
-            // Mapear el usuario de la reseña
             UsuarioReseniaDTO usuarioDTO = modelMapper.map(miResenia.getUsuario(), UsuarioReseniaDTO.class);
             miReseniaDTO.setUsuario(usuarioDTO);
-
             productoDetalladoDTO.setMiResenia(miReseniaDTO);
         }
 
-        // Mapear otras reseñas
         if (otrasResenias != null && !otrasResenias.isEmpty()) {
             List<ReseniaDTO> reseniasDTO = otrasResenias.getContent().stream()
                     .map(resenia -> {
                         ReseniaDTO reseniaDTO = modelMapper.map(resenia, ReseniaDTO.class);
-
-                        // Mapear el usuario de cada reseña
                         UsuarioReseniaDTO usuarioDTO = modelMapper.map(resenia.getUsuario(), UsuarioReseniaDTO.class);
                         reseniaDTO.setUsuario(usuarioDTO);
-
                         return reseniaDTO;
                     })
                     .collect(Collectors.toList());
@@ -167,19 +227,15 @@ public class ProductoServiceImpl implements ProductoService {
             productoDetalladoDTO.setReseniasAdicionales(reseniasDTO);
         }
 
-        // Calcular y establecer la calificación promedio usando el método que retorna AVG
         Double promedioCalificacion = reseniaRepository.obtenerCalificacionPromedio(producto.getProductoId());
-
         if (promedioCalificacion != null) {
-            BigDecimal calificacionPromedio = BigDecimal.valueOf(promedioCalificacion)
-                    .setScale(1, RoundingMode.HALF_UP);
-            productoDetalladoDTO.setCalificacionPromedio(calificacionPromedio);
+            productoDetalladoDTO.setCalificacionPromedio(
+                    BigDecimal.valueOf(promedioCalificacion).setScale(1, RoundingMode.HALF_UP)
+            );
         } else {
             productoDetalladoDTO.setCalificacionPromedio(BigDecimal.ZERO);
         }
 
         return productoDetalladoDTO;
     }
-
 }
-

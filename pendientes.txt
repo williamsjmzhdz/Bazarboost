@@ -1,7 +1,9 @@
 Vista: lista-productos.html
 - Calificación dinámica
-- Botón agregar/quitar del carrito dinámico
 - Mostrar descuento dinámico
 - Mejorar el DTO para que no devuelva todos los datos de 
 cada producto solo los necesarios
+
+- Botón agregar/quitar del carrito dinámico
+- Deshabilitar el botón agregar al carrito y dejar reseña si el producto es propio
 - Arreglar la paginación de reseñas en detalle-producto.html
