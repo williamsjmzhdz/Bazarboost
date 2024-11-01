@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(data => {
       // Actualizar el DOM con los datos del producto
       renderProductDetails(data);
-      renderMyReview(data.miResenia);
+      if (!data.esProductoPropio) {
+        renderMyReview(data.miResenia);
+      }
       renderAdditionalReviews(data.reseniasAdicionales);
     })
     .catch(error => {
@@ -34,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Función para renderizar los detalles del producto
 function renderProductDetails(data) {
   const productContainer = document.getElementById('product-container');
+  const bodyContainer = document.getElementById('bodyContainer');
   const descuento = data.descuento;
   const precioConDescuento = data.precioConDescuento;
 
@@ -70,9 +73,11 @@ function renderProductDetails(data) {
         </span>
       </div>
 
-      <button class="btn btn-primary me-2">
-        <i class="bi bi-cart-plus"></i> Agregar al carrito
-      </button>
+      ${data.esProductoPropio ? '' : `
+        <button class="btn btn-primary me-2">
+          <i class="bi bi-cart-plus"></i> Agregar al carrito
+        </button>
+      `}
       <button class="btn btn-secondary" onclick="window.history.back();">
         <i class="bi bi-arrow-left"></i> Volver a la lista
       </button>
@@ -183,7 +188,6 @@ function renderMyReview(miResenia) {
       </div>
     `;
   }
-
   myReviewSection.innerHTML = reviewFormHTML;
 }
 

@@ -22,5 +22,6 @@ public class ProductoDetalladoDTO {
     private DescuentoDTO descuento;
     private ReseniaDTO miResenia;
     private List<ReseniaDTO> reseniasAdicionales;
+    private boolean esProductoPropio;
 }
 

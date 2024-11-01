@@ -1,7 +1,16 @@
+// boton-carrito.js
+
 const contadorCarrito = document.querySelector(".nav-link .badge.bg-danger");
 
 function actualizarContadorCarrito(cantidad) {
     contadorCarrito.textContent = cantidad;
+
+    // Mostrar u ocultar el contador según la cantidad
+    if (cantidad > 0) {
+        contadorCarrito.style.display = 'inline';
+    } else {
+        contadorCarrito.style.display = 'none';
+    }
 }
 
 async function actualizarCarrito(event) {
@@ -20,7 +29,6 @@ async function actualizarCarrito(event) {
         });
 
         if (!response.ok) {
-            // Manejar errores específicos según el código de estado de la respuesta
             switch (response.status) {
                 case 404:
                     mostrarMensajeErrorDesaparece(accion === 'agregar'
@@ -58,3 +66,6 @@ async function actualizarCarrito(event) {
         console.error('Error al actualizar el carrito:', error);
     }
 }
+
+// Asignar actualizarCarrito a window para que esté disponible globalmente
+window.actualizarCarrito = actualizarCarrito;

@@ -61,5 +61,4 @@ public interface ProductoService {
      */
     ProductosPaginadosDTO buscarProductosConFiltros(String keyword, String categoria, String orden, int page, Integer usuarioId);
 
-
 }

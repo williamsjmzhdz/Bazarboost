@@ -1,27 +1,12 @@
+// lista-productos.js
+import { actualizarPaginacion, cambiarPagina, getPaginaActual, setPaginaActual } from './paginacion.js';
+
+window.cambiarPaginaCallback = (pagina) => cambiarPagina(pagina, obtenerProductos);
+
 const barraBusqueda = document.getElementById('searchBar');
 const filtroCategoria = document.getElementById('categoryFilter');
 const ordenPrecio = document.getElementById('priceSort');
 const listaProductos = document.getElementById('productList');
-
-function obtenerProductos() {
-    const palabraClave = barraBusqueda.value || null;
-    const categoria = filtroCategoria.value || null;
-    const orden = ordenPrecio.value || null;
-
-    const url = new URL('/api/productos/filtrados', window.location.origin);
-    url.searchParams.append('page', paginaActual);
-
-    if (palabraClave) url.searchParams.append('keyword', palabraClave);
-    if (categoria) url.searchParams.append('categoria', categoria);
-    if (orden) url.searchParams.append('orden', orden);
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            actualizarListaProductos(data.productos);
-            actualizarPaginacion(data);  // Función de paginación importada de `paginacion.js`
-        });
-}
 
 function formatearPrecio(precio) {
     return precio.toFixed(2);
@@ -78,19 +63,42 @@ function actualizarListaProductos(productos) {
     }
 }
 
+function obtenerProductos() {
+    const palabraClave = barraBusqueda.value || null;
+    const categoria = filtroCategoria.value || null;
+    const orden = ordenPrecio.value || null;
+
+    const url = new URL('/api/productos/filtrados', window.location.origin);
+    url.searchParams.append('page', getPaginaActual());
+
+    if (palabraClave) url.searchParams.append('keyword', palabraClave);
+    if (categoria) url.searchParams.append('categoria', categoria);
+    if (orden) url.searchParams.append('orden', orden);
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            actualizarListaProductos(data.productos);
+            actualizarPaginacion(data, window.cambiarPaginaCallback);
+        });
+}
+
+// Event Listeners
 barraBusqueda.addEventListener('input', () => {
-    paginaActual = 0;
+    setPaginaActual(0);
     obtenerProductos();
 });
 
 filtroCategoria.addEventListener('change', () => {
-    paginaActual = 0;
+    setPaginaActual(0);
     obtenerProductos();
 });
 
 ordenPrecio.addEventListener('change', () => {
-    paginaActual = 0;
+    setPaginaActual(0);
     obtenerProductos();
 });
 
+// Inicialización
 obtenerProductos();
+window.obtenerProductos = obtenerProductos;  // Exportar globalmente

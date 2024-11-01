@@ -162,6 +162,7 @@ INSERT INTO Resenias (comentario, calificacion, usuario_id, producto_id) VALUES
 ('Muy interactivo y didáctico', 5, 3, 5),
 ('Lo uso constantemente', 4, 4, 5);
 
+
 -- Inserciones en la tabla ProductosCarrito
 INSERT INTO ProductosCarrito (cantidad, total, usuario_id, producto_id) VALUES
 (2, 39.98, 1, 2),
