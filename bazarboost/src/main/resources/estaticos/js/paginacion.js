@@ -15,7 +15,7 @@ function actualizarPaginacion(data, cambiarPaginaCallback) {
     const prevDisabled = paginaActual === 0 ? 'disabled' : '';
     contenedorPaginacion.insertAdjacentHTML('beforeend', `
       <li class="page-item ${prevDisabled}">
-          <a class="page-link" href="#" onclick="window.cambiarPaginaCallback(${paginaActual - 1})">Anterior</a>
+          <a class="page-link" style="cursor:pointer" onclick="window.cambiarPaginaCallback(${paginaActual - 1})">Anterior</a>
       </li>
     `);
     const maxBotonesPagina = 5;
@@ -25,14 +25,14 @@ function actualizarPaginacion(data, cambiarPaginaCallback) {
         const claseActiva = i === paginaActual ? 'active' : '';
         contenedorPaginacion.insertAdjacentHTML('beforeend', `
             <li class="page-item ${claseActiva}">
-                <a class="page-link" href="#" onclick="window.cambiarPaginaCallback(${i})">${i + 1}</a>
+                <a class="page-link" style="cursor:pointer" onclick="window.cambiarPaginaCallback(${i})">${i + 1}</a>
             </li>
         `);
     }
     const nextDisabled = paginaActual === totalPaginas - 1 ? 'disabled' : '';
     contenedorPaginacion.insertAdjacentHTML('beforeend', `
       <li class="page-item ${nextDisabled}">
-          <a class="page-link" href="#" onclick="window.cambiarPaginaCallback(${paginaActual + 1})">Siguiente</a>
+          <a class="page-link" style="cursor: pointer" onclick="window.cambiarPaginaCallback(${paginaActual + 1})">Siguiente</a>
       </li>
     `);
 }
@@ -41,7 +41,15 @@ function cambiarPagina(pagina, obtenerProductosCallback) {
     if (pagina >= 0) {
         setPaginaActual(pagina);
         obtenerProductosCallback();
+        // Scroll suave al contenedor de paginación después de cambiar de página
+        const contenedorPaginacion = document.querySelector('.pagination');
+        if (contenedorPaginacion) {
+            setTimeout(() => {
+                contenedorPaginacion.scrollIntoView({ behavior: 'smooth' });
+            }, 100); // Pequeño delay para asegurar que el contenido se haya actualizado
+        }
     }
 }
+
 
 export { actualizarPaginacion, cambiarPagina, getPaginaActual, setPaginaActual };

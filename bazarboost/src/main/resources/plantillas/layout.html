@@ -30,7 +30,7 @@
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/carrito}" th:classappend="${requestURI == '/carrito'} ? 'active'">
                                 <i class="bi bi-cart"></i> Carrito
-                                <span class="badge bg-danger">3</span>
+                                <span class="badge bg-danger" id="cart-counter"></span>
                             </a>
                         </li>
 
@@ -98,6 +98,11 @@
                 </p>
             </div>
         </footer>
+    </th:block>
+
+    <th:block th:fragment="commonScripts">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/layout.js"></script>
     </th:block>
 </body>
 </html>

@@ -10,7 +10,8 @@ import java.util.List;
  * Proyecto: Bazarboost
  * */
 @Data
-public class ProductoDetalladoDTO {
+public class ProductoDetalladoDTO implements PaginatedResultDTO {
+    private Integer productoId;
     private String imagenUrl;
     private String nombre;
     private String descripcion;
@@ -23,5 +24,10 @@ public class ProductoDetalladoDTO {
     private ReseniaDTO miResenia;
     private List<ReseniaDTO> reseniasAdicionales;
     private boolean esProductoPropio;
+    private boolean estaEnCarrito;
+    private int paginaActual;
+    private int totalPaginas;
+    private long totalElementos;
+
 }
 

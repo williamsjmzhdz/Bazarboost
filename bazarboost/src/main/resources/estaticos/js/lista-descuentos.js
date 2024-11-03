@@ -1,3 +1,5 @@
+import { mostrarMensajeError, mostrarMensajeExitoURL } from './mensajes-estado.js';
+
 function cargarDescuentosVendedor() {
     const url = new URL('/api/descuentos/mis-descuentos', window.location.origin);
     fetch(url)
@@ -40,3 +42,8 @@ function cargarDescuentosVendedor() {
             console.error('Error inesperado al cargar descuentos:', error);
         });
 }
+
+window.onload = () => {
+  cargarDescuentosVendedor();
+  mostrarMensajeExitoURL();
+};

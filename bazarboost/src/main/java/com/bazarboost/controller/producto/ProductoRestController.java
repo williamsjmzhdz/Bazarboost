@@ -30,7 +30,6 @@ public class ProductoRestController {
     private static final Integer USUARIO_ID_TEMPORAL = 1;
     private static final Integer TAMANIO_PAGINA_RESENIAS = 10;
 
-
     @Autowired
     private ProductoService productoService;
 
@@ -45,11 +44,6 @@ public class ProductoRestController {
             @RequestParam(value = "orden", required = false) String orden,
             @RequestParam(value = "page", defaultValue = "0") int page
     ) {
-        System.out.println("PARÁMETROS POR DEFAULT");
-        System.out.println(keyword);
-        System.out.println(categoria);
-        System.out.println(orden);
-        System.out.println(page);
         // Simplemente llamamos al servicio y retornamos el resultado
         return productoService.buscarProductosConFiltros(keyword, categoria, orden, page, USUARIO_ID_TEMPORAL);
     }

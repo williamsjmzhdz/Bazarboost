@@ -95,16 +95,9 @@
 
     <div th:insert="~{layout :: footer}"></div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/mensajes-estado.js"></script>
-    <script>
-      // Cargar productos y verificar el mensaje de éxito al cargar la página
-      window.onload = () => {
-          cargarDescuentosVendedor();
-          mostrarMensajeExitoURL();
-      };
-    </script>
-    <script src="/js/lista-descuentos.js"></script>
+    <th:block th:insert="layout :: commonScripts"></th:block>
+
+    <script src="/js/mensajes-estado.js" type="module"></script>
+    <script src="/js/lista-descuentos.js" type="module"></script>
   </body>
 </html>

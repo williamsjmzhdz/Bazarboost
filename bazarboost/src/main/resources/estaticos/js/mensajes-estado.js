@@ -109,3 +109,4 @@ function mostrarMensajeErrorDesaparece(mensaje) {
     }, 5000);
 }
 
+export { mostrarMensajeError, mostrarMensajeErrorSolo, mostrarMensajeErrorDesaparece, mostrarMensajeExito, mostrarMensajeExitoURL };

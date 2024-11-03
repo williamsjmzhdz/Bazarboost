@@ -1,5 +1,8 @@
 // boton-carrito.js
 
+import { mostrarMensajeErrorDesaparece } from './mensajes-estado.js';
+
+
 const contadorCarrito = document.querySelector(".nav-link .badge.bg-danger");
 
 function actualizarContadorCarrito(cantidad) {
@@ -18,6 +21,10 @@ async function actualizarCarrito(event) {
     const productoId = botonCarrito.dataset.productoId;
     const accion = botonCarrito.dataset.accion;
     const url = '/api/producto-carrito/actualizar';
+
+    console.log("botonCarrito: ", botonCarrito);
+    console.log("productoId: ", productoId);
+    console.log("accion: ", accion);
 
     try {
         const response = await fetch(url, {
