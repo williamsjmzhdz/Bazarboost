@@ -15,6 +15,24 @@ import java.util.List;
 public interface ProductoService {
 
     /**
+     * Obtiene el producto asociado a un usuario
+     *
+     * @param productoId ID del producto que se quiere obtener
+     * @param usuarioId ID del usuario que quiere recuperar el producto
+     * @return     El producto asociado al id
+     */
+    Producto obtenerProductoPorId(Integer productoId, Integer usuarioId);
+
+    /**
+     * Elimina el producto asociado a un usuario
+     *
+     * @param productoId ID del producto que se desea eliminar
+     * @param usuarioId ID del usuario que desea eliminar el producto
+     * @return          El producto eliminado
+     */
+    Producto eliminarProductoPorId(Integer productoId, Integer usuarioId);
+
+    /**
      * Obtiene todos los productos asociados a un vendedor específico.
      *
      * @param vendedorId ID del vendedor cuyos productos queremos obtener.

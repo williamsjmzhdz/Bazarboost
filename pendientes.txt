@@ -1,9 +1,40 @@
-Vista: lista-productos.html
-- Calificación dinámica
-- Mostrar descuento dinámico
-- Mejorar el DTO para que no devuelva todos los datos de 
-cada producto solo los necesarios
+04 NOV - Vista: lista-descuentos.html y crear-editar-descuentos.html (1)
+  - Funcionalidad "Editar" para descuentos de un vendedor
+  - Funcionalidad "Eliminar" para descuentos de un vendedor
 
-- Botón agregar/quitar del carrito dinámico
-- Deshabilitar el botón agregar al carrito y dejar reseña si el producto es propio
-- Arreglar la paginación de reseñas en detalle-producto.html
+08 NOV - Vista: carrito-compras.html (3-4)
+  - Pasar los select para métodos de pago y direcciones a la vista del carrito de compras (DTOS: CarritoComprasDTO con su lista de ProductosCarritoDTO, ProductoCarritoDTO)
+  - Funcionalidad "Mostrar los productos del carrito, métodos de pago y direcciones" para el carrito de compras
+  - Funcionalidad "Eliminar" para el carrito de compras, verificar que el producto exista, que el producto este en el carrito, que el usuario exista y que el usuario sea dueño del carrito
+  - Funcionalidad "Cambiar cantidad" para el carrito de compras (cada que cambie la cantidad verificar todas las cantidades para: cantidad valida (mayor a 0) y stock suficiente, guardar cantidades validas, invalidas no y desactivar botón pagar carrito si hay cantidades invalidas
+  - Funcionalida "Pagar carrito", verificar que el método de pago no esté expirado, que tenga montos suficientes, verificar valores mayores a 0 en las cantidades, verificar que exista stock suficiente, genera la factura, genera los detalles de la factura, redirije a la lista de facturas, vacía carrito y actualiza stock
+
+09 NOV - Vista: lista-facturas.html (1)
+  - Funcionalidad "Mostrar las facturas de un usuario" y filtros
+
+10 NOV - Vista: detalle-factura.html (1)
+  - Funcionalidad "Mostrar detalle de la factura"
+
+12 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
+ - CRUD para métodos de pago
+
+14 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
+ - CRUD para direcciones
+
+15 NOV - Vista: lista-ventas.html (1)
+ - Funcionalida "Mostrar ventas" y filtros
+
+16 NOV - Vista: lista-usuarios-.html (1)
+ - Funcionalidad "Mostrar usuarios" ordenados por nombre y paginados de 10 en 10
+
+17 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
+ - CRUD para categorias
+
+17 NOV - Vista: perfil-usuario.html (1)
+ - READ y UPDATE de los datos del usuario
+
+18 NOV - 03 DIC Vista: layout.html, inicio-sesion.html, registro.html (aprox. 2 semanas tendría para implementarlo)
+ - Implementar sistema de usuarios y roles 
+
+
+

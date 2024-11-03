@@ -1,5 +1,8 @@
 package com.bazarboost.controller.producto;
 
+import com.bazarboost.exception.AccesoDenegadoException;
+import com.bazarboost.exception.ProductoNoEncontradoException;
+import com.bazarboost.exception.UsuarioNoEncontradoException;
 import com.bazarboost.model.Producto;
 import com.bazarboost.service.CategoriaService;
 import com.bazarboost.service.DescuentoService;
@@ -64,6 +67,33 @@ public class ProductoController {
         return "crear-editar-producto";
     }
 
+    @GetMapping("/vendedor/editar/{productoId}")
+    public String mostrarFormularioCrearProducto(
+            @PathVariable Integer productoId,
+            Model model,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            model.addAttribute("modo", "editar");
+            model.addAttribute("producto", productoService.obtenerProductoPorId(productoId, VENDEDOR_ID_TEMPORAL ));
+            model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
+            model.addAttribute("descuentos", descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
+            model.addAttribute("requestURI", request.getRequestURI());
+            return "crear-editar-producto";
+        } catch (ProductoNoEncontradoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "El producto que intentas editar no existe.");
+            return "redirect:/productos/vendedor";
+        } catch (UsuarioNoEncontradoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al editar el producto: usuario no encontrado.");
+            return "redirect:/productos/vendedor";
+        } catch (AccesoDenegadoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", ex.getMessage());
+            return "redirect:/productos/vendedor";
+        }
+
+    }
+
     @GetMapping("/detalle-producto/{id}")
     public String mostrarDestalleProducto(Model model, HttpServletRequest request, @PathVariable Integer id) {
         model.addAttribute("requestURI", request.getRequestURI());
@@ -72,43 +102,101 @@ public class ProductoController {
 
     /* ============================= OPERACIONES DE PRODUCTO ============================= */
 
-    @PostMapping("/crear")
-    public String crearProducto(
+    @PostMapping("/guardar")
+    public String guardarProducto(
             @Valid @ModelAttribute("producto") Producto producto,
             BindingResult resultado,
             @RequestParam("categoriaId") Integer categoriaId,
             @RequestParam(value = "descuentoId", required = false) Integer descuentoId,
-            @RequestParam("imagenArchivo") MultipartFile imagenArchivo,
+            @RequestParam(value = "imagenArchivo", required = false) MultipartFile imagenArchivo,
             RedirectAttributes redirectAttributes,
             HttpServletRequest request,
             Model model
     ) throws IOException {
+        boolean esEdicion = producto.getProductoId() != null;
 
-        // Validación de imagenArchivo para que no esté en blanco
-        if (imagenArchivo.isEmpty() || imagenArchivo.getOriginalFilename() == null || imagenArchivo.getOriginalFilename().isBlank()) {
+        // Validación de imagen
+        if (!esEdicion && (imagenArchivo == null || imagenArchivo.isEmpty() ||
+                imagenArchivo.getOriginalFilename() == null ||
+                imagenArchivo.getOriginalFilename().isBlank())) {
             resultado.rejectValue("imagenUrl", "NotBlank", "La imagen no puede estar en blanco.");
-        } else if (imagenArchivo.getOriginalFilename().length() > 255) {
-            // Validación de longitud del nombre del archivo
-            resultado.rejectValue("imagenUrl", "Size", "El nombre de la imagen no puede exceder los 255 caracteres.");
+        } else if (imagenArchivo != null && !imagenArchivo.isEmpty() &&
+                imagenArchivo.getOriginalFilename().length() > 255) {
+            resultado.rejectValue("imagenUrl", "Size",
+                    "El nombre de la imagen no puede exceder los 255 caracteres.");
         }
 
         if (resultado.hasErrors()) {
-            model.addAttribute("modo", "crear");
+            model.addAttribute("modo", esEdicion ? "editar" : "crear");
             model.addAttribute("producto", producto);
             model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
-            model.addAttribute("descuentos", descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
+            model.addAttribute("descuentos",
+                    descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
             model.addAttribute("requestURI", request.getRequestURI());
             model.addAttribute("errores", resultado.getAllErrors());
             return "crear-editar-producto";
         }
 
-        producto.setUsuario(usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL));
-        producto.setCategoria(categoriaService.obtenerCategoriaPorId(categoriaId));
-        producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuario(descuentoId, VENDEDOR_ID_TEMPORAL));
-        productoUtility.guardarImagenProducto(producto, imagenArchivo);
-        productoService.guardarProducto(producto, VENDEDOR_ID_TEMPORAL);
-        redirectAttributes.addFlashAttribute("mensajeExito", "¡Producto '" + producto.getNombre() + "' creado exitosamente!");
-        return "redirect:/productos/vendedor";
+        try {
+            // Si es edición, verificar que el producto pertenezca al vendedor
+            if (esEdicion) {
+                productoService.obtenerProductoPorId(producto.getProductoId(), VENDEDOR_ID_TEMPORAL);
+            }
+
+            // Configurar las relaciones
+            producto.setUsuario(usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL));
+            producto.setCategoria(categoriaService.obtenerCategoriaPorId(categoriaId));
+            producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuario(
+                    descuentoId, VENDEDOR_ID_TEMPORAL));
+
+            // Manejar la imagen solo si se subió una nueva
+            if (imagenArchivo != null && !imagenArchivo.isEmpty()) {
+                productoUtility.guardarImagenProducto(producto, imagenArchivo);
+            }
+
+            // Guardar el producto
+            productoService.guardarProducto(producto, VENDEDOR_ID_TEMPORAL);
+
+            // Mensaje de éxito
+            String mensaje = esEdicion
+                    ? "¡Producto '" + producto.getNombre() + "' actualizado exitosamente!"
+                    : "¡Producto '" + producto.getNombre() + "' creado exitosamente!";
+            redirectAttributes.addFlashAttribute("mensajeExito", mensaje);
+
+            return "redirect:/productos/vendedor";
+
+        } catch (ProductoNoEncontradoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "El producto que intentas guardar no existe.");
+            return "redirect:/productos/vendedor";
+        } catch (UsuarioNoEncontradoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al guardar el producto: usuario no encontrado.");
+            return "redirect:/productos/vendedor";
+        } catch (AccesoDenegadoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", ex.getMessage());
+            return "redirect:/productos/vendedor";
+        }
+    }
+
+    @PostMapping("/vendedor/eliminar/{productoId}")
+    public String eliminarProducto(
+            @PathVariable Integer productoId,
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request
+    ) {
+        try {
+            Producto producto = productoService.eliminarProductoPorId(productoId, VENDEDOR_ID_TEMPORAL);
+            redirectAttributes.addFlashAttribute("mensajeExito", "¡Producto '" + producto.getNombre() + "' eliminado exitosamente!");
+            return "redirect:/productos/vendedor";
+        } catch (ProductoNoEncontradoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "El producto que intentas eliminar no existe.");
+            return "redirect:/productos/vendedor";
+        } catch (UsuarioNoEncontradoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", "Error al eliminar el producto: usuario no encontrado.");
+            return "redirect:/productos/vendedor";
+        } catch (AccesoDenegadoException ex) {
+            redirectAttributes.addFlashAttribute("mensajeError", ex.getMessage());
+            return "redirect:/productos/vendedor";
+        }
     }
 
 }

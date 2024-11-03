@@ -1,98 +1,155 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-  <head th:replace="~{layout :: commonHead}"></head>
+<head th:replace="~{layout :: commonHead}"></head>
 
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title th:text="${modo == 'crear' ? 'BazarBoost - Crear Producto' : 'BazarBoost - Editar Producto'}">BazarBoost - Crear/Editar Producto</title>
+  <link rel="stylesheet" href="/estilos/base.css" />
+  <link rel="stylesheet" href="/estilos/base-creacion-edicion.css" />
+</th:block>
 
+<body>
+<!-- Incluir el Navbar -->
+<div th:insert="~{layout :: navbar}"></div>
 
-  <!-- Definir el fragmento con el título y los estilos específicos -->
-  <th:block th:fragment="headExtras">
-    <title th:text="${modo == 'crear' ? 'BazarBoost - Crear Producto' : 'BazarBoost - Editar Producto'}">BazarBoost - Crear/Editar Producto</title>
-    <link rel="stylesheet" href="/estilos/base.css" />
-    <link rel="stylesheet" href="/estilos/base-creacion-edicion.css" />
-  </th:block>
+<div class="container my-4 main-content" id="bodyContainer">
+  <h2 class="mb-4" th:text="${modo == 'crear' ? 'Crear Producto' : 'Editar Producto'}"></h2>
 
-  <body>
+  <!-- Formulario unificado para crear/editar producto -->
+  <form th:action="@{/productos/guardar}"
+        method="post"
+        enctype="multipart/form-data"
+        th:object="${producto}">
 
-    <!-- Incluir el Navbar -->
-    <div th:insert="~{layout :: navbar}"></div>
+    <!-- ID oculto para edición -->
+    <input type="hidden" th:field="*{productoId}" th:if="${modo == 'editar'}">
 
-    <div class="container my-4 main-content" id="bodyContainer">
-      <h2 class="mb-4" th:text="${modo == 'crear' ? 'Crear Producto' : 'Editar Producto'}"></h2>
-
-      <!-- Formulario para crear o editar producto -->
-      <form th:action="${modo == 'crear' ? '/productos/crear' : '/productos/editar/' + producto.id}" th:method="${modo == 'crear' ? 'post' : 'patch'}" enctype="multipart/form-data" th:object="${producto}">
-
-        <!-- Sección para mensajes de advertencia -->
-        <div th:if="${errores != null and !errores.isEmpty()}"
-             class="alert alert-danger"
-             id="warning-danger">
-          <i class="bi bi-exclamation-triangle"></i>
-          <span id="warning-message">No se pudo completar la acción. Solucione los siguientes errores:</span>
-
-          <!-- Lista de errores -->
-          <ul>
-            <li th:each="err : ${errores}" th:text="${err.defaultMessage}"></li>
-          </ul>
-        </div>
-
-
-        <div class="mb-3">
-          <label for="nombreProducto" class="form-label">Nombre del Producto</label>
-          <input type="text" class="form-control" id="nombreProducto" th:field="*{nombre}" placeholder="Nombre del Producto" required />
-        </div>
-
-        <div class="mb-3">
-          <label for="descripcionProducto" class="form-label">Descripción del Producto</label>
-          <textarea class="form-control" id="descripcionProducto" th:field="*{descripcion}" rows="3" placeholder="Descripción del Producto" required></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="precioProducto" class="form-label">Precio</label>
-          <input type="number" class="form-control" id="precioProducto" th:field="*{precio}" placeholder="Precio" min="0" step="1" required />
-        </div>
-
-        <div class="mb-3">
-          <label for="cantidadProducto" class="form-label">Cantidad en Existencia</label>
-          <input type="number" class="form-control" id="cantidadProducto" th:field="*{existencia}" placeholder="Cantidad en Existencia" min="0" required />
-        </div>
-
-        <div class="mb-3">
-          <label for="categoriaProducto" class="form-label">Categoría</label>
-          <select class="form-select" id="categoriaProducto" name="categoriaId" required>
-            <option value="" selected disabled>Seleccione una Categoría</option>
-            <option th:each="categoria : ${categorias}" th:value="${categoria.categoriaId}" th:text="${categoria.nombre}"></option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="descuentoProducto" class="form-label">Descuento</label>
-          <select class="form-select" id="descuentoProducto" name="descuentoId">
-            <option value="" selected disabled>Seleccione un Descuento</option>
-            <option value="-1">Sin descuento</option>
-            <option th:each="descuento : ${descuentos}" th:value="${descuento.descuentoId}" th:text="${descuento.nombre} + ' - ' + ${descuento.porcentaje} + '%'"></option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="imagenProducto" class="form-label">Imagen del Producto</label>
-          <input type="file" class="form-control" id="imagenProducto" name="imagenArchivo" />
-        </div>
-
-        <!-- Botones -->
-        <div class="d-flex justify-content-between" id="buttonsContainer">
-          <a href="/productos/vendedor" type="button" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Volver a la lista de productos
-          </a>
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save"></i> Guardar producto
-          </button>
-        </div>
-      </form>
+    <!-- Sección para mensajes de advertencia -->
+    <div th:if="${errores != null and !errores.isEmpty()}"
+         class="alert alert-danger"
+         id="warning-danger">
+      <i class="bi bi-exclamation-triangle"></i>
+      <span id="warning-message">No se pudo completar la acción. Solucione los siguientes errores:</span>
+      <ul>
+        <li th:each="err : ${errores}" th:text="${err.defaultMessage}"></li>
+      </ul>
     </div>
 
-    <div th:insert="~{layout :: footer}"></div>
+    <!-- Campos del formulario (sin cambios) -->
+    <div class="mb-3">
+      <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+      <input type="text" class="form-control" id="nombreProducto" th:field="*{nombre}"
+             placeholder="Nombre del Producto" required />
+    </div>
 
-    <th:block th:insert="layout :: commonScripts"></th:block>
+    <div class="mb-3">
+      <label for="descripcionProducto" class="form-label">Descripción del Producto</label>
+      <textarea class="form-control" id="descripcionProducto" th:field="*{descripcion}"
+                rows="3" placeholder="Descripción del Producto" required></textarea>
+    </div>
 
-  </body>
+    <div class="mb-3">
+      <label for="precioProducto" class="form-label">Precio</label>
+      <input type="number"
+             class="form-control"
+             id="precioProducto"
+             th:field="*{precio}"
+             placeholder="Precio"
+             min="0"
+             step="0.01" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="cantidadProducto" class="form-label">Cantidad en Existencia</label>
+      <input type="number" class="form-control" id="cantidadProducto" th:field="*{existencia}"
+             placeholder="Cantidad en Existencia" min="0" required />
+    </div>
+
+    <div class="mb-3">
+      <label for="categoriaProducto" class="form-label">Categoría</label>
+      <select class="form-select" id="categoriaProducto" name="categoriaId" required>
+        <option value="" selected disabled>Seleccione una Categoría</option>
+        <option th:each="categoria : ${categorias}"
+                th:value="${categoria.categoriaId}"
+                th:text="${categoria.nombre}"
+                th:selected="${modo == 'editar' && producto.categoria != null &&
+                          producto.categoria.categoriaId == categoria.categoriaId}">
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="descuentoProducto" class="form-label">Descuento</label>
+      <select class="form-select" id="descuentoProducto" name="descuentoId">
+        <option value="" selected disabled>Seleccione un Descuento</option>
+        <option value="-1" th:selected="${modo == 'editar' && producto.descuento == null}">Sin descuento</option>
+        <option th:each="descuento : ${descuentos}"
+                th:value="${descuento.descuentoId}"
+                th:text="${descuento.nombre} + ' - ' + ${descuento.porcentaje} + '%'"
+                th:selected="${modo == 'editar' && producto.descuento != null &&
+                          producto.descuento.descuentoId == descuento.descuentoId}">
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="imagenProducto" class="form-label">Imagen del Producto</label>
+      <input type="file" class="form-control" id="imagenProducto" name="imagenArchivo"
+             th:required="${modo == 'crear'}" accept="image/*" />
+
+      <!-- Mostrar imagen actual solo en modo edición -->
+      <div th:if="${modo == 'editar' && producto.imagenUrl != null}" class="mt-2">
+        <p class="text-muted">Imagen actual:</p>
+        <img th:src="@{'/api/productos/imagenes/' + ${producto.imagenUrl}}"
+             alt="Imagen actual del producto"
+             class="img-thumbnail"
+             style="max-width: 200px;">
+        <input type="hidden" th:field="*{imagenUrl}">
+      </div>
+
+      <!-- Preview de imagen nueva -->
+      <div class="mt-2 d-none" id="imagePreview">
+        <p class="text-muted">Vista previa de la nueva imagen:</p>
+        <img src="" alt="Vista previa" class="img-thumbnail" style="max-width: 200px;">
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex justify-content-between" id="buttonsContainer">
+      <a href="/productos/vendedor" type="button" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Volver a la lista de productos
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save"></i>
+        <span th:text="${modo == 'crear' ? 'Crear producto' : 'Guardar cambios'}"></span>
+      </button>
+    </div>
+  </form>
+</div>
+
+<div th:insert="~{layout :: footer}"></div>
+
+<th:block th:insert="layout :: commonScripts"></th:block>
+
+<!-- Script para preview de imagen -->
+<script>
+  document.getElementById('imagenProducto').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById('imagePreview');
+      const previewImg = preview.querySelector('img');
+
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+              previewImg.src = e.target.result;
+              preview.classList.remove('d-none');
+          }
+          reader.readAsDataURL(file);
+      } else {
+          preview.classList.add('d-none');
+      }
+  });
+</script>
+</body>
 </html>

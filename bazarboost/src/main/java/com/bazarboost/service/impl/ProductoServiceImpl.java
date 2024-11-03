@@ -1,10 +1,7 @@
 package com.bazarboost.service.impl;
 
 import com.bazarboost.dto.*;
-import com.bazarboost.exception.CategoriaNoEncontradaException;
-import com.bazarboost.exception.OrdenNoValidoException;
-import com.bazarboost.exception.ProductoNoEncontradoException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
+import com.bazarboost.exception.*;
 import com.bazarboost.model.*;
 import com.bazarboost.repository.*;
 import com.bazarboost.service.ProductoService;
@@ -31,7 +28,6 @@ public class ProductoServiceImpl implements ProductoService {
     private final ProductoRepository productoRepository;
     private final UsuarioRepository usuarioRepository;
     private final CategoriaRepository categoriaRepository;
-    private final DescuentoRepository descuentoRepository;
     private final ReseniaRepository reseniaRepository;
     private final ProductoCarritoRepository productoCarritoRepository;
     private final ReseniaService reseniaService;
@@ -39,6 +35,27 @@ public class ProductoServiceImpl implements ProductoService {
     private static final int PAGE_SIZE = 9;
 
     // Operaciones principales CRUD y búsqueda
+
+    @Override
+    @Transactional(readOnly = true)
+    public Producto obtenerProductoPorId(Integer productoId, Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+        Producto producto = obtenerProducto(productoId);
+        boolean esProductoPropio = checarSiEsProductoPropio(producto, usuario.getUsuarioId());
+        if (!esProductoPropio) throw new AccesoDenegadoException("El producto no te pertenece.");
+        return producto;
+    }
+
+    @Override
+    @Transactional
+    public Producto eliminarProductoPorId(Integer productoId, Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+        Producto producto = obtenerProducto(productoId);
+        boolean esProductoPropio = checarSiEsProductoPropio(producto, usuario.getUsuarioId());
+        if (!esProductoPropio) throw new AccesoDenegadoException("El producto que intentas eliminar no te pertenece.");
+        productoRepository.delete(producto);
+        return producto;
+    }
 
     @Override
     @Transactional

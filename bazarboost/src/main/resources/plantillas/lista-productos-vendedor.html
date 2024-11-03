@@ -20,21 +20,41 @@
     <div class="container my-4 main-content" id="bodyContainer">
       <h2 class="mb-4">Productos</h2>
 
-      <!-- Sección para mensajes de éxito -->
-      <div
-              th:if="${mensajeExito}"
-              class="alert alert-success d-flex align-items-center"
-              id="success-alert"
-              role="alert"
-      >
-        <i class="bi bi-check-circle-fill me-2"></i>
-        <div th:text="${mensajeExito}"></div>
-      </div>
+      <!-- Sección para mensajes -->
+      <div class="alerts-container">
+        <!-- Alerta de éxito -->
+        <div
+                th:if="${mensajeExito}"
+                class="alert alert-success d-flex align-items-center"
+                id="success-alert"
+                role="alert"
+        >
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <div th:text="${mensajeExito}"></div>
+        </div>
 
-      <!-- Sección para mensajes de advertencia -->
-      <div class="alert alert-danger d-none" id="warning-danger">
-        <i class="bi bi-exclamation-triangle"></i>
-        <span id="warning-message">No se pudo eliminar el producto debido a un error inesperado. Inténtelo de nuevo más tarde.</span>
+        <!-- Alerta de error del servidor (Thymeleaf) -->
+        <div
+                th:if="${mensajeError}"
+                class="alert alert-danger d-flex align-items-center"
+                id="server-error-alert"
+                role="alert"
+        >
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <span th:text="${mensajeError}"></span>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Alerta dinámica para errores de JavaScript -->
+        <div
+                class="alert alert-danger d-flex align-items-center d-none"
+                id="dynamic-error-alert"
+                role="alert"
+        >
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <span id="dynamic-error-message"></span>
+          <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       </div>
 
       <!-- Botón para añadir un nuevo producto -->
@@ -97,7 +117,10 @@
             >
               Cancelar
             </button>
-            <button type="button" class="btn btn-danger">Eliminar</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+              <input type="hidden" name="_method" value="DELETE">
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>
           </div>
         </div>
       </div>
@@ -140,18 +163,21 @@
                 : 'Sin descuento';
 
               const productoHtml = `
-                <tr data-producto-id="${producto.id}">
+                <tr data-producto-id="${producto.productoId}">
                   <td data-label="Nombre del Producto">${producto.nombre}</td>
                   <td data-label="Precio">$${producto.precio.toFixed(2)}</td>
                   <td data-label="Descuento">${descuentoTexto}</td>
                   <td data-label="Existencia">${producto.existencia}</td>
                   <td data-label="Acciones">
-                    <button class="btn btn-primary btn-sm">
+                    <a href="/productos/vendedor/editar/${producto.productoId}" class="btn btn-primary btn-sm">
                       <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                      <i class="bi bi-trash"></i> Eliminar
-                    </button>
+                    </a>
+                    <button class="btn btn-danger btn-sm"
+                          onclick="asignarAction(${producto.productoId})"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal">
+                    <i class="bi bi-trash"></i> Eliminar
+                  </button>
                   </td>
                 </tr>`;
               productosTbody.insertAdjacentHTML('beforeend', productoHtml);
@@ -162,12 +188,30 @@
           });
       }
 
+      function asignarAction(productoId) {
+          const deleteForm = document.getElementById('deleteForm');
+          deleteForm.action = `/productos/vendedor/eliminar/${productoId}`;
+      }
+
+      // Event listener para limpiar el formulario cuando se cierra el modal
+      document.getElementById('deleteModal').addEventListener('hidden.bs.modal', function () {
+          document.getElementById('deleteForm').action = '';
+      });
+
       // Función para mostrar un mensaje de error amigable al usuario
       function mostrarMensajeError(mensaje) {
-        const warningElement = document.getElementById('warning-danger');
-        const warningMessage = document.getElementById('warning-message');
-        warningMessage.textContent = mensaje; // Actualiza solo el texto del mensaje
-        warningElement.classList.remove('d-none'); // Quita la clase 'd-none' para mostrar el mensaje
+        const alertElement = document.getElementById('dynamic-error-alert');
+        const messageElement = document.getElementById('dynamic-error-message');
+        messageElement.textContent = mensaje;
+        alertElement.classList.remove('d-none');
+
+        // Opcional: Hacer scroll hacia la alerta
+        alertElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function ocultarMensajeError() {
+        const alertElement = document.getElementById('dynamic-error-alert');
+        alertElement.classList.add('d-none');
       }
 
       // Cargar productos al cargar la página
@@ -178,21 +222,33 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-          // Selecciona el elemento de la alerta
-          const alert = document.getElementById("success-alert");
-
-          if (alert) {
-              // Espera 5 segundos antes de agregar la clase para desvanecer
+          // Auto-ocultar alertas de éxito después de 5 segundos
+          const successAlert = document.getElementById('success-alert');
+          if (successAlert) {
               setTimeout(() => {
-                  alert.classList.add("fade-out");
-
-                  // Remueve el elemento del DOM después de que la transición termina
-                  alert.addEventListener("transitionend", () => {
-                      alert.remove();
+                  successAlert.classList.add('fade-out');
+                  successAlert.addEventListener('transitionend', () => {
+                      successAlert.remove();
                   });
-              }, 5000); // 5000 ms = 5 segundos
+              }, 5000);
           }
-      });
+
+          // Manejar el cierre manual de las alertas
+          document.querySelectorAll('.alert .btn-close').forEach(button => {
+              button.addEventListener('click', function() {
+                  const alert = this.closest('.alert');
+                  alert.classList.add('fade-out');
+                  alert.addEventListener('transitionend', () => {
+                      if (alert.id === 'dynamic-error-alert') {
+                          alert.classList.add('d-none');
+                          alert.classList.remove('fade-out');
+                      } else {
+                          alert.remove();
+                      }
+                  });
+              });
+          });
+      }); // Cierre del addEventListener
     </script>
 
 
