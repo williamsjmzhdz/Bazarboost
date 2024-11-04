@@ -2,12 +2,38 @@
   - Funcionalidad "Editar" para descuentos de un vendedor
   - Funcionalidad "Eliminar" para descuentos de un vendedor
 
-08 NOV - Vista: carrito-compras.html (3-4)
+05 - 08 NOV - Vista: carrito-compras.html (3-4)
+
   - Pasar los select para métodos de pago y direcciones a la vista del carrito de compras (DTOS: CarritoComprasDTO con su lista de ProductosCarritoDTO, ProductoCarritoDTO)
   - Funcionalidad "Mostrar los productos del carrito, métodos de pago y direcciones" para el carrito de compras
+
   - Funcionalidad "Eliminar" para el carrito de compras, verificar que el producto exista, que el producto este en el carrito, que el usuario exista y que el usuario sea dueño del carrito
-  - Funcionalidad "Cambiar cantidad" para el carrito de compras (cada que cambie la cantidad verificar todas las cantidades para: cantidad valida (mayor a 0) y stock suficiente, guardar cantidades validas, invalidas no y desactivar botón pagar carrito si hay cantidades invalidas
-  - Funcionalida "Pagar carrito", verificar que el método de pago no esté expirado, que tenga montos suficientes, verificar valores mayores a 0 en las cantidades, verificar que exista stock suficiente, genera la factura, genera los detalles de la factura, redirije a la lista de facturas, vacía carrito y actualiza stock
+  - Funcionalidad "Cambiar cantidad" para el carrito de compras:
+
+Al detectar un cambio en la cantidad de un producto:
+
+1. Verificar si la nueva cantidad es válida (mayor a 0)
+2. Si la cantidad es válida:
+     Realizar llamada asíncrona para actualizar ese producto específico en la base de datos
+     Actualizar el contador total de productos en el carrito
+     Proceder al paso 4
+
+3. Si la cantidad es inválida:
+     No realizar ninguna llamada al servidor
+     No actualizar el contador del carrito
+     Proceder al paso 4
+
+4. Validación general (con JavaScript):
+     Verificar todas las cantidades en el carrito
+     Si hay productos con cantidades inválidas (menores a 1):
+       Generar lista de productos con cantidades inválidas
+       Mostrar alerta con la lista de productos afectados
+       Desactivar el botón "Pagar carrito"
+     Si todas las cantidades son válidas:
+       Activar el botón "Pagar carrito"
+       Ocultar la alerta (si estaba visible)}
+
+  - Funcionalidad "Pagar carrito", verificar que el método de pago no esté expirado, que tenga montos suficientes, verificar valores mayores a 0 en las cantidades, verificar que exista stock suficiente, genera la factura, genera los detalles de la factura, redirije a la lista de facturas, vacía carrito y actualiza stock
 
 09 NOV - Vista: lista-facturas.html (1)
   - Funcionalidad "Mostrar las facturas de un usuario" y filtros
@@ -15,10 +41,10 @@
 10 NOV - Vista: detalle-factura.html (1)
   - Funcionalidad "Mostrar detalle de la factura"
 
-12 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
+11 - 12 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
  - CRUD para métodos de pago
 
-14 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
+13 - 14 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
  - CRUD para direcciones
 
 15 NOV - Vista: lista-ventas.html (1)
@@ -30,10 +56,10 @@
 17 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
  - CRUD para categorias
 
-17 NOV - Vista: perfil-usuario.html (1)
+18 NOV - Vista: perfil-usuario.html (1)
  - READ y UPDATE de los datos del usuario
 
-18 NOV - 03 DIC Vista: layout.html, inicio-sesion.html, registro.html (aprox. 2 semanas tendría para implementarlo)
+19 NOV - 03 DIC Vista: layout.html, inicio-sesion.html, registro.html (aprox. 15 días tendría para implementarlo)
  - Implementar sistema de usuarios y roles 
 
 
