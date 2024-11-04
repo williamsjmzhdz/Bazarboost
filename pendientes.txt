@@ -1,6 +1,6 @@
 04 NOV - Vista: lista-descuentos.html y crear-editar-descuentos.html (1)
-  - Funcionalidad "Editar" para descuentos de un vendedor
-  - Funcionalidad "Eliminar" para descuentos de un vendedor
+  ✅ - Funcionalidad "Editar" para descuentos de un vendedor
+  ✅ - Funcionalidad "Eliminar" para descuentos de un vendedor
 
 05 - 08 NOV - Vista: carrito-compras.html (3-4)
 

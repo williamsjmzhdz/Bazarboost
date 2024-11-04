@@ -7,6 +7,7 @@ import com.bazarboost.service.DescuentoService;
 import com.bazarboost.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +33,24 @@ public class DescuentoRestController {
         return ResponseEntity.ok().body(descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
     }
 
-    @PostMapping("/crear")
-    private ResponseEntity<Void> crearDescuento(@Valid @RequestBody Descuento descuento) throws URISyntaxException {
-        Usuario usuario = usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL);
-        descuento.setUsuario(usuario);
-        descuentoService.crearDescuento(descuento);
-        URI location = new URI("/descuentos");
-        return ResponseEntity.created(location).build(); // Devuelve solo el encabezado Location sin cuerpo
+    @PostMapping
+    public ResponseEntity<Void> crearDescuento(@Valid @RequestBody Descuento descuento) {
+        descuentoService.crearDescuento(descuento, VENDEDOR_ID_TEMPORAL);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{descuentoId}")
+    public ResponseEntity<Void> actualizarDescuento(
+            @PathVariable Integer descuentoId,
+            @Valid @RequestBody Descuento descuentoActualizado) {
+        descuentoService.actualizarDescuento(descuentoId, descuentoActualizado, VENDEDOR_ID_TEMPORAL);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{descuentoId}")
+    public ResponseEntity<Void> eliminarDescuento(@PathVariable Integer descuentoId) {
+        descuentoService.eliminarDescuento(descuentoId, VENDEDOR_ID_TEMPORAL);
+        return ResponseEntity.noContent().build();
     }
 
 

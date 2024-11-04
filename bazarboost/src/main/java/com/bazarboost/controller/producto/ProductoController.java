@@ -62,7 +62,7 @@ public class ProductoController {
         model.addAttribute("modo", "crear");
         model.addAttribute("producto", new Producto());
         model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
-        model.addAttribute("descuentos", descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
+        model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
         model.addAttribute("requestURI", request.getRequestURI());
         return "crear-editar-producto";
     }
@@ -78,7 +78,7 @@ public class ProductoController {
             model.addAttribute("modo", "editar");
             model.addAttribute("producto", productoService.obtenerProductoPorId(productoId, VENDEDOR_ID_TEMPORAL ));
             model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
-            model.addAttribute("descuentos", descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
+            model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
             model.addAttribute("requestURI", request.getRequestURI());
             return "crear-editar-producto";
         } catch (ProductoNoEncontradoException ex) {
@@ -131,7 +131,7 @@ public class ProductoController {
             model.addAttribute("producto", producto);
             model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
             model.addAttribute("descuentos",
-                    descuentoService.obtenerDescuentosPorUsuario(VENDEDOR_ID_TEMPORAL));
+                    descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
             model.addAttribute("requestURI", request.getRequestURI());
             model.addAttribute("errores", resultado.getAllErrors());
             return "crear-editar-producto";
@@ -146,7 +146,7 @@ public class ProductoController {
             // Configurar las relaciones
             producto.setUsuario(usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL));
             producto.setCategoria(categoriaService.obtenerCategoriaPorId(categoriaId));
-            producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuario(
+            producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuarioId(
                     descuentoId, VENDEDOR_ID_TEMPORAL));
 
             // Manejar la imagen solo si se subió una nueva

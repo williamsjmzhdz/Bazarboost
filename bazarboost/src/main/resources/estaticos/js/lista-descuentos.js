@@ -1,4 +1,4 @@
-import { mostrarMensajeError, mostrarMensajeExitoURL } from './mensajes-estado.js';
+import { mostrarMensajeExito, mostrarMensajeError, mostrarMensajeExitoURL, mostrarMensajeErrorURL } from './mensajes-estado.js';
 
 function cargarDescuentosVendedor() {
     const url = new URL('/api/descuentos/mis-descuentos', window.location.origin);
@@ -25,14 +25,19 @@ function cargarDescuentosVendedor() {
                 const descuentoHTML = `
                     <tr data-descuento-id="${descuento.descuentoId}" data-nombre="${descuento.nombre}" data-porcentaje="${descuento.porcentaje}">
                         <td data-label="Nombre del Descuento">${descuento.nombre}</td>
-                        <td data-label="Porcentaje">${descuento.porcentaje}</td>
+                        <td data-label="Porcentaje">${descuento.porcentaje}%</td>
                         <td data-label="Acciones">
-                            <button class="btn btn-primary btn-sm">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalConfirmDelete">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
+                            <div class="d-flex gap-2">
+                                <a href="/descuentos/editar/${descuento.descuentoId}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <button class="btn btn-danger btn-sm"
+                                        onclick="prepararEliminarDescuento(${descuento.descuentoId}, '${descuento.nombre}')"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalConfirmDelete">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </div>
                         </td>
                     </tr>`;
                 descuentosTbody.insertAdjacentHTML('beforeend', descuentoHTML);
@@ -43,7 +48,62 @@ function cargarDescuentosVendedor() {
         });
 }
 
+// Función para preparar el modal de eliminación
+window.prepararEliminarDescuento = function(descuentoId, nombreDescuento) {
+    const modal = document.getElementById('modalConfirmDelete');
+    const btnEliminar = modal.querySelector('.btn-danger');
+    const modalBody = modal.querySelector('.modal-body');
+
+    modalBody.textContent = `¿Estás seguro de que deseas eliminar el descuento "${nombreDescuento}"?`;
+    btnEliminar.onclick = () => eliminarDescuento(descuentoId);
+};
+
+// Función para eliminar el descuento
+function eliminarDescuento(descuentoId) {
+    const url = new URL(`/api/descuentos/${descuentoId}`, window.location.origin);
+
+    fetch(url, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(errorMessage => {
+                switch (response.status) {
+                    case 404:
+                        if (errorMessage.includes('Usuario')) {
+                            throw new Error('Error al encontrar el usuario. Por favor, inicia sesión nuevamente.');
+                        } else if (errorMessage.includes('Descuento')) {
+                            throw new Error('El descuento que intentas eliminar no existe.');
+                        }
+                        throw new Error('Recurso no encontrado.');
+
+                    case 403:
+                        throw new Error('No tienes permiso para eliminar este descuento.');
+
+                    default:
+                        throw new Error('Ocurrió un error al eliminar el descuento. Inténtalo más tarde.');
+                }
+            });
+        }
+
+        // Mostrar mensaje de éxito
+        mostrarMensajeExito('Descuento eliminado exitosamente');
+
+        // Recargar la lista de descuentos
+        cargarDescuentosVendedor();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarMensajeError(error.message);
+    });
+
+    // Cerrar el modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmDelete'));
+    modal.hide();
+}
+
 window.onload = () => {
-  cargarDescuentosVendedor();
-  mostrarMensajeExitoURL();
+    cargarDescuentosVendedor();
+    mostrarMensajeExitoURL();
+    mostrarMensajeErrorURL();
 };

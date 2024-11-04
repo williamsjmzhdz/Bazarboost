@@ -72,6 +72,30 @@ function mostrarMensajeExito(mensaje) {
     }, 5000);
 }
 
+function mostrarMensajeErrorURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mensajeError = urlParams.get('mensajeError');
+    if (mensajeError) {
+        const warningAlert = document.getElementById('warning-danger');
+        const warningMessage = document.getElementById('warning-message');
+        warningMessage.textContent = mensajeError;
+        warningAlert.classList.remove('d-none');
+
+        setTimeout(() => {
+            warningAlert.classList.add('fade-out');
+
+            setTimeout(() => {
+                warningAlert.classList.add('d-none');
+                warningAlert.classList.remove('fade-out');
+
+                const url = new URL(window.location);
+                url.searchParams.delete('mensajeError');
+                window.history.replaceState(null, '', url);
+            }, 500);
+        }, 5000);
+    }
+}
+
 // Función para mostrar mensaje de error
 function mostrarMensajeErrorReview(mensaje) {
     const warningElement = document.getElementById('warning-danger');
@@ -109,4 +133,4 @@ function mostrarMensajeErrorDesaparece(mensaje) {
     }, 5000);
 }
 
-export { mostrarMensajeError, mostrarMensajeErrorSolo, mostrarMensajeErrorDesaparece, mostrarMensajeExito, mostrarMensajeExitoURL };
+export { mostrarMensajeError, mostrarMensajeErrorSolo, mostrarMensajeErrorDesaparece, mostrarMensajeExito, mostrarMensajeExitoURL, mostrarMensajeErrorURL, mostrarListaErrores };

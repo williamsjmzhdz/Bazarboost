@@ -36,32 +36,44 @@
 
       <!-- Formulario de creación/edición -->
       <form>
+        <input type="hidden" id="modo" th:value="${modo}">
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre del Descuento</label>
           <input
-            type="text"
-            class="form-control"
-            id="nombre"
-            name="nombre"
-            placeholder="Ingresa el nombre del descuento"
-            maxlength="40"
-            required
+                  type="text"
+                  class="form-control"
+                  id="nombre"
+                  name="nombre"
+                  placeholder="Ingresa el nombre del descuento"
+                  maxlength="40"
+                  required
+                  th:value="${descuento != null ? descuento.nombre : ''}"
           />
         </div>
 
         <div class="mb-3">
           <label for="porcentaje" class="form-label">Porcentaje (%)</label>
           <input
-            type="number"
-            class="form-control"
-            id="porcentaje"
-            name="porcentaje"
-            placeholder="Ingresa el porcentaje de descuento"
-            min="1"
-            max="100"
-            required
+                  type="number"
+                  class="form-control"
+                  id="porcentaje"
+                  name="porcentaje"
+                  placeholder="Ingresa el porcentaje de descuento"
+                  min="1"
+                  max="100"
+                  required
+                  th:value="${descuento != null ? descuento.porcentaje : ''}"
           />
         </div>
+
+        <!-- Agregar un input hidden para el ID cuando estamos en modo editar -->
+        <input
+                type="hidden"
+                id="descuentoId"
+                name="descuentoId"
+                th:if="${modo == 'editar'}"
+                th:value="${descuento != null ? descuento.descuentoId : ''}"
+        />
 
         <!-- Botones de acción -->
         <div class="d-flex justify-content-between" id="buttonsContainer">
@@ -69,10 +81,12 @@
             <i class="bi bi-arrow-left"></i> Volver a la lista de descuentos
           </a>
           <button type="submit" class="btn btn-success">
-            <i class="bi bi-save"></i> Guardar Descuento
+            <i class="bi bi-save"></i>
+            <span th:text="${modo == 'crear' ? 'Guardar Descuento' : 'Actualizar Descuento'}"></span>
           </button>
         </div>
       </form>
+
     </div>
 
     <div th:insert="~{layout :: footer}"></div>
@@ -80,6 +94,6 @@
     <th:block th:insert="layout :: commonScripts"></th:block>
 
     <script src="/js/mensajes-estado.js" type="module"></script>
-    <script src="/js/crear-editar-descuento.js"></script>
+    <script src="/js/crear-editar-descuento.js" type="module"></script>
   </body>
 </html>

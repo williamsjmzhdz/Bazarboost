@@ -32,6 +32,13 @@ public interface DescuentoRepository extends JpaRepository<Descuento, Integer> {
      */
     Optional<Descuento> findByDescuentoIdAndUsuarioUsuarioId(Integer descuentoId, Integer usuarioId);
 
+    /**
+     * Busca un descuento por su nombre y el ID del usuario al que pertenece.
+     * Utilizado para validar la unicidad del nombre de descuento por usuario.
+     *
+     * @param nombre El nombre del descuento a buscar.
+     * @param usuarioId El ID del usuario dueño del descuento.
+     * @return Un Optional con el descuento encontrado o vacío si no existe.
+     */
+    Optional<Descuento> findByNombreAndUsuarioUsuarioId(String nombre, Integer usuarioId);
 }
-
-

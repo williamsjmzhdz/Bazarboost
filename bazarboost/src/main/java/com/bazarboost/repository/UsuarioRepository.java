@@ -1,13 +1,14 @@
 package com.bazarboost.repository;
 
 import com.bazarboost.model.Usuario;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 /*
  * Alumno: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
  * */
-public interface UsuarioRepository extends CrudRepository<Usuario, Integer> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     /*
     // Obtener todos los usuarios con un indicador de si tienen un rol
