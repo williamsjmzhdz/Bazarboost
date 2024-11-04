@@ -52,7 +52,7 @@ CREATE TABLE Descuentos(
     nombre VARCHAR(40) NOT NULL,
     usuario_id INT NOT NULL,
     CONSTRAINT PK_Descuentos PRIMARY KEY (descuento_id),
-    CONSTRAINT UQ_Descuentos_nombre UNIQUE (nombre),
+    CONSTRAINT UQ_Descuentos_nombre_usuario_id UNIQUE (nombre, usuario_id),
     CONSTRAINT FK_Descuentos_usuario_id FOREIGN KEY (usuario_id) REFERENCES Usuarios(usuario_id) ON DELETE CASCADE,
     CONSTRAINT CK_Descuentos_porcentaje CHECK (porcentaje >= 0 AND porcentaje <= 100)
 );
