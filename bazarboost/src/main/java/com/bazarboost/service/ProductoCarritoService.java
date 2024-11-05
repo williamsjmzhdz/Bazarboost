@@ -1,5 +1,6 @@
 package com.bazarboost.service;
 
+import com.bazarboost.dto.CarritoDTO;
 import com.bazarboost.dto.RespuestaCarritoDTO;
 import com.bazarboost.dto.SolicitudCarritoDTO;
 import com.bazarboost.exception.*;
@@ -33,4 +34,13 @@ public interface ProductoCarritoService {
      * @throws UsuarioNoEncontradoException si no se encuentra el usuario con el ID especificado
      */
     Integer obtenerTotalProductosEnCarrito(Integer usuarioId);
+
+    /**
+     * Obtiene toda la información del carrito de compras del usuario especificado.
+     *
+     * @param usuarioId ID del usuario dueño del carrito de compras
+     * @return CarritoDTO con toda la información del carrito de compras
+     * @throws UsuarioNoEncontradoException si el usuario no existe
+     */
+    CarritoDTO obtenerCarrito(Integer usuarioId);
 }

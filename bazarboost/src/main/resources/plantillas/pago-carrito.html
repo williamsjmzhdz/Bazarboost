@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bazarboost - Pago del Carrito</title>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="estilos/base.css" />
+    <link rel="stylesheet" href="estilos/pago-carrito.css" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Navbar - Usar en todas las plantillas -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <!-- Nombre de la aplicación a la izquierda -->
+        <a class="navbar-brand" href="#">Bazarboost</a>
+        <!-- Botón de toggler para móviles -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Links alineados a la derecha -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <!-- Usar estos enlaces en todas las plantillas -->
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="bi bi-cart"></i> Carrito
+                <!-- Badge de productos en el carrito -->
+                <span class="badge bg-danger">3</span>
+              </a>
+            </li>
+            <!-- Dropdown Cliente -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="clienteDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Cliente
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="clienteDropdown">
+                <li><a class="dropdown-item" href="#">Facturas</a></li>
+                <li><a class="dropdown-item" href="#">Metodos de pago</a></li>
+                <li><a class="dropdown-item" href="#">Direcciones</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Vendedor -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="vendedorDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Vendedor
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="vendedorDropdown">
+                <li><a class="dropdown-item" href="#">Ventas</a></li>
+                <li><a class="dropdown-item" href="#">Productos</a></li>
+                <li><a class="dropdown-item" href="#">Descuentos</a></li>
+              </ul>
+            </li>
+
+            <!-- Dropdown Administrador -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="adminDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Administrador
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                <li><a class="dropdown-item" href="#">Categorias</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item ms-lg-4">
+              <a class="nav-link" href="#">
+                <i class="bi"></i> Williams Jiménez
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Fin del Navbar -->
+
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Pago del Carrito</h2>
+
+      <!-- Sección para mensajes de advertencia -->
+      <div class="alert alert-warning" id="warning-message">
+        <i class="bi bi-exclamation-circle-fill"></i> La tarjeta seleccionada ha
+        expirado. Por favor selecciona otro método de pago. No tienes fondos
+        suficientes en el método de pago seleccionado.
+      </div>
+      <div class="alert alert-warning" id="warning-message">
+        <i class="bi bi-exclamation-circle-fill"></i> No tienes fondos
+        suficientes en el método de pago seleccionado.
+      </div>
+
+      <!-- Sección de Selección de Dirección de Envío -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Dirección de Envío</h4>
+        </div>
+        <div class="card-body">
+          <select class="form-select" aria-label="Seleccionar Dirección">
+            <option selected>Selecciona tu dirección de envío</option>
+            <option value="1">Calle Falsa 123, Ciudad Ejemplo</option>
+            <option value="2">Avenida Siempre Viva 742, Springfield</option>
+            <option value="3">Calle Luna, Calle Sol, Ciudad X</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sección de Selección de Método de Pago -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Método de Pago</h4>
+        </div>
+        <div class="card-body">
+          <select class="form-select" aria-label="Seleccionar Método de Pago">
+            <option selected>Selecciona tu método de pago</option>
+            <option value="1">
+              Visa - Terminada en 1234 (Expira: 12/2024)
+            </option>
+            <option value="2">
+              MasterCard - Terminada en 5678 (Expira: 06/2025)
+            </option>
+            <option value="3">
+              Amex - Terminada en 9876 (Expira: 09/2023)
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Mensajes de Error (Ocultos por defecto) -->
+      <div class="alert alert-danger d-none" id="error-message">
+        <i class="bi bi-exclamation-triangle"></i> No se pudo procesar el pago.
+        Verifica los datos e inténtalo de nuevo.
+      </div>
+
+      <!-- Botones -->
+      <div class="d-flex justify-content-between">
+        <a href="carrito_compras.html" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> Volver al carrito
+        </a>
+        <button class="btn btn-primary" id="pagarCarrito">
+          <i class="bi bi-credit-card"></i> Pagar carrito
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer - Usar en todas las plantillas -->
+    <footer class="text-center mt-5">
+      <div class="container">
+        <p class="mb-0">
+          &copy; 2024 Bazarboost. Todos los derechos reservados.
+        </p>
+        <p>
+          <a href="#">Términos y Condiciones</a> |
+          <a href="#">Política de Privacidad</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

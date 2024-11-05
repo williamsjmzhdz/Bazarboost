@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer> {
 
     // Encontrar todos los métodos de pago de un usuario
-    @Query("SELECT mp FROM MetodoPago mp WHERE mp.usuario.usuarioId = :usuarioId")
+    @ Query("SELECT mp FROM MetodoPago mp WHERE mp.usuario.usuarioId = :usuarioId")
     List<MetodoPago> findByUsuarioUsuarioId(@Param("usuarioId") Integer usuarioId);
 
     // Buscar un método de pago por su ID y validar que pertenece al usuario

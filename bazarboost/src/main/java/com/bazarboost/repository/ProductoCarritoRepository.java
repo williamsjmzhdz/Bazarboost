@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,4 +44,12 @@ public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrit
      */
     @Query("SELECT SUM(pc.cantidad) FROM ProductoCarrito pc WHERE pc.usuario.usuarioId = :usuarioId")
     Integer totalProductosEnCarrito(Integer usuarioId);
+
+    /**
+     * Obtiene los productos en el carrito del usuario especificado.
+     *
+     * @param usuarioId ID del usuario propietario del carrito
+     * @return List<ProductoCarrito> con todos los productos en el carrito del propietario
+     */
+    List<ProductoCarrito> findByUsuarioUsuarioId(Integer usuarioId);
 }

@@ -1,19 +1,19 @@
 package com.bazarboost.service.impl;
 
-import com.bazarboost.dto.RespuestaCarritoDTO;
-import com.bazarboost.dto.SolicitudCarritoDTO;
+import com.bazarboost.dto.*;
 import com.bazarboost.exception.*;
-import com.bazarboost.model.Producto;
-import com.bazarboost.model.ProductoCarrito;
-import com.bazarboost.model.Usuario;
-import com.bazarboost.repository.ProductoCarritoRepository;
-import com.bazarboost.repository.ProductoRepository;
-import com.bazarboost.repository.UsuarioRepository;
+import com.bazarboost.model.*;
+import com.bazarboost.repository.*;
 import com.bazarboost.service.ProductoCarritoService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,6 +26,10 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     private final ProductoCarritoRepository productoCarritoRepository;
     private final ProductoRepository productoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final MetodoPagoRepository metodoPagoRepository;
+    private final DireccionRepository direccionRepository;
+    private final ModelMapper modelMapper;
+
 
     @Override
     @Transactional
@@ -47,6 +51,29 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
         Usuario usuario = obtenerUsuario(usuarioId);
         Integer total = productoCarritoRepository.totalProductosEnCarrito(usuario.getUsuarioId());
         return total != null ? total : 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CarritoDTO obtenerCarrito(Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+
+        List<CarritoProductoDTO> carritoProductoDTOS = productoCarritoRepository.findByUsuarioUsuarioId(usuario.getUsuarioId())
+                .stream()
+                .map(this::convertirACarritoProductoDTO)
+                .toList();
+
+        List<CarritoDireccionDTO> carritoDireccionDTOS = direccionRepository.findByUsuarioUsuarioId(usuario.getUsuarioId())
+                .stream()
+                .map(this::convertirACarritoDireccionDTO)
+                .toList();
+
+        List<CarritoMetodoPagoDTO> carritoMetodoPagoDTOS = metodoPagoRepository.findByUsuarioUsuarioId(usuario.getUsuarioId())
+                .stream()
+                .map(this::convertirACarritoMetodoPagoDTO)
+                .toList();
+
+        return new CarritoDTO(carritoProductoDTOS,carritoDireccionDTOS, carritoMetodoPagoDTOS);
     }
 
     private RespuestaCarritoDTO agregarProductoAlCarrito(Usuario usuario, Producto producto) {
@@ -96,5 +123,50 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     private RespuestaCarritoDTO obtenerRespuestaCarrito(Integer usuarioId) {
         Integer totalProductos = productoCarritoRepository.totalProductosEnCarrito(usuarioId);
         return new RespuestaCarritoDTO(totalProductos != null ? totalProductos : 0);
+    }
+
+    private CarritoProductoDTO convertirACarritoProductoDTO(ProductoCarrito productoCarrito) {
+        CarritoProductoDTO carritoProductoDTO = modelMapper.map(productoCarrito, CarritoProductoDTO.class);
+
+        BigDecimal precio = productoCarrito.getProducto().getPrecio();
+        carritoProductoDTO.setTotalSinDescuento(precio.multiply(BigDecimal.valueOf(carritoProductoDTO.getCantidad())));
+
+        Descuento descuento = productoCarrito.getProducto().getDescuento();
+        if (descuento != null) {
+            Integer descuentoPorcentaje = descuento.getPorcentaje();
+            carritoProductoDTO.setDescuentoUnitarioPorcentaje(descuentoPorcentaje);
+            carritoProductoDTO.setDescuentoUnitarioValor(precio.multiply(BigDecimal.valueOf(descuentoPorcentaje)).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
+            carritoProductoDTO.setDescuentoTotal(carritoProductoDTO.getDescuentoUnitarioValor().multiply(BigDecimal.valueOf(carritoProductoDTO.getCantidad())));
+            carritoProductoDTO.setTotalFinal(carritoProductoDTO.getTotalSinDescuento().subtract(carritoProductoDTO.getDescuentoTotal()));
+        } else {
+            carritoProductoDTO.setTotalFinal(carritoProductoDTO.getTotalSinDescuento());
+        }
+
+        carritoProductoDTO.setNombre(productoCarrito.getProducto().getNombre());
+        carritoProductoDTO.setPrecio(precio);
+
+        return carritoProductoDTO;
+    }
+
+    private CarritoDireccionDTO convertirACarritoDireccionDTO(Direccion direccion) {
+        CarritoDireccionDTO carritoDireccionDTO = modelMapper.map(direccion, CarritoDireccionDTO.class);
+
+        carritoDireccionDTO.setDireccion(
+                direccion.getCalle() + " #" + direccion.getNumeroDomicilio() +
+                        ", " + direccion.getColonia() + ", " + direccion.getCiudad() +
+                        ", " + direccion.getEstado() + ", C.P. " + direccion.getCodigoPostal()
+        );
+
+        return carritoDireccionDTO;
+    }
+
+    private CarritoMetodoPagoDTO convertirACarritoMetodoPagoDTO(MetodoPago metodoPago) {
+        CarritoMetodoPagoDTO carritoMetodoPagoDTO = modelMapper.map(metodoPago, CarritoMetodoPagoDTO.class);
+
+        carritoMetodoPagoDTO.setTipo(metodoPago.getTipoTarjeta().name());
+        carritoMetodoPagoDTO.setTerminacion(metodoPago.getNumeroTarjeta().substring(metodoPago.getNumeroTarjeta().length() - 4));
+        carritoMetodoPagoDTO.setFechaExpiracion(metodoPago.getFechaExpiracion().format(DateTimeFormatter.ofPattern("MM/yyyy")));
+
+        return carritoMetodoPagoDTO;
     }
 }

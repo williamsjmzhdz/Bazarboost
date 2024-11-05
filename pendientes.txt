@@ -4,8 +4,8 @@
 
 05 - 08 NOV - Vista: carrito-compras.html (3-4)
 
-  - Pasar los select para métodos de pago y direcciones a la vista del carrito de compras (DTOS: CarritoComprasDTO con su lista de ProductosCarritoDTO, ProductoCarritoDTO)
-  - Funcionalidad "Mostrar los productos del carrito, métodos de pago y direcciones" para el carrito de compras
+  ✅ - Pasar los select para métodos de pago y direcciones a la vista del carrito de compras 
+  ✅ - Funcionalidad "Mostrar los productos del carrito, métodos de pago y direcciones" para el carrito de compras (DTOS: CarritoComprasDTO con su lista de ProductoCarritoDTO, DireccionEnvioDTO, MetodoPagoDTO)
 
   - Funcionalidad "Eliminar" para el carrito de compras, verificar que el producto exista, que el producto este en el carrito, que el usuario exista y que el usuario sea dueño del carrito
   - Funcionalidad "Cambiar cantidad" para el carrito de compras:

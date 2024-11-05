@@ -1,9 +1,11 @@
 package com.bazarboost.controller.productocarrito;
 
+import com.bazarboost.dto.CarritoDTO;
 import com.bazarboost.dto.RespuestaCarritoDTO;
 import com.bazarboost.dto.SolicitudCarritoDTO;
 import com.bazarboost.service.ProductoCarritoService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +41,16 @@ public class ProductoCarritoRestController {
     public ResponseEntity<RespuestaCarritoDTO> obtenerTotalProductos() {
         Integer totalProductos = productoCarritoService.obtenerTotalProductosEnCarrito(USUARIO_ID_TEMPORAL);
         return ResponseEntity.ok(new RespuestaCarritoDTO(totalProductos));
+    }
+
+    /**
+     * Obtiene toda la información del carrito de compras del usuario.
+     *
+     * @return ResponseEntity con toda la información del carrito de compras
+     */
+    @GetMapping
+    public ResponseEntity<CarritoDTO> obtenerCarrito() {
+        CarritoDTO carritoDTO = productoCarritoService.obtenerCarrito(USUARIO_ID_TEMPORAL);
+        return ResponseEntity.ok(carritoDTO);
     }
 }

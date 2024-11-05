@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="~{layout :: commonHead}"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title>BazarBoost - Buscar Productos</title>
+  <link rel="stylesheet" href="/estilos/base.css">
+  <link rel="stylesheet" href="/estilos/carrito-compras.css">
+</th:block>
+
+<body>
+<!-- Incluir el Navbar -->
+<div th:insert="~{layout :: navbar}"></div>
+
+<div class="container my-4 main-content" id="bodyContainer">
+  <h2 class="mb-4">Carrito de Compras</h2>
+
+  <!-- Sección para mensajes de éxito -->
+  <div class="alert alert-success d-flex d-none align-items-center" id="success-alert" role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div></div>
+  </div>
+
+  <!-- Sección para mensajes de error -->
+  <div class="alert alert-danger d-none" id="warning-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    <span id="warning-message"></span>
+  </div>
+
+  <!-- Tabla de productos en el carrito -->
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="table-dark">
+      <tr>
+        <th>Producto</th>
+        <th>Precio Unitario</th>
+        <th>Descuento Unitario</th>
+        <th>Cantidad</th>
+        <th>Total (sin descuento)</th>
+        <th>Descuento Total</th>
+        <th>Total Final</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Los productos se cargarán dinámicamente aquí -->
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="6" class="text-end">
+          <strong>Total del carrito:</strong>
+        </td>
+        <td><strong id="precioTotal">$0.00</strong></td>
+        <td></td>
+      </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="informacion-pago-envio">
+    <h2 class="mb-4">Información de Pago y Envío</h2>
+
+    <!-- Sección de Selección de Dirección de Envío -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4 class="mb-0">Dirección de Envío</h4>
+      </div>
+      <div class="card-body">
+        <select class="form-select" aria-label="Seleccionar Dirección">
+          <option selected>Selecciona tu dirección de envío</option>
+          <!-- Las direcciones se cargarán dinámicamente aquí -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Sección de Selección de Método de Pago -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4 class="mb-0">Método de Pago</h4>
+      </div>
+      <div class="card-body">
+        <select class="form-select" aria-label="Seleccionar Método de Pago">
+          <option selected>Selecciona tu método de pago</option>
+          <!-- Los métodos de pago se cargarán dinámicamente aquí -->
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="d-flex justify-content-between">
+    <a href="/productos" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Volver a la lista de productos
+    </a>
+    <button class="btn btn-primary" id="procederPago">
+      Proceder al pago <i class="bi bi-credit-card"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Modal de confirmación para eliminar producto -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">
+          Confirmar eliminación
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar este producto del carrito?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:insert="~{layout :: footer}"></div>
+
+<th:block th:insert="layout :: commonScripts"></th:block>
+
+<script src="/js/mensajes-estado.js" type="module"></script>
+<script src="/js/carrito-compras.js" type="module"></script>
+
+</body>
+
+</html>
