@@ -1,6 +1,7 @@
 package com.bazarboost.service;
 
 import com.bazarboost.dto.CarritoDTO;
+import com.bazarboost.dto.CarritoProductoCantidadDTO;
 import com.bazarboost.dto.RespuestaCarritoDTO;
 import com.bazarboost.dto.SolicitudCarritoDTO;
 import com.bazarboost.exception.*;
@@ -43,4 +44,16 @@ public interface ProductoCarritoService {
      * @throws UsuarioNoEncontradoException si el usuario no existe
      */
     CarritoDTO obtenerCarrito(Integer usuarioId);
+
+    /**
+     * Cambia la cantidad de un producto en el carrito del usuario especificado.
+     *
+     * @param carritoProductoCantidadDTO con toda la información del cambio de cantidad
+     * @param usuarioId ID del usuario dueño del carrito de compras
+     * @return RespuestaCarritoDTO con el número total de productos en el carrito
+     * @throws ProductoNoEncontradoException si el producto no existe
+     * @throws UsuarioNoEncontradoException si el usuario no existe
+     * @throws ProductoNoEnCarritoException si se intenta quitar un producto que no está en el carrito
+     */
+    RespuestaCarritoDTO cambiarCantidadProducto(CarritoProductoCantidadDTO carritoProductoCantidadDTO, Integer usuarioId);
 }

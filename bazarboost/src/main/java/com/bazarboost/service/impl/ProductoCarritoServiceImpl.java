@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.Mapping;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -76,6 +77,20 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
         return new CarritoDTO(carritoProductoDTOS,carritoDireccionDTOS, carritoMetodoPagoDTOS);
     }
 
+    @Override
+    @Transactional
+    public RespuestaCarritoDTO cambiarCantidadProducto(CarritoProductoCantidadDTO carritoProductoCantidadDTO, Integer usuarioId) {
+
+        Usuario usuario = obtenerUsuario(usuarioId);
+        Producto producto = obtenerProducto(carritoProductoCantidadDTO.getProductoId());
+        ProductoCarrito productoCarrito = obtenerProductoCarrito(usuario, producto);
+        productoCarrito.setCantidad(carritoProductoCantidadDTO.getCantidad());
+        productoCarritoRepository.save(productoCarrito);
+
+        return new RespuestaCarritoDTO(productoCarritoRepository.totalProductosEnCarrito(usuarioId));
+
+    }
+
     private RespuestaCarritoDTO agregarProductoAlCarrito(Usuario usuario, Producto producto) {
         if (producto.getUsuario().getUsuarioId().equals(usuario.getUsuarioId())) {
             throw new ProductoPropioException("No puede agregar un producto propio a su carrito");
@@ -118,6 +133,14 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     private Usuario obtenerUsuario(Integer usuarioId) {
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado"));
+    }
+
+    private ProductoCarrito obtenerProductoCarrito(Usuario usuario, Producto producto) {
+        return productoCarritoRepository.findByUsuarioAndProducto(usuario, producto)
+                .orElseThrow(() -> new ProductoNoEnCarritoException(
+                        String.format("El producto con ID %d no está en el carrito del usuario con ID %d",
+                        producto.getProductoId(), usuario.getUsuarioId()))
+                );
     }
 
     private RespuestaCarritoDTO obtenerRespuestaCarrito(Integer usuarioId) {

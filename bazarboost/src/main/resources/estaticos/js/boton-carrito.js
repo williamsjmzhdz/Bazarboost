@@ -22,10 +22,6 @@ async function actualizarCarrito(event) {
     const accion = botonCarrito.dataset.accion;
     const url = '/api/producto-carrito/actualizar';
 
-    console.log("botonCarrito: ", botonCarrito);
-    console.log("productoId: ", productoId);
-    console.log("accion: ", accion);
-
     try {
         const response = await fetch(url, {
             method: 'POST',

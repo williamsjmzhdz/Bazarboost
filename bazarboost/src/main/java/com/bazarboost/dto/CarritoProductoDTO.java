@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class CarritoProductoDTO {
 
     private Integer productoCarritoId;
+    private Integer productoId;
     private String nombre;
     private BigDecimal precio;
     private Integer descuentoUnitarioPorcentaje;
