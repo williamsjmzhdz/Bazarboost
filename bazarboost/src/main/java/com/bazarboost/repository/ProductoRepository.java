@@ -45,6 +45,16 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
      * @return        Lista de productos asociados al usuario.
      */
     List<Producto> findByUsuario(Usuario usuario);
+
+    /**
+     * Obtiene el nombre y la cantidad de stock disponible para un producto específico.
+     *
+     * @param productoId ID del producto a consultar.
+     * @return           Un arreglo de objetos con el nombre y la existencia actual del producto.
+     */
+    @Query("SELECT p.nombre, p.existencia FROM Producto p WHERE p.productoId = :productoId")
+    Object[] obtenerNombreYStockActual(@Param("productoId") Integer productoId);
+
 }
 
 

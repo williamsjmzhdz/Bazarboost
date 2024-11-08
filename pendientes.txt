@@ -10,6 +10,8 @@
   ✅ - Funcionalidad "Eliminar" para el carrito de compras, verificar que el producto exista, que el producto este en el carrito, que el usuario exista y que el usuario sea dueño del carrito
   ✅ - Funcionalidad "Cambiar cantidad" para el carrito de compras: SOLO HACER QUE LA ALERTA DE ERROR AL INGRESAR UN VALOR INVÁLIDO SE QUITE DESPUÉS DE UN TIEMPO O CUANDO SE META UNA CONSULTA VÁLIDA
 
+     - Funcionalidad "Procesar pago" (renderizar la plantilla detalle-factura para mostrar mensaje de éxito, verificar cantidades mayores o iguales a 1, verificar stock suficiente, verificar monto suficiente, vaciar carrito, actualizar stocks, actualizar monto, generar factura y detalles)
+
 09 NOV - Vista: lista-facturas.html (1)
   - Funcionalidad "Mostrar las facturas de un usuario" y filtros
 

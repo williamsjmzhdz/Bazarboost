@@ -62,42 +62,46 @@
   <div class="informacion-pago-envio">
     <h2 class="mb-4">Información de Pago y Envío</h2>
 
-    <!-- Sección de Selección de Dirección de Envío -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h4 class="mb-0">Dirección de Envío</h4>
+    <form>
+      <!-- Sección de Selección de Dirección de Envío -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Dirección de Envío</h4>
+        </div>
+        <div class="card-body">
+          <select class="form-select" aria-label="Seleccionar Dirección" required>
+            <option selected>Selecciona tu dirección de envío</option>
+            <!-- Las direcciones se cargarán dinámicamente aquí -->
+          </select>
+        </div>
       </div>
-      <div class="card-body">
-        <select class="form-select" aria-label="Seleccionar Dirección">
-          <option selected>Selecciona tu dirección de envío</option>
-          <!-- Las direcciones se cargarán dinámicamente aquí -->
-        </select>
-      </div>
-    </div>
 
-    <!-- Sección de Selección de Método de Pago -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h4 class="mb-0">Método de Pago</h4>
+      <!-- Sección de Selección de Método de Pago -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4 class="mb-0">Método de Pago</h4>
+        </div>
+        <div class="card-body">
+          <select class="form-select" aria-label="Seleccionar Método de Pago" required>
+            <option selected>Selecciona tu método de pago</option>
+            <!-- Los métodos de pago se cargarán dinámicamente aquí -->
+          </select>
+        </div>
       </div>
-      <div class="card-body">
-        <select class="form-select" aria-label="Seleccionar Método de Pago">
-          <option selected>Selecciona tu método de pago</option>
-          <!-- Los métodos de pago se cargarán dinámicamente aquí -->
-        </select>
+
+      <!-- Botones de acción -->
+      <div class="d-flex justify-content-between">
+        <a href="/productos" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> Volver a la lista de productos
+        </a>
+        <button class="btn btn-primary" id="procederPago">
+          Proceder al pago <i class="bi bi-credit-card"></i>
+        </button>
       </div>
-    </div>
+    </form>
+
   </div>
 
-  <!-- Botones de acción -->
-  <div class="d-flex justify-content-between">
-    <a href="/productos" class="btn btn-secondary">
-      <i class="bi bi-arrow-left"></i> Volver a la lista de productos
-    </a>
-    <button class="btn btn-primary" id="procederPago">
-      Proceder al pago <i class="bi bi-credit-card"></i>
-    </button>
-  </div>
 </div>
 
 <!-- Modal de confirmación para eliminar producto -->

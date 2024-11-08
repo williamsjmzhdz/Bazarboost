@@ -1,10 +1,9 @@
 package com.bazarboost.repository;
 
 import com.bazarboost.model.Direccion;
+import com.bazarboost.model.Usuario;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 /*
@@ -13,17 +12,14 @@ import java.util.Optional;
  * */
 public interface DireccionRepository extends CrudRepository<Direccion, Integer> {
 
-    // Encontrar todas las direcciones de un usuario
-    List<Direccion> findByUsuarioUsuarioId(Integer usuarioId);
+    /**
+     * Busca una dirección específica asociada a un usuario.
+     *
+     * @param direccionId ID de la direccion que se desea buscar.
+     * @param usuario Objeto usuario al cual debe estar asociada la dirección.
+     * @return Un Optional que contiene la dirección si se encuentra, o vacío si no existe.
+     */
+    Optional<Direccion> findByDireccionIdAndUsuario(Integer direccionId, Usuario usuario);
 
-    // Buscar una dirección por su ID y validar que pertenece al usuario
-    Optional<Direccion> findByDireccionIdAndUsuarioUsuarioId(Integer direccionId, Integer usuarioId);
-
-    // Eliminar una dirección de un usuario específico
-    @Transactional
-    void deleteByDireccionIdAndUsuarioUsuarioId(Integer direccionId, Integer usuarioId);
-
-    // Crear o editar una dirección (método heredado de CrudRepository)
-    // save() ya está heredado de CrudRepository.
 }
 

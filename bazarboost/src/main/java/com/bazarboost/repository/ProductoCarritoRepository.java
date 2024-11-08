@@ -5,8 +5,10 @@ import com.bazarboost.model.ProductoCarrito;
 import com.bazarboost.model.Usuario;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,4 +54,15 @@ public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrit
      * @return List<ProductoCarrito> con todos los productos en el carrito del propietario
      */
     List<ProductoCarrito> findByUsuarioUsuarioId(Integer usuarioId);
+
+
+    /**
+     * Calcula el precio total de todos los productos en el carrito de un usuario específico.
+     *
+     * @param usuario El usuario cuyo carrito se desea calcular.
+     * @return El precio total del carrito como BigDecimal.
+     */
+    @Query("SELECT SUM(pc.total) FROM ProductoCarrito pc WHERE pc.usuario = :usuario")
+    BigDecimal obtenerPrecioTotalCarrito(@Param("usuario") Usuario usuario);
+
 }

@@ -1,6 +1,7 @@
 package com.bazarboost.repository;
 
 import com.bazarboost.model.MetodoPago;
+import com.bazarboost.model.Usuario;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,35 +17,16 @@ import java.util.Optional;
  * */
 public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer> {
 
-    // Encontrar todos los métodos de pago de un usuario
-    @ Query("SELECT mp FROM MetodoPago mp WHERE mp.usuario.usuarioId = :usuarioId")
-    List<MetodoPago> findByUsuarioUsuarioId(@Param("usuarioId") Integer usuarioId);
-
-    // Buscar un método de pago por su ID y validar que pertenece al usuario
-    @Query("SELECT mp FROM MetodoPago mp WHERE mp.metodoPagoId = :metodoPagoId AND mp.usuario.usuarioId = :usuarioId")
-    Optional<MetodoPago> findByMetodoPagoIdAndUsuarioUsuarioId(@Param("metodoPagoId") Integer metodoPagoId,
-                                                               @Param("usuarioId") Integer usuarioId);
-
-    // Eliminar un método de pago de un usuario específico
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM MetodoPago mp WHERE mp.metodoPagoId = :metodoPagoId AND mp.usuario.usuarioId = :usuarioId")
-    void deleteByMetodoPagoIdAndUsuarioUsuarioId(@Param("metodoPagoId") Integer metodoPagoId,
-                                                 @Param("usuarioId") Integer usuarioId);
+    /**
+     * Busca un método de pago específico asociado a un usuario.
+     *
+     * @param metodoPagoId ID del método de pago que se desea buscar.
+     * @param usuario Objeto usuario al cual debe estar asociado el método de pago.
+     * @return Un Optional que contiene el método de pago si se encuentra, o vacío si no existe.
+     */
+    Optional<MetodoPago> findByMetodoPagoIdAndUsuario(Integer metodoPagoId, Usuario usuario);
 
 
-    // Verificar fondos suficientes en el método de pago
-    @Query("SELECT CASE WHEN mp.monto >= :total THEN true ELSE false END " +
-            "FROM MetodoPago mp WHERE mp.metodoPagoId = :metodoPagoId AND mp.usuario.usuarioId = :usuarioId")
-    boolean verifySufficientFunds(@Param("metodoPagoId") Integer metodoPagoId,
-                                  @Param("usuarioId") Integer usuarioId,
-                                  @Param("total") Double total);
-
-    // Verificar si la tarjeta de crédito ha expirado
-    @Query("SELECT CASE WHEN mp.fechaExpiracion > CURRENT_DATE THEN true ELSE false END " +
-            "FROM MetodoPago mp WHERE mp.metodoPagoId = :metodoPagoId AND mp.usuario.usuarioId = :usuarioId")
-    boolean verifyExpirationCard(@Param("metodoPagoId") Integer metodoPagoId,
-                                 @Param("usuarioId") Integer usuarioId);
 }
 
 

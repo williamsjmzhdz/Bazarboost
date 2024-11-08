@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+  <head th:replace="~{layout :: commonHead}"></head>
+
+  <!-- Definir el fragmento con el título y los estilos específicos -->
+  <th:block th:fragment="headExtras">
+    <title>BazarBoost - Buscar Productos</title>
+    <link rel="stylesheet" href="/estilos/base.css">
+    <link rel="stylesheet" href="/estilos/detalle-factura.css">
+  </th:block>
+  <body>
+    <!-- Incluir el Navbar -->
+    <div th:insert="~{layout :: navbar}"></div>
+
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Detalle de Factura</h2>
+
+      <!-- Sección para mensajes de éxito -->
+      <div class="alert alert-success d-flex d-none align-items-center" id="success-alert" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <div></div>
+      </div>
+
+      <!-- Información de la Factura -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h4>Factura #123456</h4>
+        </div>
+        <div class="card-body">
+          <p><strong>Fecha de emisión:</strong> 12/10/2024</p>
+          <p><strong>Total Factura:</strong> $460.00</p>
+        </div>
+      </div>
+
+      <!-- Tabla de productos de la factura con scroll horizontal en pantallas pequeñas -->
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Producto</th>
+              <th>Precio Unitario</th>
+              <th>Descuento Unitario</th>
+              <th>Cantidad</th>
+              <th>Total (sin descuento)</th>
+              <th>Descuento Total</th>
+              <th>Total Final</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Producto 1 -->
+            <tr data-producto="Producto 1">
+              <td>Producto 1</td>
+              <td>$100.00</td>
+              <td>10% ($10.00)</td>
+              <td>2</td>
+              <td>$200.00</td>
+              <td>$20.00</td>
+              <td>$180.00</td>
+            </tr>
+            <!-- Producto 2 -->
+            <tr data-producto="Producto 2">
+              <td>Producto 2</td>
+              <td>$200.00</td>
+              <td>5% ($10.00)</td>
+              <td>1</td>
+              <td>$200.00</td>
+              <td>$10.00</td>
+              <td>$190.00</td>
+            </tr>
+            <!-- Producto 3 -->
+            <tr data-producto="Producto 3">
+              <td>Producto 3</td>
+              <td>$50.00</td>
+              <td>Sin descuento</td>
+              <td>2</td>
+              <td>$100.00</td>
+              <td>$0.00</td>
+              <td>$100.00</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="table-secondary">
+              <th colspan="6" class="text-end">Total Final:</th>
+              <th>$460.00</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- Botón para regresar a la lista de facturas -->
+      <div class="mt-4">
+        <a href="lista_facturas.html" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> Regresar a la lista de facturas
+        </a>
+      </div>
+    </div>
+
+    <div th:insert="~{layout :: footer}"></div>
+
+    <th:block th:insert="layout :: commonScripts"></th:block>
+  </body>
+</html>

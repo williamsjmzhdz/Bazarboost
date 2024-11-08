@@ -114,6 +114,34 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    @ExceptionHandler(StockInsuficienteException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleStockInsuficiente(StockInsuficienteException ex) {
+        System.out.println("StockInsuficienteException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(FondosInsuficientesException.class)
+    @ResponseStatus(HttpStatus.PAYMENT_REQUIRED)
+    public ResponseEntity<String> handleFondosInsuficientes(FondosInsuficientesException ex) {
+        System.out.println("FondosInsuficientesException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MetodoPagoNoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleMetodoPagoNoEncontrado(MetodoPagoNoEncontradoException ex) {
+        System.out.println("MetodoPagoNoEncontradoException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DireccionNoEncontradaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleDireccionNoEncontrada(DireccionNoEncontradaException ex) {
+        System.out.println("DireccionNoEncontradaException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
