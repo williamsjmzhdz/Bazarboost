@@ -2,7 +2,7 @@
   ✅ - Funcionalidad "Editar" para descuentos de un vendedor
   ✅ - Funcionalidad "Eliminar" para descuentos de un vendedor
 
-05 - 08 NOV - Vista: carrito-compras.html (3-4)
+05 - 09 NOV - Vista: carrito-compras.html (3-4)
 
   ✅ - Pasar los select para métodos de pago y direcciones a la vista del carrito de compras 
   ✅ - Funcionalidad "Mostrar los productos del carrito, métodos de pago y direcciones" para el carrito de compras (DTOS: CarritoComprasDTO con su lista de ProductoCarritoDTO, DireccionEnvioDTO, MetodoPagoDTO)
@@ -12,31 +12,31 @@
 
      - Funcionalidad "Procesar pago" (renderizar la plantilla detalle-factura para mostrar mensaje de éxito, verificar cantidades mayores o iguales a 1, verificar stock suficiente, verificar monto suficiente, vaciar carrito, actualizar stocks, actualizar monto, generar factura y detalles)
 
-09 NOV - Vista: lista-facturas.html (1)
+10 NOV - Vista: lista-facturas.html (1)
   - Funcionalidad "Mostrar las facturas de un usuario" y filtros
 
-10 NOV - Vista: detalle-factura.html (1)
+11 NOV - Vista: detalle-factura.html (1)
   - Funcionalidad "Mostrar detalle de la factura"
 
-11 - 12 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
+12 - 13 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
  - CRUD para métodos de pago
 
-13 - 14 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
+14 - 15 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
  - CRUD para direcciones
 
-15 NOV - Vista: lista-ventas.html (1)
+16 NOV - Vista: lista-ventas.html (1)
  - Funcionalida "Mostrar ventas" y filtros
 
-16 NOV - Vista: lista-usuarios-.html (1)
+17 NOV - Vista: lista-usuarios-.html (1)
  - Funcionalidad "Mostrar usuarios" ordenados por nombre y paginados de 10 en 10
 
-17 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
+18 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
  - CRUD para categorias
 
-18 NOV - Vista: perfil-usuario.html (1)
+19 NOV - Vista: perfil-usuario.html (1)
  - READ y UPDATE de los datos del usuario
 
-19 NOV - 03 DIC Vista: layout.html, inicio-sesion.html, registro.html (aprox. 15 días tendría para implementarlo)
+20 NOV - 03 DIC Vista: layout.html, inicio-sesion.html, registro.html (aprox. 15 días tendría para implementarlo)
  - Implementar sistema de usuarios y roles 
 
 

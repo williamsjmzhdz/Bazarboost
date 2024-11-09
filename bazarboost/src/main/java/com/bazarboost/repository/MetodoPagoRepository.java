@@ -27,6 +27,18 @@ public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer
     Optional<MetodoPago> findByMetodoPagoIdAndUsuario(Integer metodoPagoId, Usuario usuario);
 
 
+    /**
+     * Reduce el monto disponible de un método de pago en un monto específico.
+     *
+     * @param metodoPagoId ID del método de pago a actualizar.
+     * @param monto        Monto a reducir del saldo disponible.
+     */
+    @Modifying
+    @Query("UPDATE MetodoPago m SET m.monto = m.monto - :monto WHERE m.metodoPagoId = :metodoPagoId")
+    void reducirMonto(@Param("metodoPagoId") Integer metodoPagoId, @Param("monto") Double monto);
+
+
+
 }
 
 

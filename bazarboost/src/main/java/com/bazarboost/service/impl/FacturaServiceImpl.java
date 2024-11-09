@@ -42,16 +42,25 @@ public class FacturaServiceImpl implements FacturaService {
 
         // Verificaciones
         Usuario usuario = obtenerUsuario(usuarioId);
-        List<Producto> productos = carritoPagoSolicitudDTO.getProductos().stream()
-                .map(productoPagoDTO -> obtenerProducto(productoPagoDTO.getProductoId())).toList();
+        List<Producto> productos = carritoPagoSolicitudDTO.getProductos().stream().map(productoPagoDTO -> obtenerProducto(productoPagoDTO.getProductoId())).toList();
         productos.forEach(producto -> obtenerProductoCarrito(usuario, producto));
         MetodoPago metodoPago = obtenerMetodoPago(carritoPagoSolicitudDTO.getMetodoPagoId(), usuario);
         Direccion direccion = obtenerDireccion(carritoPagoSolicitudDTO.getDireccionId(), usuario);
-        carritoPagoSolicitudDTO.getProductos().forEach(this::verificarStock);
         BigDecimal precioTotal = productoCarritoRepository.obtenerPrecioTotalCarrito(usuario);
-        verificarMonto(metodoPago, precioTotal);
 
         // Procesar pago
+
+        // Actualizar stock
+        carritoPagoSolicitudDTO.getProductos().forEach(this::actualizarStock);
+
+        // Actualizar monto
+        actualizarMonto(metodoPago, precioTotal);
+
+        // Generar factura
+        //generarFactura();
+
+        // Vaciar carrito
+        // vaciarCarrito();
 
 
         return null;
@@ -91,26 +100,25 @@ public class FacturaServiceImpl implements FacturaService {
                 ));
     }
 
-    private void verificarStock(ProductoPagoDTO productoPagoDTO) {
-        Object[] productoInfo = productoRepository.obtenerNombreYStockActual(productoPagoDTO.getProductoId());
-
-        if (productoInfo == null || (Integer) productoInfo[1] < productoPagoDTO.getCantidad()) {
-            String nombreProducto = (String) productoInfo[0];
-            Integer stockActual = (Integer) productoInfo[1];
-
-            throw new StockInsuficienteException("El producto '" + nombreProducto
-                    + "' tiene solo " + stockActual + " unidades disponibles.");
+    private void actualizarStock(ProductoPagoDTO productoPagoDTO) {
+        Producto producto = obtenerProducto(productoPagoDTO.getProductoId()); // Obtener el producto para acceder a la existencia actual
+        int nuevaCantidad = producto.getExistencia() - productoPagoDTO.getCantidad();
+        if (nuevaCantidad < 0) {
+            throw new StockInsuficienteException(
+                    "Stock insuficiente para el producto '" + producto.getNombre() + "'. Disponible: " + producto.getExistencia()
+            );
         }
+        productoRepository.actualizarStock(productoPagoDTO.getProductoId(), nuevaCantidad);
     }
 
-    private void verificarMonto(MetodoPago metodoPago, BigDecimal precioTotal) {
-        // Verificar que el método de pago tiene fondos suficientes
+    private void actualizarMonto(MetodoPago metodoPago, BigDecimal precioTotal) {
         if (metodoPago.getMonto() == null || BigDecimal.valueOf(metodoPago.getMonto()).compareTo(precioTotal) < 0) {
             throw new FondosInsuficientesException(
                     "Fondos insuficientes en el método de pago. Disponible: "
                             + metodoPago.getMonto() + ", Requerido: " + precioTotal
             );
         }
+        metodoPagoRepository.reducirMonto(metodoPago.getMetodoPagoId(), precioTotal.doubleValue());
     }
 
 

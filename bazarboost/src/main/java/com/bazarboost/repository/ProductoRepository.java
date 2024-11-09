@@ -2,29 +2,18 @@ package com.bazarboost.repository;
 
 import com.bazarboost.model.Producto;
 import com.bazarboost.model.Usuario;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/*
- * Autor: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
     /**
      * Consulta para buscar productos con filtros opcionales de palabra clave y categoría,
      * y una restricción de existencia disponible.
-     * No se aplican ordenamiento ni paginación en esta consulta, ya que se gestionan en el servicio.
-     *
-     * - Filtra por palabra clave en el nombre del producto si se proporciona (`:keyword`).
-     *   La búsqueda es insensible a mayúsculas y minúsculas.
-     * - Filtra por categoría específica si se proporciona (`:categoria`).
-     * - Solo incluye productos con existencia mayor a cero (`p.existencia > 0`).
      *
      * @param keyword   Palabra clave para buscar en el nombre del producto (opcional).
      * @param categoria Nombre de la categoría del producto para filtrar (opcional).
@@ -55,6 +44,13 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query("SELECT p.nombre, p.existencia FROM Producto p WHERE p.productoId = :productoId")
     Object[] obtenerNombreYStockActual(@Param("productoId") Integer productoId);
 
+    /**
+     * Actualiza el stock de un producto estableciendo una nueva cantidad.
+     *
+     * @param productoId   ID del producto a actualizar.
+     * @param nuevaCantidad Nueva cantidad de stock después de la compra.
+     */
+    @Modifying
+    @Query("UPDATE Producto p SET p.existencia = :nuevaCantidad WHERE p.productoId = :productoId")
+    void actualizarStock(@Param("productoId") Integer productoId, @Param("nuevaCantidad") Integer nuevaCantidad);
 }
-
-
