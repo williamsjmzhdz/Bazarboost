@@ -57,7 +57,7 @@ public class FacturaServiceImpl implements FacturaService {
         actualizarMonto(metodoPago, precioTotal);
 
         // Generar factura
-        //generarFactura();
+        //generarFactura(); Necesitaremos modificar la estructura de la tabla Facturas para quitar subtotal y porcentajeImpuestos
 
         // Vaciar carrito
         // vaciarCarrito();
