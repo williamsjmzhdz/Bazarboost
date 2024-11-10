@@ -4,6 +4,7 @@ import com.bazarboost.model.Direccion;
 import com.bazarboost.model.Usuario;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -20,6 +21,8 @@ public interface DireccionRepository extends CrudRepository<Direccion, Integer> 
      * @return Un Optional que contiene la dirección si se encuentra, o vacío si no existe.
      */
     Optional<Direccion> findByDireccionIdAndUsuario(Integer direccionId, Usuario usuario);
+
+    List<Direccion> findByUsuarioUsuarioId(Integer usuarioId);
 
 }
 

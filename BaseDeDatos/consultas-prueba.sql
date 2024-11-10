@@ -7,3 +7,5 @@ SELECT * FROM categorias;
 SELECT * FROM productoscarrito;
 SELECT * FROM direcciones;
 SELECT * FROM metodospago;
+SELECT * FROM facturas;
+SELECT * FROM productosfacturas;

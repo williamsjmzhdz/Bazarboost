@@ -24,14 +24,8 @@ public class Factura {
     @Column(name = "fecha")
     private LocalDateTime fecha;
 
-    @Column(name = "subtotal")
-    private Double subtotal;
-
     @Column(name = "total")
     private Double total;
-
-    @Column(name = "porcentaje_impuestos")
-    private Integer porcentajeImpuestos;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")

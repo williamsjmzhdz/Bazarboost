@@ -1,5 +1,5 @@
 // Importaciones de utilidades
-import { mostrarMensajeError, mostrarMensajeExito } from './mensajes-estado.js';
+import { mostrarMensajeError, mostrarMensajeExito, mostrarListaErrores } from './mensajes-estado.js';
 
 /**
  * Elementos DOM globales
@@ -130,6 +130,12 @@ const cargarCarrito = async () => {
             throw new Error('Error al cargar el carrito');
         }
 
+        // Guardar selecciones actuales de dirección y método de pago
+        const selectDireccion = document.querySelector('select[aria-label="Seleccionar Dirección"]');
+        const selectMetodoPago = document.querySelector('select[aria-label="Seleccionar Método de Pago"]');
+        const direccionSeleccionada = selectDireccion.value;
+        const metodoPagoSeleccionado = selectMetodoPago.value;
+
         const data = await response.json();
 
         // Limpiar y cargar productos
@@ -143,6 +149,10 @@ const cargarCarrito = async () => {
         actualizarTotalCarrito(data.carritoProductoDTOS);
         cargarDirecciones(data.carritoDireccionDTOS);
         cargarMetodosPago(data.carritoMetodoPagoDTOS);
+
+        // Restaurar selecciones de dirección y método de pago
+        selectDireccion.value = direccionSeleccionada;
+        selectMetodoPago.value = metodoPagoSeleccionado;
 
     } catch (error) {
         console.error('Error:', error);
@@ -291,6 +301,138 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.target.value = cantidadOriginal;
             }
         }
+    });
+
+    // Obtener el botón de pago
+    const procederPagoButton = document.getElementById('procederPago');
+
+    // Agregar evento para procesar el pago
+    procederPagoButton.addEventListener('click', async (event) => {
+        event.preventDefault(); // Evitar envío de formulario si está dentro de uno
+
+        // Obtener los productos del carrito
+        const productos = Array.from(document.querySelectorAll('table tbody tr')).map(fila => {
+            return {
+                productoId: parseInt(fila.getAttribute('data-producto-base-id')),
+                cantidad: parseInt(fila.querySelector('.cantidad').value)
+            };
+        });
+
+        // Validar si el carrito está vacío
+        if (productos.length === 0) {
+            mostrarMensajeError("El carrito de compras está vacío. Agrega productos antes de proceder al pago.");
+            return;
+        }
+
+        // Función auxiliar para verificar si la respuesta es JSON
+        async function obtenerErrorData(response) {
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                return await response.json();
+            } else {
+                return await response.text();  // Devuelve texto en caso de que no sea JSON
+            }
+        }
+
+        try {
+            // Construir el JSON con los productos del carrito
+            const productos = Array.from(document.querySelectorAll('table tbody tr')).map(fila => {
+                return {
+                    productoId: parseInt(fila.getAttribute('data-producto-base-id')),
+                    cantidad: parseInt(fila.querySelector('.cantidad').value)
+                };
+            });
+
+            // Obtener método de pago y dirección seleccionados
+            const metodoPagoId = parseInt(document.querySelector('select[aria-label="Seleccionar Método de Pago"]').value);
+            const direccionId = parseInt(document.querySelector('select[aria-label="Seleccionar Dirección"]').value);
+
+            // Verificar que se hayan seleccionado un método de pago y una dirección
+            if (isNaN(metodoPagoId) || isNaN(direccionId)) {
+                mostrarMensajeError("Por favor selecciona una dirección y un método de pago.");
+                return;
+            }
+
+            // Construir el cuerpo de la solicitud JSON
+            const requestData = {
+                productos: productos,
+                metodoPagoId: metodoPagoId,
+                direccionId: direccionId
+            };
+
+            // Enviar la solicitud POST al endpoint de procesamiento de pago
+            const response = await fetch('/api/facturas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            // Manejo de la respuesta del servidor
+            if (!response.ok) {
+                const errorData = await obtenerErrorData(response);  // Llama a la función auxiliar para manejar JSON o texto
+                console.error('Error del servidor:', errorData);
+
+                switch (response.status) {
+                    case 400:
+                        if (Array.isArray(errorData)) {
+                            // Lista de errores de validación
+                            mostrarListaErrores(errorData);
+                        } else {
+                            mostrarMensajeError(errorData.message || "Formato de solicitud incorrecto. Verifica los datos e inténtalo de nuevo.");
+                        }
+                        break;
+
+                    case 404:
+                        if (errorData.includes("Usuario")) {
+                            mostrarMensajeError("Usuario no encontrado. Por favor, verifica tu sesión.");
+                        } else if (errorData.includes("Producto")) {
+                            mostrarMensajeError("Uno de los productos seleccionados no existe. Actualiza el carrito.");
+                        } else if (errorData.includes("carrito")) {
+                            mostrarMensajeError("Uno de los productos no se encuentra en tu carrito. Actualiza el carrito.");
+                        } else if (errorData.includes("método de pago")) {
+                            mostrarMensajeError("El método de pago seleccionado no es válido. Por favor, elige otro método de pago.");
+                        } else if (errorData.includes("dirección")) {
+                            mostrarMensajeError("La dirección seleccionada no es válida. Por favor, elige otra dirección de envío.");
+                        } else {
+                            mostrarMensajeError("Recurso no encontrado. Verifica los datos e inténtalo de nuevo.");
+                        }
+                        break;
+
+                    case 402:
+                        mostrarMensajeError("Fondos insuficientes en el método de pago seleccionado. Por favor, elige otro método de pago.");
+                        break;
+
+                    case 409:
+                        if (errorData.includes("Stock insuficiente")) {
+                            mostrarMensajeError("Stock insuficiente para uno de los productos en el carrito. Ajusta las cantidades e inténtalo de nuevo.");
+                        } else if (errorData.includes("cantidad enviada")) {
+                            mostrarMensajeError("La cantidad seleccionada para uno de los productos no coincide con la cantidad en el carrito. Actualiza el carrito.");
+                        } else {
+                            mostrarMensajeError("Conflicto en la solicitud. Verifica los datos e inténtalo de nuevo.");
+                        }
+                        break;
+
+                    default:
+                        mostrarMensajeError("Error inesperado al procesar el pago. Por favor, inténtalo más tarde.");
+                }
+                return;
+            }
+
+            // Obtener la respuesta exitosa que incluye el ID de la factura
+            const responseData = await response.json();
+            const facturaId = responseData.facturaId;
+
+            // Redirigir al detalle de la factura con mensaje de éxito en la URL
+            window.location.href = `/facturas/detalle/${facturaId}?mensajeExito=Pago procesado exitosamente.`;
+
+        } catch (error) {
+            console.error('Error al procesar el pago:', error);
+            mostrarMensajeError("Ocurrió un error al procesar el pago. Intenta de nuevo.");
+        }
+
+
     });
 });
 

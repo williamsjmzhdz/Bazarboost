@@ -65,4 +65,23 @@ public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrit
     @Query("SELECT SUM(pc.total) FROM ProductoCarrito pc WHERE pc.usuario = :usuario")
     BigDecimal obtenerPrecioTotalCarrito(@Param("usuario") Usuario usuario);
 
+    /**
+     * Elimina todos los productos del carrito asociados a un usuario específico.
+     *
+     * @param usuarioId ID del usuario propietario del carrito
+     */
+    void deleteByUsuarioUsuarioId(Integer usuarioId);
+
+    /**
+     * Obtiene la cantidad de un producto específico en el carrito de un usuario.
+     *
+     * @param usuarioId ID del usuario propietario del carrito.
+     * @param productoId ID del producto en el carrito que se desea verificar.
+     * @return Un `Optional<Integer>` que contiene la cantidad del producto en el carrito
+     *         si existe, o `Optional.empty()` si el producto no está en el carrito del usuario.
+     */
+    @Query("SELECT pc.cantidad FROM ProductoCarrito pc WHERE pc.usuario.usuarioId = :usuarioId AND pc.producto.productoId = :productoId")
+    Optional<Integer> obtenerCantidadProductoCarrito(@Param("usuarioId") Integer usuarioId, @Param("productoId") Integer productoId);
+
+
 }

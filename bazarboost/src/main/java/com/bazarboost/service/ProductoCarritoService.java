@@ -56,4 +56,6 @@ public interface ProductoCarritoService {
      * @throws ProductoNoEnCarritoException si se intenta quitar un producto que no está en el carrito
      */
     RespuestaCarritoDTO cambiarCantidadProducto(CarritoProductoCantidadDTO carritoProductoCantidadDTO, Integer usuarioId);
+
+
 }

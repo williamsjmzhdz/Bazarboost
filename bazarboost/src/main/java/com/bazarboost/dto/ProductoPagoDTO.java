@@ -11,11 +11,8 @@ public class ProductoPagoDTO {
     @Min(value = 1, message = "El producto seleccionado no es válido, intenta nuevamente.")
     private Integer productoId;
 
-    // Solo para mensajes personalizados
-    private String nombreProducto;
-
-    @NotNull(message = "Por favor, ingresa una cantidad para el producto '{nombreProducto}'.")
-    @Min(value = 1, message = "La cantidad para el producto '{nombreProducto}' debe ser al menos 1.")
+    @NotNull(message = "Por favor, ingresa una cantidad para el producto.")
+    @Min(value = 1, message = "La cantidad para el producto debe ser al menos 1.")
     private Integer cantidad;
 
 }

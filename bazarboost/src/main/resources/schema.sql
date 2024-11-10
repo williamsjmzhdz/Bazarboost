@@ -118,9 +118,7 @@ CREATE TABLE MetodosPago (
 CREATE TABLE Facturas (
     factura_id INT AUTO_INCREMENT,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    subtotal DECIMAL(10, 2) NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
-    porcentaje_impuestos INT NOT NULL,
     usuario_id INT,
     metodo_pago_id INT,
     direccion_id INT,
@@ -129,9 +127,7 @@ CREATE TABLE Facturas (
     CONSTRAINT FK_Facturas_usuario_id FOREIGN KEY (usuario_id) REFERENCES Usuarios(usuario_id) ON DELETE SET NULL,
     CONSTRAINT FK_Facturas_metodo_pago_id FOREIGN KEY (metodo_pago_id) REFERENCES MetodosPago(metodo_pago_id) ON DELETE SET NULL,
     CONSTRAINT FK_Facturas_direccion_id FOREIGN KEY (direccion_id) REFERENCES Direcciones(direccion_id) ON DELETE SET NULL,
-    CONSTRAINT CK_Facturas_subtotal CHECK (subtotal >= 0),
     CONSTRAINT CK_Facturas_total CHECK (total >= 0),
-    CONSTRAINT CK_Facturas_porcentaje_impuestos CHECK (porcentaje_impuestos >= 0 AND porcentaje_impuestos <= 100)
 );
 
 CREATE TABLE Resenias (
