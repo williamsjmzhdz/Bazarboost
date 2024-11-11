@@ -1,13 +1,15 @@
 package com.bazarboost.service.impl;
 
-import com.bazarboost.dto.CarritoPagoRespuestaDTO;
-import com.bazarboost.dto.CarritoPagoSolicitudDTO;
-import com.bazarboost.dto.ProductoPagoDTO;
+import com.bazarboost.dto.*;
 import com.bazarboost.exception.*;
 import com.bazarboost.model.*;
 import com.bazarboost.repository.*;
 import com.bazarboost.service.FacturaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +61,60 @@ public class FacturaServiceImpl implements FacturaService {
         vaciarCarrito(usuarioId);
 
         return new CarritoPagoRespuestaDTO(factura.getFacturaId());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FacturasPaginadasDTO obtenerFacturasPaginadasYOrdenadas(String ordenarPor, String direccionOrden, Integer pagina, Integer tamanoPagina,
+                                                               Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);  // Verificación de que el usuario existe
+
+        if (!ordenarPor.equalsIgnoreCase("fecha") && !ordenarPor.equalsIgnoreCase("total")) {
+            throw new OrdenNoValidoException("Parámetro de ordenación no válido. Use 'fecha' o 'total'.");
+        }
+
+        if (!direccionOrden.equalsIgnoreCase("asc") && !direccionOrden.equalsIgnoreCase("desc")) {
+            throw new OrdenNoValidoException("Dirección de orden no válida. Use 'asc' o 'desc'.");
+        }
+
+        long totalFacturas = facturaRepository.countByUsuario(usuario);
+
+        // Si no hay facturas, devolvemos una respuesta vacía sin lanzar excepción
+        if (totalFacturas == 0) {
+            return new FacturasPaginadasDTO(
+                    List.of(),   // Lista vacía de facturas
+                    pagina,      // Página solicitada, aunque vacía
+                    0,           // Total de páginas es 0
+                    0,           // Total de elementos es 0
+                    true,        // Es la primera página (y también la última)
+                    true         // Es la última página (no hay más páginas)
+            );
+        }
+
+        int maximoPaginas = (int) Math.ceil((double) totalFacturas / tamanoPagina);
+
+        if (pagina < 0 || pagina >= maximoPaginas) {
+            throw new PaginaFueraDeRangoException("Número de página fuera de rango. Total de páginas disponibles: " + maximoPaginas);
+        }
+
+        Sort sort = direccionOrden.equals("asc") ? Sort.by(ordenarPor).ascending() : Sort.by(ordenarPor).descending();
+        Pageable pageable = PageRequest.of(pagina, tamanoPagina, sort);
+
+        Page<Factura> facturasPage = facturaRepository.findByUsuario(usuario, pageable);
+
+        List<FacturaDTO> facturasDTO = facturasPage.getContent().stream()
+                .map(factura -> new FacturaDTO(factura.getFacturaId(), factura.getFecha(), factura.getTotal()))
+                .toList();
+
+        return new FacturasPaginadasDTO(
+                facturasDTO,
+                facturasPage.getNumber(),
+                facturasPage.getTotalPages(),
+                facturasPage.getTotalElements(),
+                facturasPage.isFirst(),
+                facturasPage.isLast()
+        );
+
     }
 
     private BigDecimal calcularPrecioTotalYVerificarCantidades(CarritoPagoSolicitudDTO solicitudDTO, Integer usuarioId) {

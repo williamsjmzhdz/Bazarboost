@@ -37,10 +37,10 @@ function actualizarPaginacion(data, cambiarPaginaCallback) {
     `);
 }
 
-function cambiarPagina(pagina, obtenerProductosCallback) {
+function cambiarPagina(pagina, obtenerRecursosCallback) {
     if (pagina >= 0) {
         setPaginaActual(pagina);
-        obtenerProductosCallback();
+        obtenerRecursosCallback();
         // Scroll suave al contenedor de paginación después de cambiar de página
         const contenedorPaginacion = document.querySelector('.pagination');
         if (contenedorPaginacion) {

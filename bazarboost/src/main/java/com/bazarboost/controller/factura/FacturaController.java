@@ -17,4 +17,10 @@ public class FacturaController {
         return "detalle-factura";
     }
 
+    @GetMapping
+    public String mostrarListaFacturas(Model model, HttpServletRequest request) {
+        model.addAttribute("requestURI", request.getRequestURI());
+        return "lista-facturas";
+    }
+
 }

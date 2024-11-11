@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: commonHead"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title>BazarBoost - Facturas</title>
+  <link rel="stylesheet" href="/estilos/base.css">
+  <link rel="stylesheet" href="/estilos/base-listas.css">
+</th:block>
+
+<body>
+
+<!-- Incluir el Navbar -->
+<div th:insert="layout :: navbar"></div>
+
+<div class="container my-4 main-content" id="bodyContainer">
+  <h2 class="mb-4">Facturas</h2>
+
+  <!-- Sección para mensajes de éxito -->
+  <div
+          class="alert alert-success d-flex d-none align-items-center"
+          id="success-alert"
+          role="alert"
+  >
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div></div>
+  </div>
+
+  <!-- Sección para mensajes de error -->
+  <div class="alert alert-danger d-none" id="warning-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    <span id="warning-message"></span>
+  </div>
+
+  <!-- Mensaje cuando no hay facturas -->
+  <div id="no-facturas" style="display: none;" class="alert alert-info">
+    Aún no hay facturas. ¡Compra ahora mismo para ver tu primera factura!
+  </div>
+
+  <!-- Sección de Ordenación -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="w-100">
+      <select
+              class="form-select"
+              id="orderBy"
+              aria-label="Ordenar Facturas"
+      >
+        <option value="" selected disabled>
+          Selecciona un criterio de ordenamiento
+        </option>
+        <option value="fechaAsc">
+          Fecha (de la más antigua a la más reciente)
+        </option>
+        <option value="fechaDesc">
+          Fecha (de la más reciente a la más antigua)
+        </option>
+        <option value="totalAsc">Monto (de menor a mayor)</option>
+        <option value="totalDesc">Monto (de mayor a menor)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabla de facturas -->
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+      <tr>
+        <th scope="col">ID Factura</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Monto Total</th>
+        <th scope="col">Acciones</th>
+      </tr>
+      </thead>
+      <tbody id="facturasBody">
+      <!-- Contenido cargado dinámicamente desde lista-facturas.js -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center" id="paginationContainer">
+      <!-- Botones de paginación cargados dinámicamente desde lista-facturas.js -->
+    </ul>
+  </nav>
+</div>
+
+<div th:insert="layout :: footer"></div>
+
+<!-- Scripts comunes -->
+<th:block th:insert="layout :: commonScripts"></th:block>
+
+<script src="/js/mensajes-estado.js" type="module"></script>
+<script src="/js/paginacion.js" type="module"></script>
+<script src="/js/lista-facturas.js" type="module"></script>
+
+</body>
+</html>

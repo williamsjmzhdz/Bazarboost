@@ -1,6 +1,7 @@
 package com.bazarboost.repository;
 
 import com.bazarboost.model.Factura;
+import com.bazarboost.model.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
@@ -14,16 +15,21 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface FacturaRepository extends PagingAndSortingRepository<Factura, Integer>, CrudRepository<Factura, Integer> {
 
-    // Crear una nueva factura (save() ya está heredado)
+    /**
+     * Encuentra todas las facturas asociadas a un usuario específico con soporte de paginación.
+     *
+     * @param usuario El usuario cuyas facturas se desean recuperar.
+     * @param pageable Objeto que define la paginación y ordenamiento de los resultados.
+     * @return Página de facturas correspondientes al usuario especificado.
+     */
+    Page<Factura> findByUsuario(Usuario usuario, Pageable pageable);
 
-    // Obtener todas las facturas asociadas al usuario con paginación
-    Page<Factura> findByUsuarioUsuarioId(Integer usuarioId, Pageable pageable);
+    /**
+     * Cuenta la cantidad total de facturas asociadas a un usuario específico.
+     *
+     * @param usuario El usuario cuyas facturas se desean contar.
+     * @return El número total de facturas para el usuario especificado.
+     */
+    long countByUsuario(Usuario usuario);
 
-    // Ordenar facturas del usuario por monto total (de mayor a menor) con paginación
-    @Query("SELECT f FROM Factura f WHERE f.usuario.usuarioId = :usuarioId ORDER BY f.total DESC")
-    Page<Factura> findFacturasByUsuarioIdOrderByTotalDesc(@Param("usuarioId") Integer usuarioId, Pageable pageable);
-
-    // Ordenar facturas del usuario por monto total (de menor a mayor) con paginación
-    @Query("SELECT f FROM Factura f WHERE f.usuario.usuarioId = :usuarioId ORDER BY f.total ASC")
-    Page<Factura> findFacturasByUsuarioIdOrderByTotalAsc(@Param("usuarioId") Integer usuarioId, Pageable pageable);
 }

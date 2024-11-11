@@ -164,6 +164,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(PaginaFueraDeRangoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handlePaginaFueraDeRango(PaginaFueraDeRangoException ex) {
+        System.out.println("PaginaFueraDeRangoException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();
