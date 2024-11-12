@@ -17,12 +17,15 @@ function mostrarMensajeErrorSolo(mensaje) {
 
 function mostrarListaErrores(errores) {
     const warningElement = document.getElementById('warning-danger');
-    warningElement.innerHTML = `
-        <i class="bi bi-exclamation-triangle"></i> No se pudo completar la acción. Solucione los siguientes errores:
+    const warningMessage = document.getElementById('warning-message');
+
+    // Limpiar el contenido previo de warningMessage
+    warningMessage.innerHTML = `
+        </i> No se pudo completar la acción. Solucione los siguientes errores:
         <ul></ul>
     `;
 
-    const errorList = warningElement.querySelector('ul');
+    const errorList = warningMessage.querySelector('ul');
     errores.forEach(error => {
         const errorItem = document.createElement('li');
         errorItem.textContent = error;
@@ -31,6 +34,7 @@ function mostrarListaErrores(errores) {
 
     warningElement.classList.remove('d-none');
 }
+
 
 function mostrarMensajeExitoURL() {
     const urlParams = new URLSearchParams(window.location.search);

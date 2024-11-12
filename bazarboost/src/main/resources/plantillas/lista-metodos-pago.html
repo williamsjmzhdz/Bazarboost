@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: commonHead"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+    <title>BazarBoost - Métodos de Pago</title>
+    <link rel="stylesheet" href="/estilos/base.css">
+    <link rel="stylesheet" href="/estilos/base-listas.css">
+</th:block>
+
+<body>
+<!-- Incluir el Navbar -->
+<div th:insert="layout :: navbar"></div>
+
+<!-- Main content -->
+<div class="container my-4 main-content" id="bodyContainer">
+    <h2 class="mb-4">Métodos de Pago</h2>
+
+    <!-- Sección para mensajes de éxito -->
+    <div class="alert alert-success d-flex d-none align-items-center" id="success-alert" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <div></div>
+    </div>
+
+    <!-- Sección para mensajes de error -->
+    <div class="alert alert-danger d-none" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span id="warning-message"></span>
+    </div>
+
+    <!-- Botón para agregar nuevo método de pago -->
+    <div class="d-flex justify-content-end mb-3">
+        <a href="/metodos-pago/crear" class="btn btn-success">
+            <i class="bi bi-plus-lg"></i> Agregar Método de Pago
+        </a>
+    </div>
+
+    <!-- Tabla de métodos de pago con scroll horizontal -->
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Nombre del Titular</th>
+                <th scope="col">Número de Tarjeta</th>
+                <th scope="col">Fecha de Expiración</th>
+                <th scope="col">Tipo de Tarjeta</th>
+                <th scope="col">Monto Disponible</th>
+                <th scope="col">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Los datos se cargarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+     aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">
+                    Confirmar Eliminación
+                </h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar este método de pago?
+                Esta acción no se puede deshacer.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="layout :: footer"></div>
+
+<!-- Scripts comunes -->
+<th:block th:insert="layout :: commonScripts"></th:block>
+
+<script src="/js/mensajes-estado.js" type="module"></script>
+<script src="/js/lista-metodos-pago.js" type="module"></script>
+</body>
+</html>

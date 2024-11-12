@@ -15,23 +15,26 @@
 10 NOV - Vista: lista-facturas.html (1)
   ✅ - Funcionalidad "Mostrar las facturas de un usuario" y filtros
 
-11 NOV - Vista: detalle-factura.html (1)
-  - Funcionalidad "Mostrar detalle de la factura"
+11 - 12 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
+ ✅ - Funcionalidad: Read
+ ✅ - Funcionalidad: Create
+    - Funcionalidad: Update
+    - Funcionalidad: Delete
 
-12 - 13 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
- - CRUD para métodos de pago
-
-14 - 15 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
+13 - 14 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
  - CRUD para direcciones
 
-16 NOV - Vista: lista-ventas.html (1)
+15 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
+ - CRUD para categorias
+
+16 NOV - Vista: detalle-factura.html (1)
+  - Funcionalidad "Mostrar detalle de la factura"
+
+17 NOV - Vista: lista-ventas.html (1)
  - Funcionalida "Mostrar ventas" y filtros
 
-17 NOV - Vista: lista-usuarios-.html (1)
+18 NOV - Vista: lista-usuarios-.html (1)
  - Funcionalidad "Mostrar usuarios" ordenados por nombre y paginados de 10 en 10
-
-18 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
- - CRUD para categorias
 
 19 NOV - Vista: perfil-usuario.html (1)
  - READ y UPDATE de los datos del usuario

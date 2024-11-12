@@ -26,8 +26,26 @@ public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer
      */
     Optional<MetodoPago> findByMetodoPagoIdAndUsuario(Integer metodoPagoId, Usuario usuario);
 
-
+    /**
+     * Recupera todos los métodos de pago asociados a un usuario específico, utilizando su ID.
+     *
+     * @param usuarioId ID del usuario del cual se desean obtener los métodos de pago.
+     * @return Lista de métodos de pago asociados al usuario. Si el usuario no tiene métodos de pago,
+     *         retorna una lista vacía.
+     * @throws IllegalArgumentException si usuarioId es null.
+     */
     List<MetodoPago> findByUsuarioUsuarioId(Integer usuarioId);
+
+    /**
+     * Recupera todos los métodos de pago asociados a un usuario específico, utilizando el objeto Usuario.
+     * Esta variante es útil cuando ya se tiene cargado el objeto Usuario completo.
+     *
+     * @param usuario Objeto Usuario del cual se desean obtener los métodos de pago.
+     * @return Lista de métodos de pago asociados al usuario. Si el usuario no tiene métodos de pago,
+     *         retorna una lista vacía.
+     * @throws IllegalArgumentException si usuario es null.
+     */
+    List<MetodoPago> findByUsuario(Usuario usuario);
 
     /**
      * Reduce el monto disponible de un método de pago en un monto específico.
@@ -39,8 +57,11 @@ public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer
     @Query("UPDATE MetodoPago m SET m.monto = m.monto - :monto WHERE m.metodoPagoId = :metodoPagoId")
     void reducirMonto(@Param("metodoPagoId") Integer metodoPagoId, @Param("monto") Double monto);
 
-
-
+    /**
+     * Verifica si existe un método de pago con el mismo número de tarjeta.
+     *
+     * @param numeroTarjeta Número de tarjeta a verificar.
+     * @return true si el número de tarjeta ya existe, false si no.
+     */
+    boolean existsByNumeroTarjeta(String numeroTarjeta);
 }
-
-
