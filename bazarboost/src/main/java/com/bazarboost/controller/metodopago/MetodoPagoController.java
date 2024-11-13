@@ -23,4 +23,11 @@ public class MetodoPagoController {
         return "crear-editar-metodo-pago";
     }
 
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEdicion(Model model, HttpServletRequest request) {
+        model.addAttribute("requestURI", request.getRequestURI());
+        model.addAttribute("modo", "editar");
+        return "crear-editar-metodo-pago";
+    }
+
 }

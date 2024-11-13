@@ -18,14 +18,20 @@
 11 - 12 NOV - Vista: lista-metodos-pago.html y crear-editar-metodo-pago.html (2)
  ✅ - Funcionalidad: Read
  ✅ - Funcionalidad: Create
-    - Funcionalidad: Update
-    - Funcionalidad: Delete
+ ✅ - Funcionalidad: Update
+ ✅ - Funcionalidad: Delete
 
 13 - 14 NOV - Vista: lista-direcciones.html y crear-editar-direcciones.html (2)
- - CRUD para direcciones
+  - Funcionalidad: Read
+  - Funcionalidad: Create
+  - Funcionalidad: Update
+  - Funcionalidad: Delete
 
 15 NOV - Vista: categorias.html y crear-editar-categoria.html (1)
- - CRUD para categorias
+  - Funcionalidad: Read
+  - Funcionalidad: Create
+  - Funcionalidad: Update
+  - Funcionalidad: Delete
 
 16 NOV - Vista: detalle-factura.html (1)
   - Funcionalidad "Mostrar detalle de la factura"
