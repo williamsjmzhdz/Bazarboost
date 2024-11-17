@@ -3,7 +3,7 @@ import { mostrarMensajeError, mostrarListaErrores } from './mensajes-estado.js';
 /**
  * Clase para gestionar el formulario de creación o edición de métodos de pago
  */
-class CrearMetodoPago {
+class CrearEditarMetodoPago {
     constructor() {
         this.formulario = document.getElementById('metodo-pago-form');
         this.modo = this.determinarModo();
@@ -109,9 +109,7 @@ class CrearMetodoPago {
 
         try {
             // Construir la URL según el modo
-            const url = this.modo === 'crear'
-                ? '/api/metodos-pago'
-                : `/api/metodos-pago/${this.metodoPagoId}`;
+            const url = '/api/metodos-pago';
 
             const response = await fetch(url, {
                 method: this.modo === 'crear' ? 'POST' : 'PUT',
@@ -189,5 +187,5 @@ class CrearMetodoPago {
 
 // Inicializar la clase cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    new CrearMetodoPago();
+    new CrearEditarMetodoPago();
 });

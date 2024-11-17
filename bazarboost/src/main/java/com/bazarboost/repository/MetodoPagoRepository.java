@@ -38,7 +38,6 @@ public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer
 
     /**
      * Recupera todos los métodos de pago asociados a un usuario específico, utilizando el objeto Usuario.
-     * Esta variante es útil cuando ya se tiene cargado el objeto Usuario completo.
      *
      * @param usuario Objeto Usuario del cual se desean obtener los métodos de pago.
      * @return Lista de métodos de pago asociados al usuario. Si el usuario no tiene métodos de pago,

@@ -93,10 +93,9 @@ CREATE TABLE Direcciones (
     colonia VARCHAR(40) NOT NULL,
     calle VARCHAR(60) NOT NULL,
     numero_domicilio INT NOT NULL,
-    codigo_postal VARCHAR(10) NOT NULL,
+    codigo_postal VARCHAR(5) NOT NULL,
     usuario_id INT NOT NULL,
     CONSTRAINT PK_Direcciones PRIMARY KEY (direccion_id),
-    CONSTRAINT UQ_Direcciones UNIQUE (estado, ciudad, colonia, calle, numero_domicilio, codigo_postal),
     CONSTRAINT FK_Direcciones_usuario_id FOREIGN KEY (usuario_id) REFERENCES Usuarios(usuario_id) ON DELETE CASCADE
 );
 

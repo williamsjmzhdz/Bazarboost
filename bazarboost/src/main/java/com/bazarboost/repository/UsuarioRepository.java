@@ -2,7 +2,8 @@ package com.bazarboost.repository;
 
 import com.bazarboost.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /*
  * Alumno: Francisco Williams Jiménez Hernández
@@ -10,11 +11,11 @@ import org.springframework.data.repository.CrudRepository;
  * */
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    /*
-    // Obtener todos los usuarios con un indicador de si tienen un rol
-    @Query("SELECT u, CASE WHEN (ur.rol.rolId = :rolId) THEN true ELSE false END " +
-            "FROM Usuario u " +
-            "LEFT JOIN UsuarioRol ur ON u.usuarioId = ur.usuario.usuarioId AND ur.rol.rolId = :rolId")
-    List<Object[]> getUsersWithRole(@Param("rolId") int rolId);
-     */
+    @Query("SELECT COUNT(ur) > 0 FROM UsuarioRol ur " +
+            "WHERE ur.usuario.usuarioId = :usuarioId " +
+            "AND ur.rol.nombre = :nombreRol " +
+            "AND ur.usuario.usuarioId IS NOT NULL " +
+            "AND ur.rol.rolId IS NOT NULL")
+    boolean tieneRol(@Param("usuarioId") Integer usuarioId, @Param("nombreRol") String nombreRol);
+
 }

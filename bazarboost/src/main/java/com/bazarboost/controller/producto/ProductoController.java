@@ -20,6 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 
+
+/**
+ *
+ * NOTA IMPORTANTE: Las operaciones Create, Update y Delete de un producto están hechas con MVC y no con REST como
+ * el resto de la aplicación por motivos del entregable final del módulo 9.
+ *
+ */
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
@@ -146,8 +153,12 @@ public class ProductoController {
             // Configurar las relaciones
             producto.setUsuario(usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL));
             producto.setCategoria(categoriaService.obtenerCategoriaPorId(categoriaId));
-            producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuarioId(
-                    descuentoId, VENDEDOR_ID_TEMPORAL));
+            if (descuentoId != null && descuentoId != -1) {
+                producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuarioId(
+                        descuentoId, VENDEDOR_ID_TEMPORAL));
+            } else {
+                producto.setDescuento(null); // Explícitamente establecemos null cuando no hay descuento
+            }
 
             // Manejar la imagen solo si se subió una nueva
             if (imagenArchivo != null && !imagenArchivo.isEmpty()) {

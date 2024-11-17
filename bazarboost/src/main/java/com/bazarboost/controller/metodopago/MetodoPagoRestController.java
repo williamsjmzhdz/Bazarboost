@@ -41,13 +41,10 @@ public class MetodoPagoRestController {
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
-    @PutMapping("/{metodoPagoId}")
+    @PutMapping
     public ResponseEntity<Void> actualizar(
             @PathVariable Integer metodoPagoId,
             @RequestBody @Valid MetodoPagoEdicionDTO dto) {
-        if (!metodoPagoId.equals(dto.getMetodoPagoId())) {
-            throw new IllegalArgumentException("El ID del método de pago no coincide con el ID en la URL");
-        }
         metodoPagoService.actualizar(dto, USUARIO_ID);
         return ResponseEntity.noContent().build();
     }
