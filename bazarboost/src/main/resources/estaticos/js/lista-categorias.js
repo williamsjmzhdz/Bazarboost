@@ -48,20 +48,7 @@ class ListaCategorias {
 
             if (!response.ok) {
                 const errorData = await response.text();
-
-                if (response.status === 404) {
-                    console.error(`Error 404: ${errorData}`);
-                    if (errorData.includes("Usuario")) {
-                        mostrarMensajeErrorDesaparece("No se encontró la información del usuario. Por favor, verifica y vuelve a intentar");
-                    } else if (errorData.includes("categoría")) {
-                        mostrarMensajeErrorDesaparece("No se encontró la categoría a eliminar o no tienes permisos para eliminarla. Por favor, verifica y vuelve a intentar.");
-                    } else {
-                        mostrarMensajeErrorDesaparece(errorData);
-                    }
-                } else if (response.status === 400) {
-                    mostrarMensajeErrorDesaparece("No se puede eliminar la categoría porque tiene productos asociados.");
-                }
-
+                mostrarMensajeErrorDesaparece(errorData);
                 return;
             }
 

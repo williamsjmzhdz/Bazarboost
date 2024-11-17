@@ -68,7 +68,7 @@ public class DescuentoServiceImpl implements DescuentoService {
     public Descuento actualizarDescuento(Integer descuentoId, Descuento descuentoActualizado, Integer usuarioId) {
         Descuento descuentoExistente = obtenerDescuentoPorIdYUsuarioId(descuentoId, usuarioId);
         validarPorcentajeDescuento(descuentoActualizado.getPorcentaje());
-        validarNombreUnicoPorUsuario(descuentoActualizado.getNombre(), usuarioId, null);
+        validarNombreUnicoPorUsuario(descuentoActualizado.getNombre(), usuarioId, descuentoId);
         descuentoActualizado.setDescuentoId(descuentoId);
         descuentoActualizado.setUsuario(descuentoExistente.getUsuario());
         descuentoExistente.setNombre(descuentoActualizado.getNombre());
@@ -113,11 +113,9 @@ public class DescuentoServiceImpl implements DescuentoService {
 
     private void validarUsuario(Integer usuarioId) {
         if (usuarioId == null) {
-            System.out.println("aqui");
             throw new UsuarioNoEncontradoException("El ID del usuario no puede estar vacío");
         }
         if (!usuarioRepository.existsById(usuarioId)) {
-            System.out.println("aqui 2");
             throw new UsuarioNoEncontradoException("El usuario con ID " + usuarioId + " no existe");
         }
     }

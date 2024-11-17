@@ -7,6 +7,7 @@ import com.bazarboost.exception.CategoriaNoEncontradaException;
 import com.bazarboost.exception.NombreCategoriaDuplicadoException;
 import com.bazarboost.exception.UsuarioNoEncontradoException;
 import com.bazarboost.model.Categoria;
+import com.bazarboost.model.Direccion;
 import com.bazarboost.model.Usuario;
 import com.bazarboost.repository.CategoriaRepository;
 import com.bazarboost.repository.UsuarioRepository;
@@ -39,7 +40,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Void crear(CategoriaCreacionDTO dto, Integer usuarioId) {
         Usuario usuario = obtenerUsuario(usuarioId);
         verificarRol(usuario);
-        verificarNombreCategoria(dto.getNombre());
+        verificarNombreCategoria(dto.getNombre(), null);
         Categoria categoria = modelMapper.map(dto, Categoria.class);
         categoriaRepository.save(categoria);
         return null;
@@ -74,14 +75,22 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     @Transactional
     public Void actualizar(CategoriaEdicionDTO dto, Integer usuarioId) {
+        verificarNombreCategoria(dto.getNombre(), dto.getCategoriaId());
         Usuario usuario = obtenerUsuario(usuarioId);
         verificarRol(usuario);
         Categoria categoria = obtenerCategoria(dto.getCategoriaId());
-        System.out.println("Categoría ID: " + categoria.getCategoriaId());
         modelMapper.map(dto, categoria);
-        System.out.println("Categoría ID: " + categoria.getCategoriaId());
         categoriaRepository.save(categoria);
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void eliminar(Integer categoriaId, Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+        verificarRol(usuario);
+        Categoria categoria = obtenerCategoria(categoriaId);
+        categoriaRepository.delete(categoria);
     }
 
     private Usuario obtenerUsuario(Integer usuarioId) {
@@ -95,8 +104,12 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
     }
 
-    private void verificarNombreCategoria(String nombre) {
-        if (categoriaRepository.existsByNombre(nombre)) {
+    private void verificarNombreCategoria(String nombre, Integer categoriaIdExcluido) {
+        boolean existeNombre = categoriaIdExcluido == null
+                ? categoriaRepository.existsByNombre(nombre)
+                : categoriaRepository.existsByNombreAndCategoriaIdNot(nombre, categoriaIdExcluido);
+
+        if (existeNombre) {
             throw new NombreCategoriaDuplicadoException(
                     String.format("Ya existe una categoría con el nombre: %s", nombre)
             );

@@ -42,9 +42,7 @@ public class MetodoPagoRestController {
     }
 
     @PutMapping
-    public ResponseEntity<Void> actualizar(
-            @PathVariable Integer metodoPagoId,
-            @RequestBody @Valid MetodoPagoEdicionDTO dto) {
+    public ResponseEntity<Void> actualizar(@RequestBody @Valid MetodoPagoEdicionDTO dto) {
         metodoPagoService.actualizar(dto, USUARIO_ID);
         return ResponseEntity.noContent().build();
     }

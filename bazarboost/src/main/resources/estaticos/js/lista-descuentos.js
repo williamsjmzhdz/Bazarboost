@@ -1,5 +1,17 @@
 import { mostrarMensajeExito, mostrarMensajeError, mostrarMensajeExitoURL, mostrarMensajeErrorURL } from './mensajes-estado.js';
 
+/**
+ * Función auxiliar para escapar HTML y prevenir XSS
+ */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/**
+ * Carga la lista de descuentos del vendedor
+ */
 function cargarDescuentosVendedor() {
     const url = new URL('/api/descuentos/mis-descuentos', window.location.origin);
     fetch(url)
@@ -23,8 +35,8 @@ function cargarDescuentosVendedor() {
 
             data.forEach(descuento => {
                 const descuentoHTML = `
-                    <tr data-descuento-id="${descuento.descuentoId}" data-nombre="${descuento.nombre}" data-porcentaje="${descuento.porcentaje}">
-                        <td data-label="Nombre del Descuento">${descuento.nombre}</td>
+                    <tr data-descuento-id="${descuento.descuentoId}" data-nombre="${escapeHtml(descuento.nombre)}" data-porcentaje="${descuento.porcentaje}">
+                        <td data-label="Nombre del Descuento">${escapeHtml(descuento.nombre)}</td>
                         <td data-label="Porcentaje">${descuento.porcentaje}%</td>
                         <td data-label="Acciones">
                             <div class="d-flex gap-2">
@@ -32,7 +44,7 @@ function cargarDescuentosVendedor() {
                                     <i class="bi bi-pencil"></i> Editar
                                 </a>
                                 <button class="btn btn-danger btn-sm"
-                                        onclick="prepararEliminarDescuento(${descuento.descuentoId}, '${descuento.nombre}')"
+                                        onclick="prepararEliminarDescuento(${descuento.descuentoId}, '${escapeHtml(descuento.nombre).replace(/'/g, "\\'")}')"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalConfirmDelete">
                                     <i class="bi bi-trash"></i> Eliminar
@@ -48,7 +60,9 @@ function cargarDescuentosVendedor() {
         });
 }
 
-// Función para preparar el modal de eliminación
+/**
+ * Prepara el modal de confirmación para eliminar un descuento
+ */
 window.prepararEliminarDescuento = function(descuentoId, nombreDescuento) {
     const modal = document.getElementById('modalConfirmDelete');
     const btnEliminar = modal.querySelector('.btn-danger');
@@ -58,7 +72,9 @@ window.prepararEliminarDescuento = function(descuentoId, nombreDescuento) {
     btnEliminar.onclick = () => eliminarDescuento(descuentoId);
 };
 
-// Función para eliminar el descuento
+/**
+ * Elimina un descuento específico
+ */
 function eliminarDescuento(descuentoId) {
     const url = new URL(`/api/descuentos/${descuentoId}`, window.location.origin);
 
@@ -85,23 +101,24 @@ function eliminarDescuento(descuentoId) {
                 }
             });
         }
-
-        // Mostrar mensaje de éxito
-        mostrarMensajeExito('Descuento eliminado exitosamente');
-
-        // Recargar la lista de descuentos
-        cargarDescuentosVendedor();
+        return response;
+    })
+    .then(() => {
+        cargarDescuentosVendedor(); // Primero recargamos la lista
+        mostrarMensajeExito('Descuento eliminado exitosamente'); // Luego mostramos el mensaje
     })
     .catch(error => {
         console.error('Error:', error);
         mostrarMensajeError(error.message);
+    })
+    .finally(() => {
+        // Cerrar el modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmDelete'));
+        modal.hide();
     });
-
-    // Cerrar el modal
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirmDelete'));
-    modal.hide();
 }
 
+// Inicializar cuando el DOM esté listo
 window.onload = () => {
     cargarDescuentosVendedor();
     mostrarMensajeExitoURL();

@@ -65,4 +65,16 @@ public interface CategoriaService {
      */
     Void actualizar(CategoriaEdicionDTO categoriaEdicionDTO, Integer usuarioId);
 
+    /**
+     * Elimina una categoria específica.
+     * Solo permite eliminar categorias por el usuario administrador.
+     *
+     * @param categoriaId ID de la categoria a eliminar
+     * @param usuarioId ID del usuario administrador
+     * @throws UsuarioNoEncontradoException cuando el ID de usuario administrador no existe en el sistema
+     * @throws CategoriaNoEncontradaException cuando el ID de la categoria no existe
+     * @throws AccesoDenegadoException cuando el usuario no tiene el rol de administador
+     */
+    void eliminar(Integer categoriaId, Integer usuarioId);
+
 }

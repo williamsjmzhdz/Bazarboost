@@ -59,7 +59,7 @@ function handleErrorResponse(response) {
                     throw new Error(`Errores de validación: ${validationErrors.join(", ")}`);
                 } catch (e) {
                     // Si no es JSON, mostrar el mensaje directamente
-                    mostrarMensajeError(errorMessage);
+                    mostrarError(errorMessage);
                     throw new Error(`Bad Request: ${errorMessage}`);
                 }
 

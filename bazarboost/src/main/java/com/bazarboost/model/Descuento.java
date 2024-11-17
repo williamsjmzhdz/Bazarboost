@@ -1,10 +1,7 @@
 package com.bazarboost.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -33,6 +30,10 @@ public class Descuento {
 
     @NotBlank(message = "El nombre no puede estar vacío o contener solo espacios en blanco")
     @Length(max = 40, message = "El nombre no puede exceder los 40 caracteres")
+    @Pattern(
+            regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\\- ]+$",
+            message = "El nombre solo puede contener letras, espacios, guiones y apóstrofres."
+    )
     @Column(name = "nombre")
     private String nombre;
 

@@ -6,6 +6,8 @@ import com.bazarboost.dto.DireccionEdicionDTO;
 import com.bazarboost.model.Categoria;
 import com.bazarboost.service.CategoriaService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,12 @@ public class CategoriaRestController {
             @RequestBody @Valid CategoriaEdicionDTO dto
     ) {
         categoriaService.actualizar(dto, USUARIO_ID);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{categoriaId}")
+    public ResponseEntity<Void> eliminar(@PathVariable Integer categoriaId) {
+        categoriaService.eliminar(categoriaId, USUARIO_ID);
         return ResponseEntity.noContent().build();
     }
 
