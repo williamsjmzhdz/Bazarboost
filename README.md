@@ -97,7 +97,9 @@
 ### Respuesta
 - **204 No Content**
 
-# API Documentation - CRUD Descuentos
+---
+
+# Documentación API - CRUD Descuentos
 
 ## Obtener Mis Descuentos
 - **Método:** GET
