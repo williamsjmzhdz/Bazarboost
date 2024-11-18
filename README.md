@@ -96,3 +96,84 @@
 
 ### Respuesta
 - **204 No Content**
+
+# API Documentation - CRUD Descuentos
+
+## Obtener Mis Descuentos
+- **Método:** GET
+- **Path:** `/api/descuentos/mis-descuentos`
+
+### Excepciones
+- **404 Not Found:** Usuario no encontrado
+
+### Respuesta
+- **200 OK**
+```json
+[
+    {
+        "descuentoId": 1,
+        "porcentaje": 15,
+        "nombre": "Descuento Verano"
+    }
+]
+```
+
+---
+
+## Crear Descuento
+- **Método:** POST
+- **Path:** `/api/descuentos`
+- **Body:**
+```json
+{
+    "porcentaje": 15,  // Requerido, entre 1 y 100
+    "nombre": "string" // Requerido, debe ser único por usuario
+}
+```
+
+### Excepciones
+- **404 Not Found:** Usuario no encontrado
+- **400 Bad Request:** Porcentaje inválido o fuera de rango
+- **400 Bad Request:** Nombre de descuento duplicado para el usuario
+
+### Respuesta
+- **201 Created**
+
+---
+
+## Actualizar Descuento
+- **Método:** PUT
+- **Path:** `/api/descuentos/{descuentoId}`
+- **Parámetros de Ruta:**
+  - `descuentoId`: Integer
+- **Body:**
+```json
+{
+    "porcentaje": 20,  // Requerido, entre 1 y 100
+    "nombre": "string" // Requerido, debe ser único por usuario
+}
+```
+
+### Excepciones
+- **404 Not Found:** Descuento o usuario no encontrado
+- **403 Forbidden:** Descuento no pertenece al usuario
+- **400 Bad Request:** Porcentaje inválido o fuera de rango
+- **400 Bad Request:** Nombre de descuento duplicado para el usuario
+
+### Respuesta
+- **200 OK**
+
+---
+
+## Eliminar Descuento
+- **Método:** DELETE
+- **Path:** `/api/descuentos/{descuentoId}`
+- **Parámetros de Ruta:**
+  - `descuentoId`: Integer
+
+### Excepciones
+- **404 Not Found:** Descuento o usuario no encontrado
+- **403 Forbidden:** Descuento no pertenece al usuario
+
+### Respuesta
+- **204 No Content**
