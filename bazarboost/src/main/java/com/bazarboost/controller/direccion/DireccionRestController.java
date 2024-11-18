@@ -47,7 +47,7 @@ public class DireccionRestController {
             @RequestBody @Valid DireccionEdicionDTO dto
     ) {
         direccionService.actualizar(dto, USUARIO_ID);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{direccionId}")

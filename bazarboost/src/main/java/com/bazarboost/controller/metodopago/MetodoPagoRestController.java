@@ -44,7 +44,7 @@ public class MetodoPagoRestController {
     @PutMapping
     public ResponseEntity<Void> actualizar(@RequestBody @Valid MetodoPagoEdicionDTO dto) {
         metodoPagoService.actualizar(dto, USUARIO_ID);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{metodoPagoId}")
