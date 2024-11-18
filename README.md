@@ -80,7 +80,7 @@
 - **400 Bad Request:** Validaciones de formato no cumplidas
 
 ### Respuesta
-- **204 No Content**
+- **200 OK**
 
 ---
 
