@@ -1,52 +1,60 @@
-# Documentación de API - CRUD Categorías
+# APIs RESTful Documentation
+
+## Table of Contents
+- [Categorías API](#categorías-api)
+  - [Crear Categoría](#crear-categoría)
+  - [Obtener Datos de Edición](#obtener-datos-de-edición)
+  - [Obtener Todas las Categorías](#obtener-todas-las-categorías)
+  - [Actualizar Categoría](#actualizar-categoría)
+  - [Eliminar Categoría](#eliminar-categoría)
+- [Descuentos API](#descuentos-api)
+  - [Obtener Mis Descuentos](#obtener-mis-descuentos)
+  - [Crear Descuento](#crear-descuento)
+  - [Actualizar Descuento](#actualizar-descuento)
+  - [Eliminar Descuento](#eliminar-descuento)
+
+# Categorías API
 
 ## Crear Categoría
-- **Método:** POST
-- **Path:** `/api/categorias`
-- **Body:**
+
+**Endpoint:** `POST /api/categorias`
+
+**Request Body:**
 ```json
 {
     "nombre": "string"  // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
 }
 ```
 
-### Excepciones
-- **403 Forbidden:** Usuario no tiene rol de Administrador
-- **404 Not Found:** Usuario no encontrado
-- **400 Bad Request:** Nombre de categoría duplicado
-- **400 Bad Request:** Validaciones de formato no cumplidas
-
-### Respuesta
-- **201 Created**
-
----
+**Responses:**
+- `201 Created` - Categoría creada exitosamente
+- `400 Bad Request` - Nombre duplicado o validaciones no cumplidas
+- `403 Forbidden` - Usuario sin rol Administrador
+- `404 Not Found` - Usuario no encontrado
 
 ## Obtener Datos de Edición
-- **Método:** GET
-- **Path:** `/api/categorias/{categoriaId}/edicion`
-- **Parámetros de Ruta:**
-  - `categoriaId`: Integer
 
-### Excepciones
-- **404 Not Found:** Categoría no encontrada
+**Endpoint:** `GET /api/categorias/{categoriaId}/edicion`
 
-### Respuesta
-- **200 OK**
+**Path Parameters:**
+- `categoriaId` - Integer
+
+**Responses:**
+- `200 OK`
 ```json
 {
     "categoriaId": 1,
     "nombre": "Electrónicos"
 }
 ```
-
----
+- `404 Not Found` - Categoría no encontrada
 
 ## Obtener Todas las Categorías
-- **Método:** GET
-- **Path:** `/api/categorias`
 
-### Respuesta
-- **200 OK**
+**Endpoint:** `GET /api/categorias`
+
+**Responses:**
+- `200 OK`
 ```json
 [
     {
@@ -60,12 +68,11 @@
 ]
 ```
 
----
-
 ## Actualizar Categoría
-- **Método:** PUT
-- **Path:** `/api/categorias`
-- **Body:**
+
+**Endpoint:** `PUT /api/categorias`
+
+**Request Body:**
 ```json
 {
     "categoriaId": 1,  // Obligatorio, mínimo 0
@@ -73,43 +80,32 @@
 }
 ```
 
-### Excepciones
-- **403 Forbidden:** Usuario no tiene rol de Administrador
-- **404 Not Found:** Usuario o categoría no encontrada
-- **400 Bad Request:** Nombre de categoría duplicado
-- **400 Bad Request:** Validaciones de formato no cumplidas
-
-### Respuesta
-- **200 OK**
-
----
+**Responses:**
+- `200 OK` - Categoría actualizada exitosamente
+- `400 Bad Request` - Nombre duplicado o validaciones no cumplidas
+- `403 Forbidden` - Usuario sin rol Administrador
+- `404 Not Found` - Usuario o categoría no encontrada
 
 ## Eliminar Categoría
-- **Método:** DELETE
-- **Path:** `/api/categorias/{categoriaId}`
-- **Parámetros de Ruta:**
-  - `categoriaId`: Integer
 
-### Excepciones
-- **403 Forbidden:** Usuario no tiene rol de Administrador
-- **404 Not Found:** Usuario o categoría no encontrada
+**Endpoint:** `DELETE /api/categorias/{categoriaId}`
 
-### Respuesta
-- **204 No Content**
+**Path Parameters:**
+- `categoriaId` - Integer
 
----
+**Responses:**
+- `204 No Content` - Categoría eliminada exitosamente
+- `403 Forbidden` - Usuario sin rol Administrador
+- `404 Not Found` - Usuario o categoría no encontrada
 
-# Documentación API - CRUD Descuentos
+# Descuentos API
 
 ## Obtener Mis Descuentos
-- **Método:** GET
-- **Path:** `/api/descuentos/mis-descuentos`
 
-### Excepciones
-- **404 Not Found:** Usuario no encontrado
+**Endpoint:** `GET /api/descuentos/mis-descuentos`
 
-### Respuesta
-- **200 OK**
+**Responses:**
+- `200 OK`
 ```json
 [
     {
@@ -119,13 +115,13 @@
     }
 ]
 ```
-
----
+- `404 Not Found` - Usuario no encontrado
 
 ## Crear Descuento
-- **Método:** POST
-- **Path:** `/api/descuentos`
-- **Body:**
+
+**Endpoint:** `POST /api/descuentos`
+
+**Request Body:**
 ```json
 {
     "porcentaje": 15,  // Requerido, entre 1 y 100
@@ -133,22 +129,19 @@
 }
 ```
 
-### Excepciones
-- **404 Not Found:** Usuario no encontrado
-- **400 Bad Request:** Porcentaje inválido o fuera de rango
-- **400 Bad Request:** Nombre de descuento duplicado para el usuario
-
-### Respuesta
-- **201 Created**
-
----
+**Responses:**
+- `201 Created` - Descuento creado exitosamente
+- `400 Bad Request` - Porcentaje inválido o nombre duplicado
+- `404 Not Found` - Usuario no encontrado
 
 ## Actualizar Descuento
-- **Método:** PUT
-- **Path:** `/api/descuentos/{descuentoId}`
-- **Parámetros de Ruta:**
-  - `descuentoId`: Integer
-- **Body:**
+
+**Endpoint:** `PUT /api/descuentos/{descuentoId}`
+
+**Path Parameters:**
+- `descuentoId` - Integer
+
+**Request Body:**
 ```json
 {
     "porcentaje": 20,  // Requerido, entre 1 y 100
@@ -156,26 +149,220 @@
 }
 ```
 
-### Excepciones
-- **404 Not Found:** Descuento o usuario no encontrado
-- **403 Forbidden:** Descuento no pertenece al usuario
-- **400 Bad Request:** Porcentaje inválido o fuera de rango
-- **400 Bad Request:** Nombre de descuento duplicado para el usuario
-
-### Respuesta
-- **200 OK**
-
----
+**Responses:**
+- `200 OK` - Descuento actualizado exitosamente
+- `400 Bad Request` - Porcentaje inválido o nombre duplicado
+- `403 Forbidden` - Descuento no pertenece al usuario
+- `404 Not Found` - Descuento o usuario no encontrado
 
 ## Eliminar Descuento
-- **Método:** DELETE
-- **Path:** `/api/descuentos/{descuentoId}`
-- **Parámetros de Ruta:**
-  - `descuentoId`: Integer
 
-### Excepciones
-- **404 Not Found:** Descuento o usuario no encontrado
-- **403 Forbidden:** Descuento no pertenece al usuario
+**Endpoint:** `DELETE /api/descuentos/{descuentoId}`
 
-### Respuesta
-- **204 No Content**
+**Path Parameters:**
+- `descuentoId` - Integer
+
+**Responses:**
+- `204 No Content` - Descuento eliminado exitosamente
+- `403 Forbidden` - Descuento no pertenece al usuario
+- `404 Not Found` - Descuento o usuario no encontrado
+
+# Direcciones API
+
+## Crear Dirección
+
+**Endpoint:** `POST /api/direcciones`
+
+**Request Body:**
+```json
+{
+    "estado": "string",      // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
+    "ciudad": "string",      // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
+    "colonia": "string",     // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
+    "calle": "string",       // Obligatorio, máx 60 caracteres, solo letras, espacios, guiones y apóstrofes
+    "numeroDomicilio": 123,  // Obligatorio, mínimo 0
+    "codigoPostal": "12345"  // Obligatorio, exactamente 5 dígitos
+}
+```
+
+**Responses:**
+- `201 Created` - Dirección creada exitosamente
+- `400 Bad Request` - Validaciones no cumplidas
+- `404 Not Found` - Usuario no encontrado
+
+## Obtener Todas las Direcciones
+
+**Endpoint:** `GET /api/direcciones`
+
+**Responses:**
+- `200 OK`
+```json
+[
+    {
+        "direccionId": 1,
+        "estado": "Jalisco",
+        "ciudad": "Guadalajara",
+        "colonia": "Centro",
+        "calle": "Juárez",
+        "numeroDomicilio": 123,
+        "codigoPostal": "44100"
+    }
+]
+```
+- `404 Not Found` - Usuario no encontrado
+
+## Obtener Datos de Edición
+
+**Endpoint:** `GET /api/direcciones/{direccionId}/edicion`
+
+**Path Parameters:**
+- `direccionId` - Integer
+
+**Responses:**
+- `200 OK`
+```json
+{
+    "direccionId": 1,
+    "estado": "Jalisco",
+    "ciudad": "Guadalajara",
+    "colonia": "Centro",
+    "calle": "Juárez",
+    "numeroDomicilio": 123,
+    "codigoPostal": "44100"
+}
+```
+- `404 Not Found` - Dirección no encontrada o no pertenece al usuario
+
+## Actualizar Dirección
+
+**Endpoint:** `PUT /api/direcciones`
+
+**Request Body:**
+```json
+{
+    "direccionId": 1,        // Obligatorio, mínimo 0
+    "estado": "string",      // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
+    "ciudad": "string",      // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
+    "colonia": "string",     // Obligatorio, máx 40 caracteres, solo letras, espacios, guiones y apóstrofes
+    "calle": "string",       // Obligatorio, máx 60 caracteres, solo letras, espacios, guiones y apóstrofes
+    "numeroDomicilio": 123,  // Obligatorio, mínimo 0
+    "codigoPostal": "12345"  // Obligatorio, exactamente 5 dígitos
+}
+```
+
+**Responses:**
+- `200 OK` - Dirección actualizada exitosamente
+- `400 Bad Request` - Validaciones no cumplidas
+- `404 Not Found` - Dirección no encontrada o no pertenece al usuario
+
+## Eliminar Dirección
+
+**Endpoint:** `DELETE /api/direcciones/{direccionId}`
+
+**Path Parameters:**
+- `direccionId` - Integer, obligatorio, mínimo 1
+
+**Responses:**
+- `204 No Content` - Dirección eliminada exitosamente
+- `400 Bad Request` - ID de dirección inválido
+- `404 Not Found` - Dirección no encontrada o no pertenece al usuario
+
+# Métodos de Pago API
+
+## Obtener Datos de Edición
+
+**Endpoint:** `GET /api/metodos-pago/{metodoPagoId}/edicion`
+
+**Path Parameters:**
+- `metodoPagoId` - Integer
+
+**Responses:**
+- `200 OK`
+```json
+{
+    "metodoPagoId": 1,
+    "nombreTitular": "Juan Pérez",
+    "numeroTarjeta": "4111111111111111",
+    "fechaExpiracion": "2025-12-31",
+    "tipoTarjeta": "CREDITO",
+    "monto": 1000.00
+}
+```
+- `404 Not Found` - Método de pago no encontrado o no pertenece al usuario
+
+## Obtener Todos los Métodos de Pago
+
+**Endpoint:** `GET /api/metodos-pago`
+
+**Responses:**
+- `200 OK`
+```json
+[
+    {
+        "metodoPagoId": 1,
+        "nombreTitular": "Juan Pérez",
+        "terminacion": "1111",
+        "fechaExpiracion": "12/2025",
+        "tipo": "CREDITO",
+        "monto": 1000.00
+    }
+]
+```
+- `404 Not Found` - Usuario no encontrado
+
+## Crear Método de Pago
+
+**Endpoint:** `POST /api/metodos-pago`
+
+**Request Body:**
+```json
+{
+    "nombreTitular": "string",     // Obligatorio, máx 120 caracteres, solo letras, espacios, guiones y apóstrofes
+    "numeroTarjeta": "string",     // Obligatorio, entre 13 y 19 dígitos
+    "fechaExpiracion": "2025-12-31", // Obligatorio, debe ser fecha futura
+    "tipoTarjeta": "CREDITO",      // Obligatorio, enum TipoTarjeta
+    "monto": 1000.00              // Obligatorio, no negativo, máx 8 enteros y 2 decimales
+}
+```
+
+**Responses:**
+- `201 Created` - Método de pago creado exitosamente
+- `400 Bad Request` 
+  - Validaciones no cumplidas
+  - Número de tarjeta duplicado
+- `404 Not Found` - Usuario no encontrado
+
+## Actualizar Método de Pago
+
+**Endpoint:** `PUT /api/metodos-pago`
+
+**Request Body:**
+```json
+{
+    "metodoPagoId": 1,           // Obligatorio, mínimo 0
+    "nombreTitular": "string",     // Obligatorio, máx 120 caracteres, solo letras, espacios, guiones y apóstrofes
+    "numeroTarjeta": "string",     // Obligatorio, entre 13 y 19 dígitos
+    "fechaExpiracion": "2025-12-31", // Obligatorio, debe ser fecha futura
+    "tipoTarjeta": "CREDITO",      // Obligatorio, enum TipoTarjeta
+    "monto": 1000.00              // Obligatorio, no negativo, máx 8 enteros y 2 decimales
+}
+```
+
+**Responses:**
+- `200 OK` - Método de pago actualizado exitosamente
+- `400 Bad Request`
+  - Validaciones no cumplidas
+  - Número de tarjeta duplicado
+- `404 Not Found` - Método de pago no encontrado o no pertenece al usuario
+
+## Eliminar Método de Pago
+
+**Endpoint:** `DELETE /api/metodos-pago/{metodoPagoId}`
+
+**Path Parameters:**
+- `metodoPagoId` - Integer, obligatorio, mínimo 1
+
+**Responses:**
+- `204 No Content` - Método de pago eliminado exitosamente
+- `400 Bad Request` - ID del método de pago inválido
+- `404 Not Found` - Método de pago no encontrado o no pertenece al usuario
