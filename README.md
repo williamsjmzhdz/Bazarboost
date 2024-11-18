@@ -1,4 +1,4 @@
-# API Documentation - CRUD Categorías
+# Documentación de API - CRUD Categorías
 
 ## Crear Categoría
 - **Método:** POST
