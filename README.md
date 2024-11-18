@@ -12,6 +12,18 @@
   - [Crear Descuento](#crear-descuento)
   - [Actualizar Descuento](#actualizar-descuento)
   - [Eliminar Descuento](#eliminar-descuento)
+- [Direcciones API](#direcciones-api)
+  - [Crear Dirección](#crear-dirección)
+  - [Obtener Todas las Direcciones](#obtener-todas-las-direcciones)
+  - [Obtener Datos de Edición](#obtener-datos-de-edición-2)
+  - [Actualizar Dirección](#actualizar-dirección)
+  - [Eliminar Dirección](#eliminar-dirección)
+- [Métodos de Pago API](#métodos-de-pago-api)
+  - [Obtener Datos de Edición](#obtener-datos-de-edición-3)
+  - [Obtener Todos los Métodos de Pago](#obtener-todos-los-métodos-de-pago)
+  - [Crear Método de Pago](#crear-método-de-pago)
+  - [Actualizar Método de Pago](#actualizar-método-de-pago)
+  - [Eliminar Método de Pago](#eliminar-método-de-pago)
 
 # Categorías API
 
