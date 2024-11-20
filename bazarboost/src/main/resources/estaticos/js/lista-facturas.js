@@ -37,7 +37,7 @@ function actualizarListaFacturas(facturas) {
                     <td>${formatearFecha(factura.fecha)}</td>
                     <td>$${factura.monto.toFixed(2)}</td>
                     <td>
-                        <a href="detalle_factura.html" class="btn btn-primary btn-sm" data-factura-id="${factura.facturaId}">
+                        <a href="/facturas/detalle/${factura.facturaId}" class="btn btn-primary btn-sm" data-factura-id="${factura.facturaId}">
                             <i class="bi bi-eye"></i> Ver Detalles
                         </a>
                     </td>

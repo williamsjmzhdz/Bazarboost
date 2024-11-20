@@ -108,7 +108,7 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
         nuevoProductoCarrito.setUsuario(usuario);
         nuevoProductoCarrito.setProducto(producto);
         nuevoProductoCarrito.setCantidad(1);
-        nuevoProductoCarrito.setTotal(producto.getPrecio().doubleValue());
+        nuevoProductoCarrito.setTotal(producto.getPrecio());
 
         productoCarritoRepository.save(nuevoProductoCarrito);
         return obtenerRespuestaCarrito(usuario.getUsuarioId());

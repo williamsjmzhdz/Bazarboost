@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: commonHead}"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title>BazarBoost - Registro</title>
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base-form.css}">
+</th:block>
+
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">BazarBoost</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/inicio-sesion}">Iniciar Sesión</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container my-4 main-content" id="bodyContainer">
+  <div class="form-container">
+    <h2 class="mb-4 text-center">Registro</h2>
+
+    <!-- Sección para mensajes de éxito -->
+    <div class="alert alert-success d-flex d-none align-items-center" id="success-alert" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <div></div>
+    </div>
+
+    <!-- Sección para mensajes de error -->
+    <div class="alert alert-danger d-none" id="warning-danger">
+      <i class="bi bi-exclamation-triangle"></i>
+      <span id="warning-message"></span>
+    </div>
+
+    <form th:action="@{/registro}" th:object="${usuario}" method="post">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre" th:field="*{nombre}"
+                 th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="apellidoPaterno" class="form-label">Apellido Paterno</label>
+          <input type="text" class="form-control" id="apellidoPaterno" th:field="*{apellidoPaterno}"
+                 th:classappend="${#fields.hasErrors('apellidoPaterno')} ? 'is-invalid'">
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoPaterno')}" th:errors="*{apellidoPaterno}"></div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="apellidoMaterno" class="form-label">Apellido Materno</label>
+          <input type="text" class="form-control" id="apellidoMaterno" th:field="*{apellidoMaterno}"
+                 th:classappend="${#fields.hasErrors('apellidoMaterno')} ? 'is-invalid'">
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidoMaterno')}" th:errors="*{apellidoMaterno}"></div>
+        </div>
+        <div class="col-md-6">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input type="text" class="form-control" id="telefono" th:field="*{telefono}"
+                 th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid'">
+          <div class="form-text">Debe tener 10 dígitos.</div>
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="correoElectronico" class="form-label">Correo Electrónico</label>
+          <input type="email" class="form-control" id="correoElectronico" th:field="*{correoElectronico}"
+                 th:classappend="${#fields.hasErrors('correoElectronico')} ? 'is-invalid'">
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('correoElectronico')}" th:errors="*{correoElectronico}"></div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label for="contrasenia" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="contrasenia" th:field="*{contrasenia}"
+                 th:classappend="${#fields.hasErrors('contrasenia')} ? 'is-invalid'">
+          <div class="form-text">Debe tener al menos 8 caracteres.</div>
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('contrasenia')}" th:errors="*{contrasenia}"></div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center" id="buttonContainer">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-person-plus"></i> Registrarse
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-4 text-center">
+      <p class="text-muted">
+        ¿Ya tienes cuenta? <a th:href="@{/inicio-sesion}">Inicia sesión</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div th:insert="~{layout :: footer}"></div>
+
+<!-- Scripts comunes -->
+<th:block th:insert="~{layout :: commonScripts}"></th:block>
+</body>
+
+</html>

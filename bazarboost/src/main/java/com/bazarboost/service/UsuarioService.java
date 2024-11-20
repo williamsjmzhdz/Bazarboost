@@ -1,5 +1,6 @@
 package com.bazarboost.service;
 
+import com.bazarboost.dto.UsuarioRegistroDTO;
 import com.bazarboost.model.Usuario;
 
 import java.util.Optional;
@@ -17,5 +18,12 @@ public interface UsuarioService {
      * @return El usuario si se encuentra sino null.
      */
     Usuario obtenerUsuarioPorId(Integer usuarioId);
+
+    /**
+     * Guarda un usuario en la base de datos para su registro.
+     *
+     * @param usuarioDTO Objeto con la información del registro del usuario
+     */
+    void guardarUsuario(UsuarioRegistroDTO usuarioDTO);
 
 }

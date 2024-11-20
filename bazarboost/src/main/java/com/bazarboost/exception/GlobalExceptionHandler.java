@@ -185,6 +185,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    @ExceptionHandler(CorreoElectronicoExistenteException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleCorreoElectronicoExistente(CorreoElectronicoExistenteException ex) {
+        System.out.println("CorreoElectronicoExistenteException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(RolNoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<String> handleRolNoEncontradO(RolNoEncontradoException ex) {
+        System.out.println("RolNoEncontradoException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<String> errors = new ArrayList<>();

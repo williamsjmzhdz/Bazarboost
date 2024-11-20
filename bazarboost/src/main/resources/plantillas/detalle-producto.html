@@ -5,8 +5,8 @@
 <!-- Definir el fragmento con el título y los estilos específicos -->
 <th:block th:fragment="headExtras">
   <title>BazarBoost - Detalle Producto</title>
-  <link rel="stylesheet" href="/estilos/base.css">
-  <link rel="stylesheet" href="/estilos/detalle-producto.css">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/detalle-producto.css}">
 </th:block>
 
 <body>
@@ -53,9 +53,9 @@
 
 
 <!-- Agregar tu script personalizado -->
-<script src="/js/mensajes-estado.js" type="module"></script>
-<script src="/js/boton-carrito.js" type="module"></script>
-<script src="/js/detalle-producto.js" type="module"></script>
+<script th:src="@{/estaticos/js/mensajes-estado.js}" type="module"></script>
+<script th:src="@{/estaticos/js/boton-carrito.js}" type="module"></script>
+<script th:src="@{/estaticos/js/detalle-producto.js}" type="module"></script>
 
 </body>
 </html>

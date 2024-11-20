@@ -25,7 +25,7 @@ CREATE TABLE Usuarios (
     apellido_materno VARCHAR(40) NOT NULL,
     telefono VARCHAR(10) NOT NULL,
     correo_electronico VARCHAR(80) NOT NULL,
-    contrasenia VARCHAR(40) NOT NULL,
+    contrasenia VARCHAR(60) NOT NULL,
     CONSTRAINT PK_Usuarios PRIMARY KEY (usuario_id),
     CONSTRAINT UQ_Usuarios_telefono UNIQUE (telefono),
     CONSTRAINT UQ_Usuarios_correo_electronico UNIQUE (correo_electronico)
@@ -161,6 +161,7 @@ CREATE TABLE ProductosFacturas(
     producto_factura_id INT AUTO_INCREMENT,
     cantidad INT NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
+    descuento_unitario_porcentaje
     factura_id INT NOT NULL,
     producto_id INT,
     CONSTRAINT PK_ProductosFacturas PRIMARY KEY (producto_factura_id),

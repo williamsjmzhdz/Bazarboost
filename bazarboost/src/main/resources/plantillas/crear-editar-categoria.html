@@ -6,8 +6,8 @@
 <!-- Definir el fragmento con el título y los estilos específicos -->
 <th:block th:fragment="headExtras">
   <title th:text="${modo == 'crear' ? 'BazarBoost - Crear Categoría' : 'BazarBoost - Editar Categoría'}"></title>
-  <link rel="stylesheet" href="/estilos/base.css">
-  <link rel="stylesheet" href="/estilos/base-creacion-edicion.css">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base-creacion-edicion.css}">
 </th:block>
 
   <body>
@@ -63,7 +63,7 @@
     <!-- Scripts comunes -->
     <th:block th:insert="layout :: commonScripts"></th:block>
 
-    <script src="/js/mensajes-estado.js" type="module"></script>
-    <script src="/js/crear-editar-categoria.js" type="module"></script>
+    <script th:src="@{/estaticos/js/mensajes-estado.js}" type="module"></script>
+    <script th:src="@{/estaticos/js/crear-editar-categoria.js}" type="module"></script>
   </body>
 </html>

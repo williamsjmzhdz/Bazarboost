@@ -84,6 +84,17 @@
 			<version>2.4.4</version>
 		</dependency>
 
+		<!-- Dependencia de Spring Security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- Dependencia de Spring Security para Thymeleaf -->
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		</dependency>
 
 	</dependencies>
 

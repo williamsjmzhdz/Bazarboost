@@ -5,8 +5,8 @@
 <!-- Definir el fragmento con el título y los estilos específicos -->
 <th:block th:fragment="headExtras">
   <title th:text="${modo == 'crear' ? 'BazarBoost - Crear Producto' : 'BazarBoost - Editar Producto'}"></title>
-  <link rel="stylesheet" href="/estilos/base.css" />
-  <link rel="stylesheet" href="/estilos/base-creacion-edicion.css" />
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}" />
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base-creacion-edicion.css}" />
 </th:block>
 
 <body>

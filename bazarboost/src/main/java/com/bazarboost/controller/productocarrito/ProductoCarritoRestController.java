@@ -29,8 +29,6 @@ public class ProductoCarritoRestController {
      */
     @PostMapping("/actualizar")
     public ResponseEntity<RespuestaCarritoDTO> actualizarCarrito(@RequestBody SolicitudCarritoDTO solicitudCarritoDTO) {
-        System.out.println("ID: " + solicitudCarritoDTO.getProductoId());
-        System.out.println("accción: " + solicitudCarritoDTO.getAccion());
         RespuestaCarritoDTO respuesta = productoCarritoService.actualizarCarrito(solicitudCarritoDTO, USUARIO_ID_TEMPORAL);
         return ResponseEntity.ok(respuesta);
     }

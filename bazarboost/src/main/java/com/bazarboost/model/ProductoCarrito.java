@@ -3,6 +3,8 @@ package com.bazarboost.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 /*
  * Alumno: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
@@ -23,7 +25,7 @@ public class ProductoCarrito {
     private Integer cantidad;
 
     @Column(name = "total")
-    private Double total;
+    private BigDecimal total;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")

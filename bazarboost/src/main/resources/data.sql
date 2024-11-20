@@ -3,7 +3,7 @@
 
 -- Inserts de datos de prueba
 
--- Inserciones en la tabla Usuarios
+-- Inserciones en la tabla Usuarios con contraseña sin encriptar (password123)
 INSERT INTO Usuarios (nombre, apellido_paterno, apellido_materno, correo_electronico, contrasenia, telefono) VALUES
 ('Juan', 'Pérez', 'López', 'juan.perez@example.com', 'password123', '5551234567'),
 ('María', 'Gómez', 'Martínez', 'maria.gomez@example.com', 'password123', '5557654321'),

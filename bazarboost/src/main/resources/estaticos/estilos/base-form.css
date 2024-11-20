@@ -1,0 +1,26 @@
+.main-content {
+  max-width: 700px !important;
+}
+
+.form-container {
+  padding: 4rem 2.5rem;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+#buttonContainer button {
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+@media (max-width: 1299px) {
+  .main-content {
+    width: 85% !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .main-content {
+    width: 95% !important;
+  }
+}

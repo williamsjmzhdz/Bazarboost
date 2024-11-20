@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: commonHead"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title>BazarBoost - Iniciar Sesión</title>
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base-form.css}">
+</th:block>
+
+  <body>
+    <!-- Navbar - Usar en todas las plantillas -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand">BazarBoost</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/registro">Registrarse</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Fin del Navbar -->
+
+    <div class="container my-4 main-content" id="bodyContainer">
+      <div class="form-container">
+        <h2 class="mb-4 text-center">Iniciar Sesión</h2>
+
+        <!-- Sección para mensajes de éxito -->
+        <div class="alert alert-success d-flex d-none align-items-center" id="success-alert" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          <div></div>
+        </div>
+
+        <!-- Sección para mensajes de error -->
+        <div class="alert alert-danger d-none" id="warning-danger">
+          <i class="bi bi-exclamation-triangle"></i>
+          <span id="warning-message"></span>
+        </div>
+
+        <form th:action="@{/login}" method="post">
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="username" class="form-label">Correo Electrónico</label>
+              <input type="email" class="form-control" id="username" name="username" required />
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="password" name="password" required />
+            </div>
+          </div>
+
+          <!-- Mostrar error de autenticación -->
+          <div th:if="${param.error}" class="alert alert-danger">
+            <i class="bi bi-exclamation-circle-fill"></i> Credenciales incorrectas
+          </div>
+
+          <!-- Mostrar mensaje de logout -->
+          <div th:if="${param.logout}" class="alert alert-success">
+            <i class="bi bi-check-circle-fill"></i> Sesión cerrada exitosamente
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+            </button>
+          </div>
+        </form>
+
+        <!-- Sección de texto inferior -->
+        <div class="mt-4 text-center">
+          <p class="text-muted">
+            ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div th:insert="layout :: footer"></div>
+
+    <!-- Scripts comunes -->
+    <th:block th:insert="layout :: commonScripts"></th:block>
+  </body>
+</html>

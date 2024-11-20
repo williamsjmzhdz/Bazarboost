@@ -6,8 +6,9 @@
 <!-- Definir el fragmento con el título y los estilos específicos -->
 <th:block th:fragment="headExtras">
   <title>BazarBoost - Lista de productos</title>
-  <link rel="stylesheet" href="/estilos/base.css">
-  <link rel="stylesheet" href="/estilos/lista-productos.css">
+  <!-- CSS -->
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/lista-productos.css}">
 </th:block>
 
 <body>
@@ -85,10 +86,10 @@
 <!-- Scripts comunes -->
 <th:block th:insert="layout :: commonScripts"></th:block>
 
-<!-- Scripts específicos de la página -->
-<script src="/js/mensajes-estado.js" type="module"></script>
-<script src="/js/paginacion.js" type="module"></script>
-<script src="/js/boton-carrito.js" type="module"></script>
-<script src="/js/lista-productos.js" type="module"></script>
+<!-- JavaScript -->
+<script th:src="@{/estaticos/js/mensajes-estado.js}" type="module"></script>
+<script th:src="@{/estaticos/js/paginacion.js}" type="module"></script>
+<script th:src="@{/estaticos/js/boton-carrito.js}" type="module"></script>
+<script th:src="@{/estaticos/js/lista-productos.js}" type="module"></script>
 </body>
 </html>
