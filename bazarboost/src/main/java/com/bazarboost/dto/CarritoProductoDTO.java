@@ -9,6 +9,7 @@ public class CarritoProductoDTO {
 
     private Integer productoCarritoId;
     private Integer productoId;
+    private Integer descuentoId;
     private String nombre;
     private BigDecimal precio;
     private Integer descuentoUnitarioPorcentaje;

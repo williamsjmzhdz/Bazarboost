@@ -3,6 +3,8 @@ package com.bazarboost.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 /*
  * Alumno: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
@@ -25,6 +27,15 @@ public class ProductoFactura {
 
     @Column(name = "total")
     private Double total;
+
+    @Column(name = "descuento_unitario_porcentaje")
+    private Integer descuentoUnitarioPorcentaje;
+
+    @Column(name = "descuento_unitario_valor")
+    private BigDecimal descuentoUnitarioValor;
+
+    @Column(name = "descuento_nombre")
+    private String descuentoNombre;
 
     @ManyToOne
     @JoinColumn(name = "factura_id")

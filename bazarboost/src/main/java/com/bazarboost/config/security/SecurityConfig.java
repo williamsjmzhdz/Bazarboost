@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                                 new AntPathRequestMatcher("/api/**")
                         )
-                ).httpBasic(Customizer.withDefaults())
+                )
                 .formLogin(form -> form
                         .loginPage("/inicio-sesion")
                         .loginProcessingUrl("/login")  // Spring Security procesará POST a /login

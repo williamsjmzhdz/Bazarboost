@@ -16,14 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class FacturaServiceImpl implements FacturaService {
-
     @Autowired
     private FacturaRepository facturaRepository;
     @Autowired
@@ -38,26 +37,21 @@ public class FacturaServiceImpl implements FacturaService {
     private DireccionRepository direccionRepository;
     @Autowired
     private ProductoFacturaRepository productoFacturaRepository;
+    @Autowired
+    private DescuentoRepository descuentoRepository;
 
     @Override
     @Transactional
     public CarritoPagoRespuestaDTO procesarPago(CarritoPagoSolicitudDTO solicitudDTO, Integer usuarioId) {
-
-        if (solicitudDTO.getProductos() == null || solicitudDTO.getProductos().isEmpty()) {
-            throw new CarritoVacioException("El carrito de compras está vacío. Agrega productos antes de proceder al pago.");
-        }
+        validarCarrito(solicitudDTO);
 
         Usuario usuario = obtenerUsuario(usuarioId);
         BigDecimal precioTotal = calcularPrecioTotalYVerificarCantidades(solicitudDTO, usuarioId);
-        MetodoPago metodoPago = obtenerMetodoPago(solicitudDTO.getMetodoPagoId(), usuario);
+        MetodoPago metodoPago = obtenerMetodoPagoValido(solicitudDTO.getMetodoPagoId(), usuario);
         Direccion direccion = obtenerDireccion(solicitudDTO.getDireccionId(), usuario);
 
-        actualizarStockProductos(solicitudDTO.getProductos());
-        descontarMontoMetodoPago(metodoPago, precioTotal);
-
-        Factura factura = crearFactura(precioTotal, usuario, metodoPago, direccion);
-        guardarDetallesFactura(factura, solicitudDTO.getProductos());
-
+        procesarTransaccion(solicitudDTO, precioTotal, metodoPago);
+        Factura factura = generarFactura(precioTotal, usuario, metodoPago, direccion, solicitudDTO.getProductos());
         vaciarCarrito(usuarioId);
 
         return new CarritoPagoRespuestaDTO(factura.getFacturaId());
@@ -65,41 +59,160 @@ public class FacturaServiceImpl implements FacturaService {
 
     @Override
     @Transactional(readOnly = true)
-    public FacturasPaginadasDTO obtenerFacturasPaginadasYOrdenadas(String ordenarPor, String direccionOrden, Integer pagina, Integer tamanoPagina,
-                                                               Integer usuarioId) {
-        Usuario usuario = obtenerUsuario(usuarioId);  // Verificación de que el usuario existe
-
-        if (!ordenarPor.equalsIgnoreCase("fecha") && !ordenarPor.equalsIgnoreCase("total")) {
-            throw new OrdenNoValidoException("Parámetro de ordenación no válido. Use 'fecha' o 'total'.");
-        }
-
-        if (!direccionOrden.equalsIgnoreCase("asc") && !direccionOrden.equalsIgnoreCase("desc")) {
-            throw new OrdenNoValidoException("Dirección de orden no válida. Use 'asc' o 'desc'.");
-        }
+    public FacturasPaginadasDTO obtenerFacturasPaginadasYOrdenadas(String ordenarPor, String direccionOrden,
+                                                                   Integer pagina, Integer tamanoPagina,
+                                                                   Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+        validarParametrosOrdenamiento(ordenarPor, direccionOrden);
 
         long totalFacturas = facturaRepository.countByUsuario(usuario);
-
-        // Si no hay facturas, devolvemos una respuesta vacía sin lanzar excepción
         if (totalFacturas == 0) {
-            return new FacturasPaginadasDTO(
-                    List.of(),   // Lista vacía de facturas
-                    pagina,      // Página solicitada, aunque vacía
-                    0,           // Total de páginas es 0
-                    0,           // Total de elementos es 0
-                    true,        // Es la primera página (y también la última)
-                    true         // Es la última página (no hay más páginas)
-            );
+            return crearRespuestaVacia(pagina);
         }
 
+        validarPaginacion(pagina, tamanoPagina, totalFacturas);
+        return obtenerFacturasPaginadas(usuario, ordenarPor, direccionOrden, pagina, tamanoPagina);
+    }
+
+    private BigDecimal calcularPrecioTotalYVerificarCantidades(CarritoPagoSolicitudDTO solicitudDTO, Integer usuarioId) {
+        return solicitudDTO.getProductos().stream()
+                .map(productoPagoDTO -> {
+                    Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
+                    validarCantidadEnCarrito(usuarioId, producto, productoPagoDTO.getCantidad());
+                    return calcularPrecioConDescuento(producto, productoPagoDTO)
+                            .multiply(BigDecimal.valueOf(productoPagoDTO.getCantidad()));
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void procesarTransaccion(CarritoPagoSolicitudDTO solicitudDTO, BigDecimal precioTotal, MetodoPago metodoPago) {
+        actualizarStockProductos(solicitudDTO.getProductos());
+        descontarMontoMetodoPago(metodoPago, precioTotal);
+    }
+
+    private Factura generarFactura(BigDecimal precioTotal, Usuario usuario, MetodoPago metodoPago,
+                                   Direccion direccion, List<ProductoPagoDTO> productos) {
+        Factura factura = crearFactura(precioTotal, usuario, metodoPago, direccion);
+        guardarDetallesFactura(factura, productos);
+        return factura;
+    }
+
+    private void validarCantidadEnCarrito(Integer usuarioId, Producto producto, Integer cantidadSolicitada) {
+        Integer cantidadEnCarrito = productoCarritoRepository.obtenerCantidadProductoCarrito(usuarioId, producto.getProductoId())
+                .orElseThrow(() -> new ProductoNoEnCarritoException(
+                        String.format("El producto con ID %d no está en el carrito del usuario con ID %d",
+                                producto.getProductoId(), usuarioId)));
+
+        if (!cantidadEnCarrito.equals(cantidadSolicitada)) {
+            throw new CantidadNoCoincideException(String.format(
+                    "La cantidad enviada (%d) para el producto '%s' no coincide con la cantidad en el carrito (%d).",
+                    cantidadSolicitada, producto.getNombre(), cantidadEnCarrito));
+        }
+    }
+
+    private BigDecimal calcularPrecioConDescuento(Producto producto, ProductoPagoDTO productoPagoDTO) {
+        if (producto.getDescuento() == null) {
+            return producto.getPrecio();
+        }
+
+        validarDescuento(producto, productoPagoDTO);
+        return producto.getPrecio().subtract(calcularValorDescuento(producto));
+    }
+
+    private void validarDescuento(Producto producto, ProductoPagoDTO productoPagoDTO) {
+        if (productoPagoDTO == null) return;
+
+        Descuento descuento = descuentoRepository.findById(productoPagoDTO.getDescuentoId())
+                .orElseThrow(() -> new DescuentoNoEncontradoException(
+                        "No se encontró información del descuento aplicado al producto '" + producto.getNombre() + "'"));
+
+        if (!producto.getDescuento().getDescuentoId().equals(productoPagoDTO.getDescuentoId()) ||
+                !producto.getDescuento().getPorcentaje().equals(productoPagoDTO.getDescuentoUnitarioPorcentaje())) {
+            throw new DescuentoInvalidoException("El descuento seleccionado para el producto '" +
+                    producto.getNombre() + "' no es válido");
+        }
+    }
+
+    private void descontarMontoMetodoPago(MetodoPago metodoPago, BigDecimal precioTotal) {
+        if (metodoPago.getMonto() == null || BigDecimal.valueOf(metodoPago.getMonto()).compareTo(precioTotal) < 0) {
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("es", "MX"));
+            throw new FondosInsuficientesException(String.format("Fondos insuficientes. Disponible: %s, Requerido: %s",
+                    currencyFormat.format(metodoPago.getMonto()),
+                    currencyFormat.format(precioTotal)));
+        }
+
+        metodoPagoRepository.reducirMonto(metodoPago.getMetodoPagoId(), precioTotal.doubleValue());
+    }
+
+    private void actualizarStock(ProductoPagoDTO productoPagoDTO) {
+        Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
+        int nuevaCantidad = producto.getExistencia() - productoPagoDTO.getCantidad();
+
+        if (nuevaCantidad < 0) {
+            throw new StockInsuficienteException(String.format("Stock insuficiente para '%s'. Disponible: %d",
+                    producto.getNombre(), producto.getExistencia()));
+        }
+
+        productoRepository.actualizarStock(productoPagoDTO.getProductoId(), nuevaCantidad);
+    }
+
+    private void guardarDetallesFactura(Factura factura, List<ProductoPagoDTO> productos) {
+        productos.forEach(productoPagoDTO -> {
+            Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
+            ProductoFactura detalle = crearDetalleFactura(factura, producto, productoPagoDTO);
+            productoFacturaRepository.save(detalle);
+        });
+    }
+
+    private ProductoFactura crearDetalleFactura(Factura factura, Producto producto, ProductoPagoDTO productoPagoDTO) {
+        ProductoFactura detalle = new ProductoFactura();
+        detalle.setFactura(factura);
+        detalle.setProducto(producto);
+        detalle.setCantidad(productoPagoDTO.getCantidad());
+        detalle.setTotal(calcularPrecioConDescuento(producto, null)
+                .multiply(BigDecimal.valueOf(productoPagoDTO.getCantidad()))
+                .doubleValue());
+
+        if (producto.getDescuento() != null) {
+            detalle.setDescuentoNombre(producto.getDescuento().getNombre());
+            detalle.setDescuentoUnitarioPorcentaje(producto.getDescuento().getPorcentaje());
+            detalle.setDescuentoUnitarioValor(calcularValorDescuento(producto));
+        }
+
+        return detalle;
+    }
+
+    // Métodos auxiliares y validaciones
+    private void validarCarrito(CarritoPagoSolicitudDTO solicitudDTO) {
+        if (solicitudDTO.getProductos() == null || solicitudDTO.getProductos().isEmpty()) {
+            throw new CarritoVacioException("El carrito de compras está vacío");
+        }
+    }
+
+    private void validarParametrosOrdenamiento(String ordenarPor, String direccionOrden) {
+        if (!ordenarPor.equalsIgnoreCase("fecha") && !ordenarPor.equalsIgnoreCase("total")) {
+            throw new OrdenNoValidoException("Parámetro de ordenación no válido. Use 'fecha' o 'total'");
+        }
+        if (!direccionOrden.equalsIgnoreCase("asc") && !direccionOrden.equalsIgnoreCase("desc")) {
+            throw new OrdenNoValidoException("Dirección de orden no válida. Use 'asc' o 'desc'");
+        }
+    }
+
+    private void validarPaginacion(Integer pagina, Integer tamanoPagina, long totalFacturas) {
         int maximoPaginas = (int) Math.ceil((double) totalFacturas / tamanoPagina);
-
         if (pagina < 0 || pagina >= maximoPaginas) {
-            throw new PaginaFueraDeRangoException("Número de página fuera de rango. Total de páginas disponibles: " + maximoPaginas);
+            throw new PaginaFueraDeRangoException("Número de página fuera de rango. Total: " + maximoPaginas);
         }
+    }
 
+    private FacturasPaginadasDTO crearRespuestaVacia(Integer pagina) {
+        return new FacturasPaginadasDTO(List.of(), pagina, 0, 0, true, true);
+    }
+
+    private FacturasPaginadasDTO obtenerFacturasPaginadas(Usuario usuario, String ordenarPor,
+                                                          String direccionOrden, Integer pagina, Integer tamanoPagina) {
         Sort sort = direccionOrden.equals("asc") ? Sort.by(ordenarPor).ascending() : Sort.by(ordenarPor).descending();
         Pageable pageable = PageRequest.of(pagina, tamanoPagina, sort);
-
         Page<Factura> facturasPage = facturaRepository.findByUsuario(usuario, pageable);
 
         List<FacturaDTO> facturasDTO = facturasPage.getContent().stream()
@@ -114,64 +227,46 @@ public class FacturaServiceImpl implements FacturaService {
                 facturasPage.isFirst(),
                 facturasPage.isLast()
         );
-
     }
 
-    private BigDecimal calcularPrecioTotalYVerificarCantidades(CarritoPagoSolicitudDTO solicitudDTO, Integer usuarioId) {
-        AtomicReference<BigDecimal> precioTotal = new AtomicReference<>(BigDecimal.ZERO);
+    private MetodoPago obtenerMetodoPagoValido(Integer metodoPagoId, Usuario usuario) {
+        MetodoPago metodoPago = metodoPagoRepository.findByMetodoPagoIdAndUsuario(metodoPagoId, usuario)
+                .orElseThrow(() -> new MetodoPagoNoEncontradoException(String.format(
+                        "No se encontró un método de pago con ID %d para el usuario con ID %d",
+                        metodoPagoId, usuario.getUsuarioId())));
 
-        solicitudDTO.getProductos().forEach(productoPagoDTO -> {
-            Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
-            Integer cantidadEnCarrito = obtenerCantidadProductoEnCarrito(usuarioId, producto.getProductoId());
-
-            if (!cantidadEnCarrito.equals(productoPagoDTO.getCantidad())) {
-                throw new CantidadNoCoincideException(String.format(
-                        "La cantidad enviada (%d) para el producto '%s' no coincide con la cantidad en el carrito (%d).",
-                        productoPagoDTO.getCantidad(), producto.getNombre(), cantidadEnCarrito));
-            }
-
-            BigDecimal precioProductoConDescuento = calcularPrecioConDescuento(producto)
-                    .multiply(BigDecimal.valueOf(productoPagoDTO.getCantidad()));
-            precioTotal.updateAndGet(total -> total.add(precioProductoConDescuento));
-        });
-
-        return precioTotal.get();
-    }
-
-    private Integer obtenerCantidadProductoEnCarrito(Integer usuarioId, Integer productoId) {
-        return productoCarritoRepository.obtenerCantidadProductoCarrito(usuarioId, productoId)
-                .orElseThrow(() -> new ProductoNoEnCarritoException(
-                        String.format("El producto con ID %d no está en el carrito del usuario con ID %d", productoId, usuarioId)));
-    }
-
-    private void actualizarStockProductos(List<ProductoPagoDTO> productosPagoDTO) {
-        productosPagoDTO.forEach(this::actualizarStock);
-    }
-
-    private void actualizarStock(ProductoPagoDTO productoPagoDTO) {
-        Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
-        int nuevaCantidad = producto.getExistencia() - productoPagoDTO.getCantidad();
-
-        if (nuevaCantidad < 0) {
-            throw new StockInsuficienteException("Stock insuficiente para el producto '" + producto.getNombre()
-                    + "'. Disponible: " + producto.getExistencia());
+        if (metodoPago.getFechaExpiracion().isBefore(LocalDate.now())) {
+            throw new MetodoPagoExpiradoException("El método de pago seleccionado ha expirado");
         }
 
-        productoRepository.actualizarStock(productoPagoDTO.getProductoId(), nuevaCantidad);
+        return metodoPago;
     }
 
-    private void descontarMontoMetodoPago(MetodoPago metodoPago, BigDecimal precioTotal) {
-        if (metodoPago.getMonto() == null || BigDecimal.valueOf(metodoPago.getMonto()).compareTo(precioTotal) < 0) {
-            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("es", "MX"));
+    private BigDecimal calcularValorDescuento(Producto producto) {
+        return producto.getPrecio()
+                .multiply(BigDecimal.valueOf(producto.getDescuento().getPorcentaje()))
+                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+    }
 
-            String disponibleFormateado = currencyFormat.format(metodoPago.getMonto());
-            String requeridoFormateado = currencyFormat.format(precioTotal);
+    private Usuario obtenerUsuario(Integer usuarioId) {
+        return usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado"));
+    }
 
-            throw new FondosInsuficientesException("Fondos insuficientes en el método de pago. Disponible: "
-                    + disponibleFormateado + ", Requerido: " + requeridoFormateado);
-        }
+    private Producto obtenerProducto(Integer productoId) {
+        return productoRepository.findById(productoId)
+                .orElseThrow(() -> new ProductoNoEncontradoException("Producto con ID " + productoId + " no encontrado"));
+    }
 
-        metodoPagoRepository.reducirMonto(metodoPago.getMetodoPagoId(), precioTotal.doubleValue());
+    private Direccion obtenerDireccion(Integer direccionId, Usuario usuario) {
+        return direccionRepository.findByDireccionIdAndUsuario(direccionId, usuario)
+                .orElseThrow(() -> new DireccionNoEncontradaException(String.format(
+                        "No se encontró una dirección con ID %d para el usuario con ID %d",
+                        direccionId, usuario.getUsuarioId())));
+    }
+
+    private void actualizarStockProductos(List<ProductoPagoDTO> productos) {
+        productos.forEach(this::actualizarStock);
     }
 
     private Factura crearFactura(BigDecimal precioTotal, Usuario usuario, MetodoPago metodoPago, Direccion direccion) {
@@ -184,60 +279,7 @@ public class FacturaServiceImpl implements FacturaService {
         return facturaRepository.save(factura);
     }
 
-    private void guardarDetallesFactura(Factura factura, List<ProductoPagoDTO> productosPagoDTO) {
-        productosPagoDTO.forEach(productoPagoDTO -> {
-            Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
-            ProductoFactura productoFactura = new ProductoFactura();
-
-            productoFactura.setFactura(factura);
-            productoFactura.setProducto(producto);
-            productoFactura.setCantidad(productoPagoDTO.getCantidad());
-            productoFactura.setTotal(calcularPrecioConDescuento(producto)
-                    .multiply(BigDecimal.valueOf(productoPagoDTO.getCantidad()))
-                    .doubleValue());
-
-            productoFacturaRepository.save(productoFactura);
-        });
-    }
-
-    private BigDecimal calcularPrecioConDescuento(Producto producto) {
-        if (producto.getDescuento() != null) {
-            return producto.getPrecio().subtract(calcularValorDescuento(producto));
-        }
-        return producto.getPrecio();
-    }
-
-    private BigDecimal calcularValorDescuento(Producto producto) {
-        return producto.getPrecio()
-                .multiply(BigDecimal.valueOf(producto.getDescuento().getPorcentaje()))
-                .divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
-    }
-
     private void vaciarCarrito(Integer usuarioId) {
         productoCarritoRepository.deleteByUsuarioUsuarioId(usuarioId);
-    }
-
-    // Métodos auxiliares para obtener entidades
-
-    private Producto obtenerProducto(Integer productoId) {
-        return productoRepository.findById(productoId)
-                .orElseThrow(() -> new ProductoNoEncontradoException("Producto con ID " + productoId + " no encontrado"));
-    }
-
-    private Usuario obtenerUsuario(Integer usuarioId) {
-        return usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado"));
-    }
-
-    private MetodoPago obtenerMetodoPago(Integer metodoPagoId, Usuario usuario) {
-        return metodoPagoRepository.findByMetodoPagoIdAndUsuario(metodoPagoId, usuario)
-                .orElseThrow(() -> new MetodoPagoNoEncontradoException(String.format(
-                        "No se encontró un método de pago con ID %d para el usuario con ID %d", metodoPagoId, usuario.getUsuarioId())));
-    }
-
-    private Direccion obtenerDireccion(Integer direccionId, Usuario usuario) {
-        return direccionRepository.findByDireccionIdAndUsuario(direccionId, usuario)
-                .orElseThrow(() -> new DireccionNoEncontradaException(String.format(
-                        "No se encontró una dirección con ID %d para el usuario con ID %d", direccionId, usuario.getUsuarioId())));
     }
 }

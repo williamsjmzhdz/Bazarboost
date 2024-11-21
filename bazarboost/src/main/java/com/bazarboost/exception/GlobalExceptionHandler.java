@@ -4,7 +4,6 @@ import com.bazarboost.model.Resenia;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -197,6 +196,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRolNoEncontradO(RolNoEncontradoException ex) {
         System.out.println("RolNoEncontradoException: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MetodoPagoExpiradoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleMetodoPagoExpirado(MetodoPagoExpiradoException ex) {
+        System.out.println("MetodoPagoExpiradoException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DescuentoInvalidoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<String> handleDescuentoInvalidoException(DescuentoInvalidoException ex) {
+        System.out.println("DescuentoInvalidoException: " + ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

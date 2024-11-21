@@ -157,6 +157,7 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
         Descuento descuento = productoCarrito.getProducto().getDescuento();
         if (descuento != null) {
             Integer descuentoPorcentaje = descuento.getPorcentaje();
+            carritoProductoDTO.setDescuentoId(descuento.getDescuentoId());
             carritoProductoDTO.setDescuentoUnitarioPorcentaje(descuentoPorcentaje);
             carritoProductoDTO.setDescuentoUnitarioValor(precio.multiply(BigDecimal.valueOf(descuentoPorcentaje)).divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP));
             carritoProductoDTO.setDescuentoTotal(carritoProductoDTO.getDescuentoUnitarioValor().multiply(BigDecimal.valueOf(carritoProductoDTO.getCantidad())));

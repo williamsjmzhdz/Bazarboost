@@ -38,9 +38,16 @@ const formatearMoneda = (valor) => {
  * @returns {HTMLElement} Elemento TR con los datos del producto
  */
 const crearFilaProducto = (producto) => {
+
     const fila = document.createElement('tr');
+
     fila.setAttribute('data-producto-id', producto.productoCarritoId);
     fila.setAttribute('data-producto-base-id', producto.productoId);
+
+    if (producto.descuentoId) {
+        fila.setAttribute('data-descuento-id', producto.descuentoId);
+        fila.setAttribute('data-descuento-unitario-porcentaje', producto.descuentoUnitarioPorcentaje);
+    }
 
     const descuentoUnitarioTexto = producto.descuentoUnitarioPorcentaje
         ? `${producto.descuentoUnitarioPorcentaje}% (${formatearMoneda(producto.descuentoUnitarioValor)})`
@@ -314,7 +321,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const productos = Array.from(document.querySelectorAll('table tbody tr')).map(fila => {
             return {
                 productoId: parseInt(fila.getAttribute('data-producto-base-id')),
-                cantidad: parseInt(fila.querySelector('.cantidad').value)
+                descuentoId: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-id') : null,
+                descuentoUnitarioPorcentaje: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-unitario-porcentaje') : null,
+                cantidad: parseInt(fila.querySelector('.cantidad').value),
+
             };
         });
 
@@ -339,6 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const productos = Array.from(document.querySelectorAll('table tbody tr')).map(fila => {
                 return {
                     productoId: parseInt(fila.getAttribute('data-producto-base-id')),
+                    descuentoId: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-id') : null,
+                    descuentoUnitarioPorcentaje: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-unitario-porcentaje') : null,
                     cantidad: parseInt(fila.querySelector('.cantidad').value)
                 };
             });
@@ -380,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Lista de errores de validación
                             mostrarListaErrores(errorData);
                         } else {
-                            mostrarMensajeError(errorData.message || "Formato de solicitud incorrecto. Verifica los datos e inténtalo de nuevo.");
+                            mostrarMensajeError(errorData || "Formato de solicitud incorrecto. Verifica los datos e inténtalo de nuevo.");
                         }
                         break;
 
@@ -390,11 +402,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else if (errorData.includes("Producto")) {
                             mostrarMensajeError("Uno de los productos seleccionados no existe. Actualiza el carrito.");
                         } else if (errorData.includes("carrito")) {
-                            mostrarMensajeError("Uno de los productos no se encuentra en tu carrito. Actualiza el carrito.");
+                            mostrarMensajeError("Uno de los productos que intentas comprar no se encuentra en tu carrito. Actualiza el carrito.");
                         } else if (errorData.includes("método de pago")) {
                             mostrarMensajeError("El método de pago seleccionado no es válido. Por favor, elige otro método de pago.");
                         } else if (errorData.includes("dirección")) {
                             mostrarMensajeError("La dirección seleccionada no es válida. Por favor, elige otra dirección de envío.");
+                        } else if (errorData.includes("descuento aplicado")) {
+                            mostrarMensajeError(errorData);
                         } else {
                             mostrarMensajeError("Recurso no encontrado. Verifica los datos e inténtalo de nuevo.");
                         }
@@ -406,9 +420,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     case 409:
                         if (errorData.includes("Stock insuficiente")) {
-                            mostrarMensajeError("Stock insuficiente para uno de los productos en el carrito. Ajusta las cantidades e inténtalo de nuevo.");
+                            mostrarMensajeError(errorData);
                         } else if (errorData.includes("cantidad enviada")) {
-                            mostrarMensajeError("La cantidad seleccionada para uno de los productos no coincide con la cantidad en el carrito. Actualiza el carrito.");
+                            mostrarMensajeError(errorData);
+                        } else if (errorData.includes("descuento seleccionado")) {
+                            mostrarMensajeError(errorData);
                         } else {
                             mostrarMensajeError("Conflicto en la solicitud. Verifica los datos e inténtalo de nuevo.");
                         }
