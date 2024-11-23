@@ -161,6 +161,8 @@ CREATE TABLE ProductosFacturas(
     producto_factura_id INT AUTO_INCREMENT,
     cantidad INT NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
+    producto_nombre VARCHAR(40) NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
     descuento_unitario_porcentaje INT,
     descuento_unitario_valor DECIMAL(10,2),
     descuento_nombre VARCHAR(40),

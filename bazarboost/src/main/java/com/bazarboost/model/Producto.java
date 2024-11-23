@@ -21,6 +21,10 @@ public class Producto {
 
     @NotBlank(message = "El nombre del producto no puede estar vacío")
     @Length(min = 1, max = 40, message = "El nombre debe tener entre 1 y 40 caracteres")
+    @Pattern(
+            regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ'\\- ]+$",
+            message = "El nombre del producto solo puede contener letras, espacios, guiones y apóstrofes"
+    )
     @Column(name = "nombre")
     private String nombre;
 

@@ -146,6 +146,17 @@ public class FacturaServiceImpl implements FacturaService {
 
     private void actualizarStock(ProductoPagoDTO productoPagoDTO) {
         Producto producto = obtenerProducto(productoPagoDTO.getProductoId());
+
+        // Validar nombre del producto
+        if (!producto.getNombre().equals(productoPagoDTO.getNombre())) {
+            throw new ProductoInvalidoException("El nombre del producto ha sido modificado. Por favor, actualice la página e intente nuevamente.");
+        }
+
+        // Validar precio unitario
+        if (producto.getPrecio().compareTo(productoPagoDTO.getPrecioUnitario()) != 0) {
+            throw new ProductoInvalidoException("El precio del producto ha cambiado. Por favor, actualice la página e intente nuevamente.");
+        }
+
         int nuevaCantidad = producto.getExistencia() - productoPagoDTO.getCantidad();
 
         if (nuevaCantidad < 0) {
@@ -168,6 +179,8 @@ public class FacturaServiceImpl implements FacturaService {
         ProductoFactura detalle = new ProductoFactura();
         detalle.setFactura(factura);
         detalle.setProducto(producto);
+        detalle.setProductoNombre(productoPagoDTO.getNombre());
+        detalle.setPrecioUnitario(productoPagoDTO.getPrecioUnitario());
         detalle.setCantidad(productoPagoDTO.getCantidad());
         detalle.setTotal(calcularPrecioConDescuento(producto, null)
                 .multiply(BigDecimal.valueOf(productoPagoDTO.getCantidad()))

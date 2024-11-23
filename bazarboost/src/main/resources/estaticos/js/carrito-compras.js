@@ -32,17 +32,12 @@ const formatearMoneda = (valor) => {
  * Funciones de creación de elementos DOM
  */
 
-/**
- * Crea una fila de producto para la tabla del carrito
- * @param {Object} producto - Datos del producto
- * @returns {HTMLElement} Elemento TR con los datos del producto
- */
 const crearFilaProducto = (producto) => {
-
     const fila = document.createElement('tr');
-
     fila.setAttribute('data-producto-id', producto.productoCarritoId);
     fila.setAttribute('data-producto-base-id', producto.productoId);
+    fila.setAttribute('data-nombre', producto.nombre);
+    fila.setAttribute('data-precio', producto.precio);
 
     if (producto.descuentoId) {
         fila.setAttribute('data-descuento-id', producto.descuentoId);
@@ -57,16 +52,13 @@ const crearFilaProducto = (producto) => {
         <td>${producto.nombre}</td>
         <td>${formatearMoneda(producto.precio)}</td>
         <td>${descuentoUnitarioTexto}</td>
-        <td>
-            <input type="number" class="form-control cantidad" value="${producto.cantidad}" min="1"/>
-        </td>
+        <td><input type="number" class="cantidad form-control" value="${producto.cantidad}" min="1"></td>
         <td>${formatearMoneda(producto.totalSinDescuento)}</td>
         <td>${formatearMoneda(producto.descuentoTotal || 0)}</td>
         <td>${formatearMoneda(producto.totalFinal)}</td>
-        <td class="btn-cell">
-            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-            onclick="prepararEliminarProductoCarrito(${producto.productoId}, '${producto.nombre}')">
-                <i class="bi bi-trash"></i> Eliminar
+        <td>
+            <button class="btn btn-danger btn-sm" onclick="prepararEliminarProductoCarrito(${producto.productoCarritoId}, '${producto.nombre}')" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                Eliminar
             </button>
         </td>
     `;
@@ -313,18 +305,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Obtener el botón de pago
     const procederPagoButton = document.getElementById('procederPago');
 
-    // Agregar evento para procesar el pago
     procederPagoButton.addEventListener('click', async (event) => {
-        event.preventDefault(); // Evitar envío de formulario si está dentro de uno
+        event.preventDefault();
 
         // Obtener los productos del carrito
         const productos = Array.from(document.querySelectorAll('table tbody tr')).map(fila => {
             return {
                 productoId: parseInt(fila.getAttribute('data-producto-base-id')),
+                nombre: fila.getAttribute('data-nombre'),
+                precioUnitario: parseFloat(fila.getAttribute('data-precio')),
                 descuentoId: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-id') : null,
                 descuentoUnitarioPorcentaje: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-unitario-porcentaje') : null,
-                cantidad: parseInt(fila.querySelector('.cantidad').value),
-
+                cantidad: parseInt(fila.querySelector('.cantidad').value)
             };
         });
 
@@ -349,6 +341,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const productos = Array.from(document.querySelectorAll('table tbody tr')).map(fila => {
                 return {
                     productoId: parseInt(fila.getAttribute('data-producto-base-id')),
+                    nombre: fila.getAttribute('data-nombre'),
+                    precioUnitario: parseFloat(fila.getAttribute('data-precio')),
                     descuentoId: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-id') : null,
                     descuentoUnitarioPorcentaje: fila.hasAttribute('data-descuento-id') ? fila.getAttribute('data-descuento-unitario-porcentaje') : null,
                     cantidad: parseInt(fila.querySelector('.cantidad').value)
@@ -389,7 +383,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 switch (response.status) {
                     case 400:
                         if (Array.isArray(errorData)) {
-                            // Lista de errores de validación
                             mostrarListaErrores(errorData);
                         } else {
                             mostrarMensajeError(errorData || "Formato de solicitud incorrecto. Verifica los datos e inténtalo de nuevo.");
@@ -428,6 +421,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             mostrarMensajeError("Conflicto en la solicitud. Verifica los datos e inténtalo de nuevo.");
                         }
+                        break;
+
+                    case 422:
+                        mostrarMensajeError(errorData || "Los datos del producto han cambiado. Por favor, actualiza la página e inténtalo nuevamente.");
                         break;
 
                     default:

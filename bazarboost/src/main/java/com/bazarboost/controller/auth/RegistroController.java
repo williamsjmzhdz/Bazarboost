@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
 @Controller
 public class RegistroController {
     @Autowired
@@ -26,16 +29,15 @@ public class RegistroController {
     @PostMapping("/registro")
     public String registrar(@Valid @ModelAttribute("usuario") UsuarioRegistroDTO usuario,
                             BindingResult result,
-                            RedirectAttributes redirectAttributes)
-    {
+                            RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
         if (result.hasErrors()) {
             return "registro";
         }
 
         usuarioService.guardarUsuario(usuario);
-        redirectAttributes.addFlashAttribute("mensajeExito",
-                "¡Registro exitoso! Ya puedes iniciar sesión.");
 
-        return "redirect:/inicio-sesion";
+        // Codificar el mensaje de éxito
+        String encodedMessage = java.net.URLEncoder.encode("¡Registro exitoso! Ya puedes iniciar sesión.", StandardCharsets.UTF_8);
+        return "redirect:/inicio-sesion?mensajeExito=" + encodedMessage;
     }
 }

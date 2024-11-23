@@ -171,12 +171,11 @@ INSERT INTO ProductosCarrito (cantidad, total, usuario_id, producto_id) VALUES
 
 
 -- Inserciones en la tabla ProductosFacturas
--- Inserciones actualizadas en la tabla ProductosFacturas
-INSERT INTO ProductosFacturas (cantidad, total, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
-(1, 629.99, 10, 70.00, 'Descuento de Bienvenida', 1, 1),
-(2, 39.98, NULL, NULL, NULL, 2, 2),
-(1, 474.99, 5, 25.00, 'Descuento de Fin de Temporada', 3, 3),
-(1, 29.99, NULL, NULL, NULL, 4, 4),
-(1, 59.99, 25, 20.00, 'Descuento Black Friday', 5, 5);
+INSERT INTO ProductosFacturas (cantidad, total, producto_nombre, precio_unitario, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 1, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 2, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 3, 3),
+(1, 29.99, 'Libro de Java', 29.99, NULL, NULL, NULL, 4, 4),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 5, 5);
 
 

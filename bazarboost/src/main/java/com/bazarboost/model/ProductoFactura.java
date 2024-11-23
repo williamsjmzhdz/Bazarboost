@@ -22,6 +22,12 @@ public class ProductoFactura {
     @Column(name = "producto_factura_id")
     private Integer productoFacturaId;
 
+    @Column(name = "producto_nombre")
+    private String productoNombre;
+
+    @Column(name = "precio_unitario")
+    private BigDecimal precioUnitario;
+
     @Column(name = "cantidad")
     private Integer cantidad;
 

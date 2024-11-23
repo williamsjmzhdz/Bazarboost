@@ -2,6 +2,7 @@ package com.bazarboost.controller.factura;
 
 import com.bazarboost.dto.CarritoPagoRespuestaDTO;
 import com.bazarboost.dto.CarritoPagoSolicitudDTO;
+import com.bazarboost.dto.DetalleFacturaDTO;
 import com.bazarboost.dto.FacturasPaginadasDTO;
 import com.bazarboost.service.FacturaService;
 import jakarta.validation.Valid;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/facturas")
 public class FacturaRestController {
-
     private static final Integer USUARIO_ID_TEMPORAL = 1;
     private static final Integer TAMANO_PAGINA = 10;
 
@@ -38,4 +38,11 @@ public class FacturaRestController {
         return ResponseEntity.ok(facturas);
     }
 
+    /*
+    @GetMapping("/{facturaId}")
+    public ResponseEntity<DetalleFacturaDTO> obtenerDetalleFactura(@PathVariable Integer facturaId) {
+        DetalleFacturaDTO detalleFactura = facturaService.obtenerDetalleFactura(facturaId, USUARIO_ID_TEMPORAL);
+        return ResponseEntity.ok(detalleFactura);
+    }
+     */
 }
