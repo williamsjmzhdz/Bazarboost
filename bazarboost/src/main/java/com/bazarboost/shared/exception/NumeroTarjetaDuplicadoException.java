@@ -1,4 +1,4 @@
-package com.bazarboost.system.exception;
+package com.bazarboost.shared.exception;
 
 public class NumeroTarjetaDuplicadoException extends RuntimeException {
     public NumeroTarjetaDuplicadoException(String message) {

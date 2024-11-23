@@ -4,7 +4,7 @@ import com.bazarboost.system.dto.CarritoProductoCantidadDTO;
 import com.bazarboost.system.dto.CarritoDTO;
 import com.bazarboost.system.dto.RespuestaCarritoDTO;
 import com.bazarboost.system.dto.SolicitudCarritoDTO;
-import com.bazarboost.service.ProductoCarritoService;
+import com.bazarboost.system.service.ProductoCarritoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.bazarboost.repository;
+package com.bazarboost.system.repository;
 
 import com.bazarboost.system.model.Rol;
 import org.springframework.data.repository.CrudRepository;

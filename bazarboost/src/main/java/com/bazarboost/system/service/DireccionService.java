@@ -1,12 +1,11 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.DireccionCreacionDTO;
-import com.bazarboost.dto.DireccionDTO;
-import com.bazarboost.dto.DireccionEdicionDTO;
-import com.bazarboost.exception.AccesoDenegadoException;
-import com.bazarboost.exception.DireccionNoEncontradaException;
-import com.bazarboost.exception.MetodoPagoNoEncontradoException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.dto.DireccionCreacionDTO;
+import com.bazarboost.system.dto.DireccionDTO;
+import com.bazarboost.system.dto.DireccionEdicionDTO;
+import com.bazarboost.shared.exception.AccesoDenegadoException;
+import com.bazarboost.shared.exception.DireccionNoEncontradaException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
 
 import java.util.List;
 

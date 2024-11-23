@@ -1,4 +1,4 @@
-package com.bazarboost.system.util;
+package com.bazarboost.shared.util;
 
 import com.bazarboost.system.model.Producto;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.bazarboost.system.exception;
+package com.bazarboost.shared.exception;
 
 public class CorreoElectronicoExistenteException extends RuntimeException {
     public CorreoElectronicoExistenteException(String message) {

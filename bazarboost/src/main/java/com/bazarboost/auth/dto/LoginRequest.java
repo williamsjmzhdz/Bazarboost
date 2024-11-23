@@ -1,2 +1,4 @@
-package com.bazarboost.auth.dto;public class LoginRequest {
+package com.bazarboost.auth.dto;
+
+public class LoginRequest {
 }

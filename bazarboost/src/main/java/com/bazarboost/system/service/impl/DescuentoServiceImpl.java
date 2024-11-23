@@ -1,12 +1,12 @@
-package com.bazarboost.service.impl;
+package com.bazarboost.system.service.impl;
 
-import com.bazarboost.dto.DescuentoVendedorDTO;
-import com.bazarboost.exception.*;
-import com.bazarboost.model.Descuento;
-import com.bazarboost.model.Usuario;
-import com.bazarboost.repository.DescuentoRepository;
-import com.bazarboost.repository.UsuarioRepository;
-import com.bazarboost.service.DescuentoService;
+import com.bazarboost.shared.exception.*;
+import com.bazarboost.system.dto.DescuentoVendedorDTO;
+import com.bazarboost.system.model.Descuento;
+import com.bazarboost.system.model.Usuario;
+import com.bazarboost.system.repository.DescuentoRepository;
+import com.bazarboost.system.repository.UsuarioRepository;
+import com.bazarboost.system.service.DescuentoService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

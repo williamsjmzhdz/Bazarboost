@@ -3,7 +3,7 @@ package com.bazarboost.system.controller.producto;
 import com.bazarboost.system.dto.ProductoDetalladoDTO;
 import com.bazarboost.system.dto.ProductoVendedorDTO;
 import com.bazarboost.system.dto.ProductosPaginadosDTO;
-import com.bazarboost.service.ProductoService;
+import com.bazarboost.system.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

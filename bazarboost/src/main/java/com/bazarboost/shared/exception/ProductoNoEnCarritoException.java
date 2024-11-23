@@ -1,4 +1,4 @@
-package com.bazarboost.system.exception;
+package com.bazarboost.shared.exception;
 
 public class ProductoNoEnCarritoException extends RuntimeException {
     public ProductoNoEnCarritoException(String message) {

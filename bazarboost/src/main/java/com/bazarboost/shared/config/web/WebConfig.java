@@ -1,4 +1,4 @@
-package com.bazarboost.system.config.web;
+package com.bazarboost.shared.config.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

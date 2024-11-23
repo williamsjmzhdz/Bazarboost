@@ -1,2 +1,4 @@
-package com.bazarboost.auth.service;public class JwtService {
+package com.bazarboost.auth.service;
+
+public class JwtService {
 }

@@ -1,12 +1,12 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.MetodoPagoCreacionDTO;
-import com.bazarboost.dto.MetodoPagoDTO;
-import com.bazarboost.dto.MetodoPagoEdicionDTO;
-import com.bazarboost.exception.AccesoDenegadoException;
-import com.bazarboost.exception.MetodoPagoNoEncontradoException;
-import com.bazarboost.exception.NumeroTarjetaDuplicadoException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.dto.MetodoPagoCreacionDTO;
+import com.bazarboost.system.dto.MetodoPagoDTO;
+import com.bazarboost.system.dto.MetodoPagoEdicionDTO;
+import com.bazarboost.shared.exception.AccesoDenegadoException;
+import com.bazarboost.shared.exception.MetodoPagoNoEncontradoException;
+import com.bazarboost.shared.exception.NumeroTarjetaDuplicadoException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
 
 import java.util.List;
 

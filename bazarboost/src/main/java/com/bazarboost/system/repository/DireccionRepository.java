@@ -1,4 +1,4 @@
-package com.bazarboost.repository;
+package com.bazarboost.system.repository;
 
 import com.bazarboost.system.model.Direccion;
 import com.bazarboost.system.model.Usuario;

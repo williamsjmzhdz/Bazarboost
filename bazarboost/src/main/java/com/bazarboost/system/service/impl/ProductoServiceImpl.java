@@ -1,11 +1,14 @@
-package com.bazarboost.service.impl;
+package com.bazarboost.system.service.impl;
 
-import com.bazarboost.dto.*;
-import com.bazarboost.exception.*;
-import com.bazarboost.model.*;
-import com.bazarboost.repository.*;
-import com.bazarboost.service.ProductoService;
-import com.bazarboost.service.ReseniaService;
+
+import com.bazarboost.shared.exception.*;
+import com.bazarboost.system.service.ProductoService;
+import com.bazarboost.system.service.ReseniaService;
+import com.bazarboost.system.dto.*;
+import com.bazarboost.system.model.Producto;
+import com.bazarboost.system.model.Resenia;
+import com.bazarboost.system.model.Usuario;
+import com.bazarboost.system.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

@@ -1,14 +1,14 @@
 package com.bazarboost.system.controller.producto;
 
-import com.bazarboost.system.exception.AccesoDenegadoException;
-import com.bazarboost.system.exception.ProductoNoEncontradoException;
-import com.bazarboost.system.exception.UsuarioNoEncontradoException;
+import com.bazarboost.shared.exception.AccesoDenegadoException;
+import com.bazarboost.shared.exception.ProductoNoEncontradoException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
 import com.bazarboost.system.model.Producto;
-import com.bazarboost.service.CategoriaService;
-import com.bazarboost.service.DescuentoService;
-import com.bazarboost.service.ProductoService;
-import com.bazarboost.service.UsuarioService;
-import com.bazarboost.util.ProductoUtility;
+import com.bazarboost.system.service.CategoriaService;
+import com.bazarboost.system.service.DescuentoService;
+import com.bazarboost.system.service.ProductoService;
+import com.bazarboost.system.service.UsuarioService;
+import com.bazarboost.shared.util.ProductoUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

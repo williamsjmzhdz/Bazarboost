@@ -1,9 +1,7 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.UsuarioRegistroDTO;
-import com.bazarboost.model.Usuario;
-
-import java.util.Optional;
+import com.bazarboost.system.dto.UsuarioRegistroDTO;
+import com.bazarboost.system.model.Usuario;
 
 /*
  * Autor: Francisco Williams Jiménez Hernández

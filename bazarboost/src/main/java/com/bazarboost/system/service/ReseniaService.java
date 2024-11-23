@@ -1,14 +1,14 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.CalificacionPromedioDTO;
-import com.bazarboost.dto.ReseniaCreacionDTO;
-import com.bazarboost.dto.ReseniaEdicionDTO;
-import com.bazarboost.dto.ReseniaRespuestaDTO;
-import com.bazarboost.exception.AccesoDenegadoException;
-import com.bazarboost.exception.ProductoNoEncontradoException;
-import com.bazarboost.exception.ReseniaNoEncontradaException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
-import com.bazarboost.model.Producto;
+import com.bazarboost.system.dto.CalificacionPromedioDTO;
+import com.bazarboost.system.dto.ReseniaCreacionDTO;
+import com.bazarboost.system.dto.ReseniaEdicionDTO;
+import com.bazarboost.system.dto.ReseniaRespuestaDTO;
+import com.bazarboost.shared.exception.AccesoDenegadoException;
+import com.bazarboost.shared.exception.ProductoNoEncontradoException;
+import com.bazarboost.shared.exception.ReseniaNoEncontradaException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.model.Producto;
 
 import java.math.BigDecimal;
 

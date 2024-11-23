@@ -1,4 +1,4 @@
-package com.bazarboost.repository;
+package com.bazarboost.system.repository;
 
 import com.bazarboost.system.model.MetodoPago;
 import com.bazarboost.system.model.Usuario;

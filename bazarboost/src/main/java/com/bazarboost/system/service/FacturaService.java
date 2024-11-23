@@ -1,12 +1,8 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.CarritoPagoRespuestaDTO;
-import com.bazarboost.dto.CarritoPagoSolicitudDTO;
-import com.bazarboost.dto.FacturaDTO;
-import com.bazarboost.dto.FacturasPaginadasDTO;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
+import com.bazarboost.system.dto.CarritoPagoRespuestaDTO;
+import com.bazarboost.system.dto.CarritoPagoSolicitudDTO;
+import com.bazarboost.system.dto.FacturasPaginadasDTO;
 
 public interface FacturaService {
 

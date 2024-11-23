@@ -1,9 +1,9 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.ProductoDetalladoDTO;
-import com.bazarboost.dto.ProductoVendedorDTO;
-import com.bazarboost.dto.ProductosPaginadosDTO;
-import com.bazarboost.model.Producto;
+import com.bazarboost.system.dto.ProductoDetalladoDTO;
+import com.bazarboost.system.dto.ProductoVendedorDTO;
+import com.bazarboost.system.dto.ProductosPaginadosDTO;
+import com.bazarboost.system.model.Producto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

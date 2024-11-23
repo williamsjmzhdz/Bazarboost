@@ -3,7 +3,7 @@ package com.bazarboost.system.controller.categoria;
 import com.bazarboost.system.dto.CategoriaCreacionDTO;
 import com.bazarboost.system.dto.CategoriaEdicionDTO;
 import com.bazarboost.system.model.Categoria;
-import com.bazarboost.service.CategoriaService;
+import com.bazarboost.system.service.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

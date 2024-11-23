@@ -1,6 +1,6 @@
-package com.bazarboost.system.config;
+package com.bazarboost.shared.config;
 
-import com.bazarboost.system.util.ProductoUtility;
+import com.bazarboost.shared.util.ProductoUtility;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

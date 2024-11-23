@@ -1,4 +1,4 @@
-package com.bazarboost.system.config.modelmapper;
+package com.bazarboost.shared.config.modelmapper;
 
 import com.bazarboost.system.dto.CarritoProductoDTO;
 import com.bazarboost.system.model.ProductoCarrito;

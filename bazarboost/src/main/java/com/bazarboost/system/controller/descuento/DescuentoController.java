@@ -1,8 +1,8 @@
 package com.bazarboost.system.controller.descuento;
 
-import com.bazarboost.system.exception.DescuentoNoEncontradoException;
+import com.bazarboost.shared.exception.DescuentoNoEncontradoException;
 import com.bazarboost.system.model.Descuento;
-import com.bazarboost.service.DescuentoService;
+import com.bazarboost.system.service.DescuentoService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

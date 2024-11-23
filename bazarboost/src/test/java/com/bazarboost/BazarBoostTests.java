@@ -1,7 +1,7 @@
 package com.bazarboost;
 
-import com.bazarboost.model.Usuario;
-import com.bazarboost.repository.UsuarioRepository;
+import com.bazarboost.system.model.Usuario;
+import com.bazarboost.system.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

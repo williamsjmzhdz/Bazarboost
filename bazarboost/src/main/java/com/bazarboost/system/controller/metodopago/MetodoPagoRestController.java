@@ -3,7 +3,7 @@ package com.bazarboost.system.controller.metodopago;
 import com.bazarboost.system.dto.MetodoPagoCreacionDTO;
 import com.bazarboost.system.dto.MetodoPagoDTO;
 import com.bazarboost.system.dto.MetodoPagoEdicionDTO;
-import com.bazarboost.service.MetodoPagoService;
+import com.bazarboost.system.service.MetodoPagoService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

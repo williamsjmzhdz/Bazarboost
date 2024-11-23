@@ -1,4 +1,4 @@
-package com.bazarboost.system.exception;
+package com.bazarboost.shared.exception;
 
 public class PaginaFueraDeRangoException extends RuntimeException {
     public PaginaFueraDeRangoException(String message) {

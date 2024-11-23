@@ -1,13 +1,11 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.CategoriaCreacionDTO;
-import com.bazarboost.dto.CategoriaEdicionDTO;
-import com.bazarboost.dto.DireccionEdicionDTO;
-import com.bazarboost.exception.AccesoDenegadoException;
-import com.bazarboost.exception.CategoriaNoEncontradaException;
-import com.bazarboost.exception.DireccionNoEncontradaException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
-import com.bazarboost.model.Categoria;
+import com.bazarboost.system.dto.CategoriaCreacionDTO;
+import com.bazarboost.system.dto.CategoriaEdicionDTO;
+import com.bazarboost.shared.exception.AccesoDenegadoException;
+import com.bazarboost.shared.exception.CategoriaNoEncontradaException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.model.Categoria;
 
 import java.util.List;
 

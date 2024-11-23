@@ -3,7 +3,7 @@ package com.bazarboost.system.controller.factura;
 import com.bazarboost.system.dto.CarritoPagoRespuestaDTO;
 import com.bazarboost.system.dto.CarritoPagoSolicitudDTO;
 import com.bazarboost.system.dto.FacturasPaginadasDTO;
-import com.bazarboost.service.FacturaService;
+import com.bazarboost.system.service.FacturaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

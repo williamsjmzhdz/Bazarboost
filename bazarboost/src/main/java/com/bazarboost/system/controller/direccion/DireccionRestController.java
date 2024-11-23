@@ -3,7 +3,7 @@ package com.bazarboost.system.controller.direccion;
 import com.bazarboost.system.dto.DireccionCreacionDTO;
 import com.bazarboost.system.dto.DireccionDTO;
 import com.bazarboost.system.dto.DireccionEdicionDTO;
-import com.bazarboost.service.DireccionService;
+import com.bazarboost.system.service.DireccionService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

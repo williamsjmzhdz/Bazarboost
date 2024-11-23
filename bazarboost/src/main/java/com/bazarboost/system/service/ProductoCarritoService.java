@@ -1,10 +1,10 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.CarritoDTO;
-import com.bazarboost.dto.CarritoProductoCantidadDTO;
-import com.bazarboost.dto.RespuestaCarritoDTO;
-import com.bazarboost.dto.SolicitudCarritoDTO;
-import com.bazarboost.exception.*;
+import com.bazarboost.shared.exception.*;
+import com.bazarboost.system.dto.CarritoDTO;
+import com.bazarboost.system.dto.CarritoProductoCantidadDTO;
+import com.bazarboost.system.dto.RespuestaCarritoDTO;
+import com.bazarboost.system.dto.SolicitudCarritoDTO;
 
 /**
  * Servicio que gestiona las operaciones relacionadas con el carrito de productos.

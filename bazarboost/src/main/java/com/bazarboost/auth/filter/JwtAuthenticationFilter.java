@@ -1,2 +1,4 @@
-package com.bazarboost.auth.filter;public class JwtAuthenticationFilter {
+package com.bazarboost.auth.filter;
+
+public class JwtAuthenticationFilter {
 }

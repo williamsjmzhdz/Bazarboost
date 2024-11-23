@@ -1,10 +1,10 @@
-package com.bazarboost.service.impl;
+package com.bazarboost.system.service.impl;
 
-import com.bazarboost.dto.*;
-import com.bazarboost.exception.*;
-import com.bazarboost.model.*;
-import com.bazarboost.repository.*;
-import com.bazarboost.service.FacturaService;
+import com.bazarboost.shared.exception.*;
+import com.bazarboost.system.repository.*;
+import com.bazarboost.system.service.FacturaService;
+import com.bazarboost.system.dto.*;
+import com.bazarboost.system.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,16 +1,15 @@
-package com.bazarboost.service.impl;
+package com.bazarboost.system.service.impl;
 
-import com.bazarboost.dto.DireccionCreacionDTO;
-import com.bazarboost.dto.DireccionDTO;
-import com.bazarboost.dto.DireccionEdicionDTO;
-import com.bazarboost.exception.DireccionNoEncontradaException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
-import com.bazarboost.model.Direccion;
-import com.bazarboost.model.MetodoPago;
-import com.bazarboost.model.Usuario;
-import com.bazarboost.repository.DireccionRepository;
-import com.bazarboost.repository.UsuarioRepository;
-import com.bazarboost.service.DireccionService;
+import com.bazarboost.system.dto.DireccionCreacionDTO;
+import com.bazarboost.system.dto.DireccionDTO;
+import com.bazarboost.system.dto.DireccionEdicionDTO;
+import com.bazarboost.shared.exception.DireccionNoEncontradaException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.model.Direccion;
+import com.bazarboost.system.model.Usuario;
+import com.bazarboost.system.repository.DireccionRepository;
+import com.bazarboost.system.repository.UsuarioRepository;
+import com.bazarboost.system.service.DireccionService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

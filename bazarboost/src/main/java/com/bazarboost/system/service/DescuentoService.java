@@ -1,10 +1,10 @@
-package com.bazarboost.service;
+package com.bazarboost.system.service;
 
-import com.bazarboost.dto.DescuentoVendedorDTO;
-import com.bazarboost.exception.DescuentoNoEncontradoException;
-import com.bazarboost.exception.PorcentajeDescuentoInvalidoException;
-import com.bazarboost.exception.UsuarioNoEncontradoException;
-import com.bazarboost.model.Descuento;
+import com.bazarboost.system.dto.DescuentoVendedorDTO;
+import com.bazarboost.shared.exception.DescuentoNoEncontradoException;
+import com.bazarboost.shared.exception.PorcentajeDescuentoInvalidoException;
+import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.model.Descuento;
 
 import java.util.List;
 

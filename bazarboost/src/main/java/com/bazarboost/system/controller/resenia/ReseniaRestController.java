@@ -4,7 +4,7 @@ import com.bazarboost.system.dto.CalificacionPromedioDTO;
 import com.bazarboost.system.dto.ReseniaCreacionDTO;
 import com.bazarboost.system.dto.ReseniaEdicionDTO;
 import com.bazarboost.system.dto.ReseniaRespuestaDTO;
-import com.bazarboost.service.ReseniaService;
+import com.bazarboost.system.service.ReseniaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
