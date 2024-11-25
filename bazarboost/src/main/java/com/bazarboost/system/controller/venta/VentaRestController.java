@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/ventas")
 public class VentaRestController {
 
-    private static final Integer USUARIO_ID_TEMPORAL = 2;
+    private static final Integer USUARIO_ID_TEMPORAL = 1;
     private static final Integer TAMANO_PAGINA = 10;
 
     @Autowired

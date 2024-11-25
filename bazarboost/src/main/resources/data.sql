@@ -9,7 +9,8 @@ INSERT INTO Usuarios (nombre, apellido_paterno, apellido_materno, correo_electro
 ('María', 'Gómez', 'Martínez', 'maria.gomez@example.com', 'password123', '5557654321'),
 ('Pedro', 'Sánchez', 'Hernández', 'pedro.sanchez@example.com', 'password123', '5556781234'),
 ('Ana', 'Ramírez', 'García', 'ana.ramirez@example.com', 'password123', '5559876543'),
-('Carlos', 'Fernández', 'Pérez', 'carlos.fernandez@example.com', 'password123', '5554567890');
+('Carlos', 'Fernández', 'Pérez', 'carlos.fernandez@example.com', 'password123', '5554567890'),
+('Williams', 'Jiménez', 'Hernández', 'williams.jimenez@example.com', 'password123', '5571714144');
 
 -- Inserciones en la tabla Categorias
 INSERT INTO Categorias (nombre) VALUES
@@ -50,7 +51,9 @@ INSERT INTO UsuariosRoles (usuario_id, rol_id) VALUES
 (2, 3),
 (3, 2),
 (4, 2),
-(5, 2);
+(5, 2),
+(6, 2),
+(6, 3);
 
 -- Inserciones en la tabla Direcciones
 INSERT INTO Direcciones (estado, ciudad, colonia, calle, numero_domicilio, codigo_postal, usuario_id) VALUES

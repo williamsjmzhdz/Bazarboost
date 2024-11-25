@@ -44,12 +44,12 @@ Fechas (limites) importantes:
 
 24 NOV
  ✅ - Reestructuración de código
-  - Funcionalidad "Mostrar detalle de la factura"
+ ✅ - Funcionalidad "Mostrar detalle de la factura"
 
 25 NOV
- - Ejercicio 3 M11
- - Funcionalidad: "Mostrar ventas" paginadas de 10 en 10
- - Funcionalidad: Filtros
+ ✅ - Ejercicio 3 M11
+ ✅ - Funcionalidad: "Mostrar ventas" paginadas de 10 en 10
+ ✅ - Funcionalidad: Filtros
 
 26 y 27 NOV
  - Funcionalidad "Mostrar usuarios" ordenados por nombre y paginados de 10 en 10
@@ -68,6 +68,8 @@ Fechas (limites) importantes:
 6 - 12 DIC
 - Video y entrega final
 
-
+Dudas
+1.- ¿Debería buscar un registro por id y usuario (o usuario id), o solo por su id y después verificar que el registro le pertenece al usuario?
+2.- ¿Debería buscar registros por entidad o por id? ej. por usuario o por usuarioId.
 
 

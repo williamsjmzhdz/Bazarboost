@@ -33,38 +33,47 @@ class ListaVentas {
         };
     }
 
-    async cargarVentas() {
-        const url = new URL('/api/ventas', window.location.origin);
-        url.searchParams.append('pagina', getPaginaActual());
-        url.searchParams.append('ordenarPor', this.ordenarPor);
-        url.searchParams.append('direccionOrden', this.direccionOrden);
+   async cargarVentas() {
+       const url = new URL('/api/ventas', window.location.origin);
+       url.searchParams.append('pagina', getPaginaActual());
+       url.searchParams.append('ordenarPor', this.ordenarPor);
+       url.searchParams.append('direccionOrden', this.direccionOrden);
 
-        try {
-            const response = await fetch(url);
+       try {
+           const response = await fetch(url);
 
-            if (!response.ok) {
-                const errorMessage = await response.text();
-                this.manejarError(response.status, errorMessage);
-                return;
-            }
+           if (!response.ok) {
+               const errorMessage = await response.text();
+               this.manejarError(response.status, errorMessage);
+               return;
+           }
 
-            const data = await response.json();
+           const data = await response.json();
 
-            // Solo manejamos la visibilidad del mensaje
-            if (data.ventas.length === 0) {
-                this.messageNoVentas.style.display = 'block';
-            } else {
-                this.messageNoVentas.style.display = 'none';
-            }
+           if (data.ventas.length === 0) {
+               // Ocultar tabla, paginación y select de ordenamiento
+               this.tablaVentas.classList.add('d-none');
+               this.contenedorPaginacion.classList.add('d-none');
+               this.orderBySelector.parentElement.parentElement.classList.add('d-none'); // Ocultar todo el contenedor del select
+               // Mostrar mensaje
+               this.messageNoVentas.classList.remove('d-none');
+           } else {
+               // Mostrar tabla, paginación y select de ordenamiento
+               this.tablaVentas.classList.remove('d-none');
+               this.contenedorPaginacion.classList.remove('d-none');
+               this.orderBySelector.parentElement.parentElement.classList.remove('d-none');
+               // Ocultar mensaje
+               this.messageNoVentas.classList.add('d-none');
+           }
 
-            this.renderizarVentas(data.ventas);
-            actualizarPaginacion(data, window.cambiarPaginaCallback);
+           this.renderizarVentas(data.ventas);
+           actualizarPaginacion(data, window.cambiarPaginaCallback);
 
-        } catch (error) {
-            console.error('Error al cargar ventas:', error);
-            mostrarMensajeError('No se pudo establecer conexión con el servidor. Por favor, verifica tu conexión a internet.');
-        }
-    }
+       } catch (error) {
+           console.error('Error al cargar ventas:', error);
+           mostrarMensajeError('No se pudo establecer conexión con el servidor. Por favor, verifica tu conexión a internet.');
+       }
+   }
 
     manejarError(status, errorMessage) {
         switch (status) {
@@ -75,7 +84,7 @@ class ListaVentas {
                 window.location.href = `/productos?mensajeError=${encodeURIComponent(errorMessage)}`;
                 break;
             case 404:
-                if (errorMessage.contains("Usuario")) {
+                if (errorMessage.includes("Usuario")) {
                     mostrarMensajeErrorDesaparece("No se encontró información de su usuario. Reinicie sesión e intente nuevamente.");
                 } else {
                     mostrarMensajeErrorDesaparece(errorMessage);
@@ -84,6 +93,7 @@ class ListaVentas {
             default:
                 mostrarMensajeError('Ocurrió un error inesperado. Intenta nuevamente.');
         }
+        console.error("Error: " + errorMessage);
     }
 
     renderizarVentas(ventas) {
