@@ -75,7 +75,11 @@ class ListaVentas {
                 window.location.href = `/productos?mensajeError=${encodeURIComponent(errorMessage)}`;
                 break;
             case 404:
-                mostrarMensajeErrorDesaparece(errorMessage);
+                if (errorMessage.contains("Usuario")) {
+                    mostrarMensajeErrorDesaparece("No se encontró información de su usuario. Reinicie sesión e intente nuevamente.");
+                } else {
+                    mostrarMensajeErrorDesaparece(errorMessage);
+                }
                 break;
             default:
                 mostrarMensajeError('Ocurrió un error inesperado. Intenta nuevamente.');
