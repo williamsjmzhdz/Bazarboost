@@ -63,6 +63,7 @@ public class FacturaServiceImpl implements FacturaService {
                                                                    Integer pagina, Integer tamanoPagina,
                                                                    Integer usuarioId) {
         Usuario usuario = obtenerUsuario(usuarioId);
+        validarRolCliente(usuario);
         validarParametrosOrdenamiento(ordenarPor, direccionOrden);
 
         long totalFacturas = facturaRepository.countByUsuario(usuario);
@@ -72,6 +73,142 @@ public class FacturaServiceImpl implements FacturaService {
 
         validarPaginacion(pagina, tamanoPagina, totalFacturas);
         return obtenerFacturasPaginadas(usuario, ordenarPor, direccionOrden, pagina, tamanoPagina);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DetalleFacturaDTO obtenerDetalleFactura(Integer facturaId, Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+        validarRolCliente(usuario);
+
+        Factura factura = obtenerFactura(facturaId);
+        validarPropietarioFactura(factura, usuarioId);
+
+        List<ProductoFactura> productosFactura = obtenerProductosFactura(factura);
+        List<DetalleFacturaProductoDTO> productosDTO = productosFactura.stream()
+                .map(this::mapearADetalleFacturaProductoDTO)
+                .toList();
+
+        return new DetalleFacturaDTO(
+                factura.getFacturaId(),
+                factura.getFecha(),
+                BigDecimal.valueOf(factura.getTotal()),
+                productosDTO
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public VentasPaginadasDTO obtenerVentasPaginadasYOrdenadas(String ordenarPor, String direccionOrden,
+                                                               Integer pagina, Integer tamanoPagina,
+                                                               Integer vendedorId) {
+        Usuario vendedor = obtenerUsuario(vendedorId);
+        validarRolVendedor(vendedor);
+        validarParametrosOrdenamiento(ordenarPor, direccionOrden);
+
+        long totalVentas = productoFacturaRepository.countByProductoUsuario(vendedor);
+        if (totalVentas == 0) {
+            return new VentasPaginadasDTO(List.of(), pagina, 0, 0L, true, true);
+        }
+
+        validarPaginacion(pagina, tamanoPagina, totalVentas);
+        return obtenerVentasPaginadas(vendedor, ordenarPor, direccionOrden, pagina, tamanoPagina);
+    }
+
+    private void validarRolVendedor(Usuario usuario) {
+        if (!usuarioRepository.tieneRol(usuario.getUsuarioId(), "VENDEDOR")) {
+            throw new AccesoDenegadoException("No puedes acceder al panel de ventas porque no tienes el rol de vendedor.");
+        }
+    }
+
+    private VentasPaginadasDTO obtenerVentasPaginadas(Usuario vendedor, String ordenarPor,
+                                                      String direccionOrden, Integer pagina, Integer tamanoPagina) {
+        // Si ordenarPor es "fecha", usa "factura.fecha"; si es "total", usa "total".
+        String campoOrdenamiento = "fecha".equals(ordenarPor) ? "factura.fecha" : "total";
+
+        // Crear el objeto Sort dinámico
+        Sort sort = "asc".equalsIgnoreCase(direccionOrden)
+                ? Sort.by(campoOrdenamiento).ascending()
+                : Sort.by(campoOrdenamiento).descending();
+
+        Pageable pageable = PageRequest.of(pagina, tamanoPagina, sort);
+
+        Page<ProductoFactura> facturasPage = productoFacturaRepository.findByProductoUsuario(vendedor, pageable);
+
+        facturasPage.getContent().forEach(System.out::println);
+
+        List<VentaDTO> ventasDTO = facturasPage.getContent().stream()
+                .map(this::mapearAVentaDTO)
+                .toList();
+
+        return new VentasPaginadasDTO(
+                ventasDTO,
+                facturasPage.getNumber(),
+                facturasPage.getTotalPages(),
+                facturasPage.getTotalElements(),
+                facturasPage.isFirst(),
+                facturasPage.isLast()
+        );
+    }
+
+
+    private VentaDTO mapearAVentaDTO(ProductoFactura venta) {
+
+        VentaDTO ventaDTO = new VentaDTO();
+
+        ventaDTO.setVentaId(venta.getProductoFacturaId());
+        ventaDTO.setFecha(venta.getFactura().getFecha());
+        ventaDTO.setNombreCliente(venta.getFactura().getUsuario().getNombre());
+        ventaDTO.setProducto(mapearADetalleFacturaProductoDTO(venta));
+
+        return ventaDTO;
+    }
+
+    private void validarRolCliente(Usuario usuario) {
+        if (!usuarioRepository.tieneRol(usuario.getUsuarioId(), "CLIENTE")) {
+            throw new AccesoDenegadoException("No tienes el rol de cliente.");
+        }
+    }
+
+    private Factura obtenerFactura(Integer facturaId) {
+        return facturaRepository.findById(facturaId)
+                .orElseThrow(() -> new FacturaNoEncontradaException("No se encontró la factura especificada."));
+    }
+
+    protected List<ProductoFactura> obtenerProductosFactura(Factura factura) {
+        return productoFacturaRepository.findByFactura(factura);
+    }
+
+    private DetalleFacturaProductoDTO mapearADetalleFacturaProductoDTO(ProductoFactura productoFactura) {
+        DetalleFacturaProductoDTO dto = new DetalleFacturaProductoDTO();
+        dto.setNombre(productoFactura.getProductoNombre());
+        dto.setPrecioUnitario(productoFactura.getPrecioUnitario());
+        dto.setDescuentoUnitarioPorcentaje(productoFactura.getDescuentoUnitarioPorcentaje());
+        dto.setDescuentoUnitarioValor(productoFactura.getDescuentoUnitarioValor());
+        dto.setCantidad(productoFactura.getCantidad());
+
+        // Calcular totales
+        BigDecimal totalSinDescuento = productoFactura.getPrecioUnitario()
+                .multiply(BigDecimal.valueOf(productoFactura.getCantidad()));
+        dto.setTotalSinDescuento(totalSinDescuento);
+
+        if (productoFactura.getDescuentoUnitarioValor() != null) {
+            BigDecimal descuentoTotal = productoFactura.getDescuentoUnitarioValor()
+                    .multiply(BigDecimal.valueOf(productoFactura.getCantidad()));
+            dto.setDescuentoTotal(descuentoTotal);
+            dto.setTotalFinal(totalSinDescuento.subtract(descuentoTotal));
+        } else {
+            dto.setDescuentoTotal(BigDecimal.ZERO);
+            dto.setTotalFinal(totalSinDescuento);
+        }
+
+        return dto;
+    }
+
+    private void validarPropietarioFactura(Factura factura, Integer usuarioId) {
+        if (!factura.getUsuario().getUsuarioId().equals(usuarioId)) {
+            throw new AccesoDenegadoException("La factura que intentas ver no te pertenece.");
+        }
     }
 
     private BigDecimal calcularPrecioTotalYVerificarCantidades(CarritoPagoSolicitudDTO solicitudDTO, Integer usuarioId) {

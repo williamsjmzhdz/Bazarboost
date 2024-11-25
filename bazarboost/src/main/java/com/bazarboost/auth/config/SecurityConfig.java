@@ -36,7 +36,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")  // Spring Security procesará POST a /login
                         .permitAll()
                         .defaultSuccessUrl("/", true)
-                )
+                )/*.httpBasic(Customizer.withDefaults())*/
                 .logout(logout -> logout
                         .logoutSuccessUrl("/inicio-sesion")
                         .permitAll()

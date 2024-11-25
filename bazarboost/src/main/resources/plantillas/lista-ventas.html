@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout :: commonHead"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title>BazarBoost - Lista de ventas</title>
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/detalle-factura.css}">
+</th:block>
+
+  <body>
+    <!-- Incluir el Navbar -->
+    <div th:insert="layout :: navbar"></div>
+
+    <!-- Main content -->
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Ventas</h2>
+
+      <!-- Sección para mensajes de éxito -->
+      <div
+              class="alert alert-success d-flex d-none align-items-center"
+              id="success-alert"
+              role="alert"
+      >
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <div></div>
+      </div>
+
+      <!-- Sección para mensajes de error -->
+      <div class="alert alert-danger d-none" id="warning-danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span id="warning-message"></span>
+      </div>
+
+      <!-- Sección de Ordenación -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="w-100">
+          <select
+            class="form-select"
+            id="orderBy"
+            aria-label="Ordenar Facturas"
+          >
+            <option value="" selected disabled>
+              Selecciona un criterio de ordenamiento
+            </option>
+            <option value="dateAsc">
+              Fecha (de la más antigua a la más reciente)
+            </option>
+            <option value="dateDesc">
+              Fecha (de la más reciente a la más antigua)
+            </option>
+            <option value="amountAsc">Monto (de menor a mayor)</option>
+            <option value="amountDesc">Monto (de mayor a menor)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabla de ventas con scroll horizontal -->
+      <p id="no-facturas"></p>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead class="table-dark">
+          <tr>
+            <th># Venta</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Producto</th>
+            <th>Precio Unitario</th>
+            <th>Descuento Unitario</th>
+            <th>Cantidad</th>
+            <th>Total (sin descuento)</th>
+            <th>Descuento Total</th>
+            <th>Total Final</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Los datos se cargarán dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center" id="paginationContainer">
+          <!-- Botones de paginación cargados dinámicamente -->
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-labelledby="confirmDeleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">
+              Confirmar Eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            ¿Estás seguro de que deseas eliminar esta venta? Esta acción no se
+            puede deshacer.
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-danger">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div th:insert="layout :: footer"></div>
+
+    <!-- Scripts comunes -->
+    <th:block th:insert="layout :: commonScripts"></th:block>
+
+    <script th:src="@{/estaticos/js/mensajes-estado.js}" type="module"></script>
+    <script th:src="@{/estaticos/js/paginacion.js}" type="module"></script>
+    <script th:src="@{/estaticos/js/lista-ventas.js}" type="module"></script>
+  </body>
+</html>

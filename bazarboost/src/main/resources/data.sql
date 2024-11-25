@@ -44,10 +44,13 @@ INSERT INTO Productos (nombre, descripcion, precio, existencia, imagen_url, usua
 -- Inserciones en la tabla UsuariosRoles
 INSERT INTO UsuariosRoles (usuario_id, rol_id) VALUES
 (1, 1),
+(1, 2),
+(1, 3),
 (2, 2),
-(3, 3),
+(2, 3),
+(3, 2),
 (4, 2),
-(5, 3);
+(5, 2);
 
 -- Inserciones en la tabla Direcciones
 INSERT INTO Direcciones (estado, ciudad, colonia, calle, numero_domicilio, codigo_postal, usuario_id) VALUES
@@ -69,64 +72,64 @@ INSERT INTO MetodosPago (nombre_titular, numero_tarjeta, fecha_expiracion, tipo_
 INSERT INTO Facturas (fecha, total, usuario_id, metodo_pago_id, direccion_id) VALUES
 
 -- Facturas para usuario 1
-('2024-10-11 10:00:00', 165.00, 1, 1, 1),
-('2024-10-11 10:01:00', 176.00, 1, 1, 1),
-('2024-10-11 10:02:00', 187.00, 1, 1, 1),
-('2024-10-11 10:03:00', 198.00, 1, 1, 1),
-('2024-10-11 10:04:00', 209.00, 1, 1, 1),
-('2024-10-11 10:05:00', 220.00, 1, 1, 1),
-('2024-10-11 10:06:00', 231.00, 1, 1, 1),
-('2024-10-11 10:07:00', 242.00, 1, 1, 1),
-('2024-10-11 10:08:00', 253.00, 1, 1, 1),
-('2024-10-11 10:09:00', 264.00, 1, 1, 1),
+('2024-10-11 10:00:00', 514.97, 1, 1, 1),  -- 2 Camisetas (39.98) + Sofá (474.99)
+('2024-10-11 10:01:00', 39.98, 1, 1, 1),   -- 2 Camisetas
+('2024-10-11 10:02:00', 474.99, 1, 1, 1),  -- 1 Sofá
+('2024-10-11 10:03:00', 89.97, 1, 1, 1),   -- 3 Libros Java
+('2024-10-11 10:04:00', 119.98, 1, 1, 1),  -- 2 Robots
+('2024-10-11 10:05:00', 474.99, 1, 1, 1),  -- 1 Sofá
+('2024-10-11 10:06:00', 59.98, 1, 1, 1),   -- 2 Libros Java
+('2024-10-11 10:07:00', 59.99, 1, 1, 1),   -- 1 Robot
+('2024-10-11 10:08:00', 39.98, 1, 1, 1),   -- 2 Camisetas
+('2024-10-11 10:09:00', 474.99, 1, 1, 1),  -- 1 Sofá
 
 -- Facturas para usuario 2
-('2024-10-11 11:00:00', 330.00, 2, 2, 2),
-('2024-10-11 11:01:00', 341.00, 2, 2, 2),
-('2024-10-11 11:02:00', 352.00, 2, 2, 2),
-('2024-10-11 11:03:00', 363.00, 2, 2, 2),
-('2024-10-11 11:04:00', 374.00, 2, 2, 2),
-('2024-10-11 11:05:00', 385.00, 2, 2, 2),
-('2024-10-11 11:06:00', 396.00, 2, 2, 2),
-('2024-10-11 11:07:00', 407.00, 2, 2, 2),
-('2024-10-11 11:08:00', 418.00, 2, 2, 2),
-('2024-10-11 11:09:00', 429.00, 2, 2, 2),
+('2024-10-11 11:00:00', 1104.98, 2, 2, 2), -- Smartphone (629.99) + Sofá (474.99)
+('2024-10-11 11:01:00', 59.98, 2, 2, 2),   -- 2 Libros Java
+('2024-10-11 11:02:00', 59.99, 2, 2, 2),   -- 1 Robot
+('2024-10-11 11:03:00', 629.99, 2, 2, 2),  -- 1 Smartphone
+('2024-10-11 11:04:00', 474.99, 2, 2, 2),  -- 1 Sofá
+('2024-10-11 11:05:00', 59.98, 2, 2, 2),   -- 2 Libros Java
+('2024-10-11 11:06:00', 59.99, 2, 2, 2),   -- 1 Robot
+('2024-10-11 11:07:00', 629.99, 2, 2, 2),  -- 1 Smartphone
+('2024-10-11 11:08:00', 474.99, 2, 2, 2),  -- 1 Sofá
+('2024-10-11 11:09:00', 59.98, 2, 2, 2),   -- 2 Libros Java
 
 -- Facturas para usuario 3
-('2024-10-11 12:00:00', 495.00, 3, 3, 3),
-('2024-10-11 12:01:00', 506.00, 3, 3, 3),
-('2024-10-11 12:02:00', 517.00, 3, 3, 3),
-('2024-10-11 12:03:00', 528.00, 3, 3, 3),
-('2024-10-11 12:04:00', 539.00, 3, 3, 3),
-('2024-10-11 12:05:00', 550.00, 3, 3, 3),
-('2024-10-11 12:06:00', 561.00, 3, 3, 3),
-('2024-10-11 12:07:00', 572.00, 3, 3, 3),
-('2024-10-11 12:08:00', 583.00, 3, 3, 3),
-('2024-10-11 12:09:00', 594.00, 3, 3, 3),
+('2024-10-11 12:00:00', 669.97, 3, 3, 3),  -- Smartphone (629.99) + 2 Camisetas (39.98)
+('2024-10-11 12:01:00', 59.98, 3, 3, 3),   -- 2 Libros Java
+('2024-10-11 12:02:00', 59.99, 3, 3, 3),   -- 1 Robot
+('2024-10-11 12:03:00', 629.99, 3, 3, 3),  -- 1 Smartphone
+('2024-10-11 12:04:00', 39.98, 3, 3, 3),   -- 2 Camisetas
+('2024-10-11 12:05:00', 59.98, 3, 3, 3),   -- 2 Libros Java
+('2024-10-11 12:06:00', 59.99, 3, 3, 3),   -- 1 Robot
+('2024-10-11 12:07:00', 629.99, 3, 3, 3),  -- 1 Smartphone
+('2024-10-11 12:08:00', 39.98, 3, 3, 3),   -- 2 Camisetas
+('2024-10-11 12:09:00', 59.98, 3, 3, 3),   -- 2 Libros Java
 
 -- Facturas para usuario 4
-('2024-10-11 13:00:00', 220.00, 4, 4, 4),
-('2024-10-11 13:01:00', 231.00, 4, 4, 4),
-('2024-10-11 13:02:00', 242.00, 4, 4, 4),
-('2024-10-11 13:03:00', 253.00, 4, 4, 4),
-('2024-10-11 13:04:00', 264.00, 4, 4, 4),
-('2024-10-11 13:05:00', 275.00, 4, 4, 4),
-('2024-10-11 13:06:00', 286.00, 4, 4, 4),
-('2024-10-11 13:07:00', 297.00, 4, 4, 4),
-('2024-10-11 13:08:00', 308.00, 4, 4, 4),
-('2024-10-11 13:09:00', 319.00, 4, 4, 4),
+('2024-10-11 13:00:00', 669.97, 4, 4, 4),  -- Smartphone (629.99) + 2 Camisetas (39.98)
+('2024-10-11 13:01:00', 474.99, 4, 4, 4),  -- 1 Sofá
+('2024-10-11 13:02:00', 59.99, 4, 4, 4),   -- 1 Robot
+('2024-10-11 13:03:00', 629.99, 4, 4, 4),  -- 1 Smartphone
+('2024-10-11 13:04:00', 39.98, 4, 4, 4),   -- 2 Camisetas
+('2024-10-11 13:05:00', 474.99, 4, 4, 4),  -- 1 Sofá
+('2024-10-11 13:06:00', 59.99, 4, 4, 4),   -- 1 Robot
+('2024-10-11 13:07:00', 629.99, 4, 4, 4),  -- 1 Smartphone
+('2024-10-11 13:08:00', 39.98, 4, 4, 4),   -- 2 Camisetas
+('2024-10-11 13:09:00', 474.99, 4, 4, 4),  -- 1 Sofá
 
 -- Facturas para usuario 5
-('2024-10-11 14:00:00', 110.00, 5, 5, 5),
-('2024-10-11 14:01:00', 121.00, 5, 5, 5),
-('2024-10-11 14:02:00', 132.00, 5, 5, 5),
-('2024-10-11 14:03:00', 143.00, 5, 5, 5),
-('2024-10-11 14:04:00', 154.00, 5, 5, 5),
-('2024-10-11 14:05:00', 165.00, 5, 5, 5),
-('2024-10-11 14:06:00', 176.00, 5, 5, 5),
-('2024-10-11 14:07:00', 187.00, 5, 5, 5),
-('2024-10-11 14:08:00', 198.00, 5, 5, 5),
-('2024-10-11 14:09:00', 209.00, 5, 5, 5);
+('2024-10-11 14:00:00', 669.97, 5, 5, 5),  -- Smartphone (629.99) + 2 Camisetas (39.98)
+('2024-10-11 14:01:00', 474.99, 5, 5, 5),  -- 1 Sofá
+('2024-10-11 14:02:00', 59.98, 5, 5, 5),   -- 2 Libros Java
+('2024-10-11 14:03:00', 629.99, 5, 5, 5),  -- 1 Smartphone
+('2024-10-11 14:04:00', 39.98, 5, 5, 5),   -- 2 Camisetas
+('2024-10-11 14:05:00', 474.99, 5, 5, 5),  -- 1 Sofá
+('2024-10-11 14:06:00', 59.98, 5, 5, 5),   -- 2 Libros Java
+('2024-10-11 14:07:00', 629.99, 5, 5, 5),  -- 1 Smartphone
+('2024-10-11 14:08:00', 39.98, 5, 5, 5),   -- 2 Camisetas
+('2024-10-11 14:09:00', 474.99, 5, 5, 5);  -- 1 Sofá
 
 -- Inserciones en la tabla Resenias
 INSERT INTO Resenias (comentario, calificacion, usuario_id, producto_id) VALUES
@@ -169,13 +172,74 @@ INSERT INTO ProductosCarrito (cantidad, total, usuario_id, producto_id) VALUES
 (3, 89.97, 4, 5),
 (2, 59.98, 5, 4);
 
-
--- Inserciones en la tabla ProductosFacturas
+-- Para las facturas del usuario 1 (no puede comprar productos del usuario 1)
 INSERT INTO ProductosFacturas (cantidad, total, producto_nombre, precio_unitario, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
-(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 1, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 1, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 1, 3),
 (2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 2, 2),
 (1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 3, 3),
-(1, 29.99, 'Libro de Java', 29.99, NULL, NULL, NULL, 4, 4),
-(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 5, 5);
+(3, 89.97, 'Libro de Java', 29.99, NULL, NULL, NULL, 4, 4),
+(2, 119.98, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 5, 5),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 6, 3),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 7, 4),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 8, 5),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 9, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 10, 3);
+
+-- Para las facturas del usuario 2 (no puede comprar productos del usuario 2)
+INSERT INTO ProductosFacturas (cantidad, total, producto_nombre, precio_unitario, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 11, 1),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 11, 3),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 12, 4),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 13, 5),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 14, 1),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 15, 3),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 16, 4),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 17, 5),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 18, 1),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 19, 3),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 20, 4);
+
+-- Para las facturas del usuario 3 (no puede comprar productos del usuario 3)
+INSERT INTO ProductosFacturas (cantidad, total, producto_nombre, precio_unitario, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 21, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 21, 2),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 22, 4),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 23, 5),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 24, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 25, 2),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 26, 4),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 27, 5),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 28, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 29, 2),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 30, 4);
+
+-- Para las facturas del usuario 4 (no puede comprar productos del usuario 4)
+INSERT INTO ProductosFacturas (cantidad, total, producto_nombre, precio_unitario, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 31, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 31, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 32, 3),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 33, 5),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 34, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 35, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 36, 3),
+(1, 59.99, 'Juguete Robot', 79.99, 25, 20.00, 'Descuento Black Friday', 37, 5),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 38, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 39, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 40, 3);
+
+-- Para las facturas del usuario 5 (no puede comprar productos del usuario 5)
+INSERT INTO ProductosFacturas (cantidad, total, producto_nombre, precio_unitario, descuento_unitario_porcentaje, descuento_unitario_valor, descuento_nombre, factura_id, producto_id) VALUES
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 41, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 41, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 42, 3),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 43, 4),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 44, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 45, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 46, 3),
+(2, 59.98, 'Libro de Java', 29.99, NULL, NULL, NULL, 47, 4),
+(1, 629.99, 'Smartphone', 699.99, 10, 70.00, 'Descuento de Bienvenida', 48, 1),
+(2, 39.98, 'Camiseta', 19.99, NULL, NULL, NULL, 49, 2),
+(1, 474.99, 'Sofá', 499.99, 5, 25.00, 'Descuento de Fin de Temporada', 50, 3);
 
 

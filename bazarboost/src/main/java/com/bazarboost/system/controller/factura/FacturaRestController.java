@@ -2,6 +2,7 @@ package com.bazarboost.system.controller.factura;
 
 import com.bazarboost.system.dto.CarritoPagoRespuestaDTO;
 import com.bazarboost.system.dto.CarritoPagoSolicitudDTO;
+import com.bazarboost.system.dto.DetalleFacturaDTO;
 import com.bazarboost.system.dto.FacturasPaginadasDTO;
 import com.bazarboost.system.service.FacturaService;
 import jakarta.validation.Valid;
@@ -37,11 +38,11 @@ public class FacturaRestController {
         return ResponseEntity.ok(facturas);
     }
 
-    /*
+
     @GetMapping("/{facturaId}")
     public ResponseEntity<DetalleFacturaDTO> obtenerDetalleFactura(@PathVariable Integer facturaId) {
         DetalleFacturaDTO detalleFactura = facturaService.obtenerDetalleFactura(facturaId, USUARIO_ID_TEMPORAL);
         return ResponseEntity.ok(detalleFactura);
     }
-     */
+
 }

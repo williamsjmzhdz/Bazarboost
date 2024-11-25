@@ -16,7 +16,6 @@ import java.util.Optional;
  * Repositorio que gestiona las operaciones de persistencia para la entidad ProductoCarrito.
  * Proporciona métodos para buscar, guardar y eliminar productos del carrito.
  */
-@Repository
 public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrito, Integer> {
 
     /**

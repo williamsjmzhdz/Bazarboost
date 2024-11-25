@@ -17,6 +17,23 @@
 <div th:insert="layout :: navbar"></div>
 
 <div class="container my-4 main-content" id="bodyContainer">
+
+  <!-- Sección para mensajes de éxito -->
+  <div
+          class="alert alert-success d-flex d-none align-items-center"
+          id="success-alert"
+          role="alert"
+  >
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div></div>
+  </div>
+
+  <!-- Sección para mensajes de error -->
+  <div class="alert alert-danger d-none" id="warning-danger">
+    <i class="bi bi-exclamation-triangle"></i>
+    <span id="warning-message"></span>
+  </div>
+
   <!-- Barra de búsqueda -->
   <div class="row mb-4 justify-content-center">
     <div class="col-md-8">
@@ -44,22 +61,6 @@
         <option value="desc">De mayor a menor</option>
       </select>
     </div>
-  </div>
-
-  <!-- Sección para mensajes de éxito -->
-  <div
-          class="alert alert-success d-flex d-none align-items-center"
-          id="success-alert"
-          role="alert"
-  >
-    <i class="bi bi-check-circle-fill me-2"></i>
-    <div></div>
-  </div>
-
-  <!-- Sección para mensajes de error -->
-  <div class="alert alert-danger d-none" id="warning-danger">
-    <i class="bi bi-exclamation-triangle"></i>
-    <span id="warning-message"></span>
   </div>
 
   <!-- Lista de productos -->

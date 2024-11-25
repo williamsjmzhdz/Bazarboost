@@ -1,5 +1,7 @@
 // lista-productos.js
 import { actualizarPaginacion, cambiarPagina, getPaginaActual, setPaginaActual } from './paginacion.js';
+import { mostrarMensajeErrorURL } from './mensajes-estado.js';
+
 
 window.cambiarPaginaCallback = (pagina) => cambiarPagina(pagina, obtenerProductos);
 
@@ -102,3 +104,8 @@ ordenPrecio.addEventListener('change', () => {
 // Inicialización
 obtenerProductos();
 window.obtenerProductos = obtenerProductos;  // Exportar globalmente
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    mostrarMensajeErrorURL();
+});

@@ -5,8 +5,9 @@
   <!-- Definir el fragmento con el título y los estilos específicos -->
   <th:block th:fragment="headExtras">
     <title>BazarBoost - Lista de descuentos</title>
-    <link th:rel="stylesheet" href="@{/estaticos/estilos/base.css}">
-    <link th:rel="stylesheet" href="@{/estaticos/estilos/base-listas.css}">
+    <link th:rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+    <link th:rel="stylesheet" th:href="@{/estaticos/estilos/base-listas.css}">
+
   </th:block>
 
   <body>

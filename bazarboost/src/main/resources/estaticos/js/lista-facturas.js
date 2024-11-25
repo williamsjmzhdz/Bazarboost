@@ -1,5 +1,5 @@
 import { actualizarPaginacion, cambiarPagina, getPaginaActual, setPaginaActual } from './paginacion.js';
-import { mostrarMensajeError, mostrarListaErrores } from './mensajes-estado.js';
+import { mostrarMensajeError, mostrarListaErrores, mostrarMensajeErrorURL } from './mensajes-estado.js';
 
 const listaFacturas = document.querySelector('table tbody');
 const ordenSelector = document.getElementById('orderBy');
@@ -123,3 +123,8 @@ ordenSelector.addEventListener('change', () => {
 // Inicializar la lista de facturas al cargar la página
 obtenerFacturas();
 window.cambiarPaginaCallback = cambiarPaginaCallback;  // Exportar callback para paginación
+
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    mostrarMensajeErrorURL();
+});
