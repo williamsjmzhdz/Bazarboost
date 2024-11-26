@@ -116,7 +116,7 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     private void validarRolVendedor(Usuario usuario) {
-        if (!usuarioRepository.tieneRol(usuario.getUsuarioId(), "VENDEDOR")) {
+        if (!usuarioRepository.tieneRol(usuario.getUsuarioId(), "Vendedor")) {
             throw new AccesoDenegadoException("No puedes acceder al panel de ventas porque no tienes el rol de vendedor.");
         }
     }

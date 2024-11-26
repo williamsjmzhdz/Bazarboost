@@ -1,9 +1,9 @@
 package com.bazarboost.system.service.impl;
 
+import com.bazarboost.shared.exception.*;
+import com.bazarboost.system.dto.UsuarioDTO;
 import com.bazarboost.system.dto.UsuarioRegistroDTO;
-import com.bazarboost.shared.exception.CorreoElectronicoExistenteException;
-import com.bazarboost.shared.exception.RolNoEncontradoException;
-import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
+import com.bazarboost.system.dto.UsuariosPaginadosDTO;
 import com.bazarboost.system.model.Rol;
 import com.bazarboost.system.model.Usuario;
 import com.bazarboost.system.model.UsuarioRol;
@@ -11,12 +11,17 @@ import com.bazarboost.system.repository.RolRepository;
 import com.bazarboost.system.repository.UsuarioRepository;
 import com.bazarboost.system.repository.UsuarioRolRepository;
 import com.bazarboost.system.service.UsuarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -31,6 +36,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -71,5 +79,117 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRol.setFechaAsignacion(LocalDateTime.now());
 
         usuarioRolRepository.save(usuarioRol);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UsuariosPaginadosDTO obtenerTodos(String keyword, Integer pagina, Integer tamanioPagina, Integer usuarioId) {
+        Usuario usuario = obtenerUsuario(usuarioId);
+        validarRolAdministrador(usuario);
+
+        long totalRegistros = usuarioRepository.count();
+        if (totalRegistros == 0) {
+            return new UsuariosPaginadosDTO(Collections.emptyList(), pagina, 0, 0, true, true);
+        }
+        validarPaginacion(pagina, tamanioPagina, totalRegistros);
+
+        return obtenerUsuariosPaginados(pagina, tamanioPagina, keyword);
+    }
+
+    @Override
+    @Transactional
+    public void actualizarRolVendedor(Integer usuarioId, Boolean esVendedor, Integer usuarioAdminId) {
+        String nombreRol = "VENDEDOR";
+
+        // Obtener y validar usuario administrador
+        Usuario usuarioAdmin = obtenerUsuarioConMensaje(usuarioAdminId,
+                "No se encontró información del usuario administrador. Por favor, inicie sesión nuevamente.");
+        validarRolAdministrador(usuarioAdmin);
+
+        // Obtener usuario a modificar
+        Usuario usuario = obtenerUsuarioConMensaje(usuarioId,
+                "No se encontró información del usuario al que intentas modificar el rol.");
+
+
+        // Obtener rol vendedor
+        Rol rolVendedor = rolRepository.findByNombre(nombreRol)
+                .orElseThrow(() -> new RolNoEncontradoException("No se encontró el rol " + nombreRol));
+
+        // Verificar si ya tiene el rol
+        boolean tieneRolVendedor = usuarioRepository.tieneRol(usuarioId, "VENDEDOR");
+
+        if (esVendedor && tieneRolVendedor) {
+            throw new AsignacionRolInvalidaException("El usuario ya tiene el rol de Vendedor asignado.");
+        }
+
+        if (!esVendedor && !tieneRolVendedor) {
+            throw new AsignacionRolInvalidaException("El usuario no tiene el rol de Vendedor para quitar.");
+        }
+
+        if (esVendedor) {
+            // Crear y guardar nueva relación usuario-rol
+            UsuarioRol usuarioRol = new UsuarioRol();
+            usuarioRol.setUsuario(usuario);
+            usuarioRol.setRol(rolVendedor);
+            usuarioRol.setFechaAsignacion(LocalDateTime.now());
+            usuarioRolRepository.save(usuarioRol);
+        } else {
+            // Eliminar la relación usuario-rol
+            usuarioRolRepository.deleteByUsuarioAndRol(usuario, rolVendedor);
+        }
+    }
+
+    private Usuario obtenerUsuario(Integer usuarioId) {
+        return usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException("No se encontró información de su usuario. Inicie sesión nuevamente e inténtelo de nuevo."));
+    }
+
+    private void validarRolAdministrador(Usuario usuario) {
+        if (!usuarioRepository.tieneRol(usuario.getUsuarioId(), "ADMINISTRADOR")) {
+            throw new AccesoDenegadoException("No puedes acceder al panel de usuarios porque no tienes el rol de administrador.");
+        }
+    }
+
+    private void validarPaginacion(Integer pagina, Integer tamanioPagina, long totalRegistros) {
+        int maximoPaginas = (int) Math.ceil((double) totalRegistros / tamanioPagina);
+        if (pagina < 0 || pagina >= maximoPaginas) {
+            throw new PaginaFueraDeRangoException("Número de página fuera de rango.");
+        }
+    }
+
+    private UsuariosPaginadosDTO obtenerUsuariosPaginados(Integer pagina, Integer tamanioPagina, String keyword) {
+        Pageable pageable = PageRequest.of(pagina, tamanioPagina);
+
+        // Obtener la página de usuarios
+        Page<Usuario> usuariosPage = keyword != null && !keyword.trim().isEmpty()
+                ? usuarioRepository.buscarUsuarios(keyword, pageable)
+                : usuarioRepository.findAll(pageable);
+
+        // Convertir usuarios a DTOs
+        List<UsuarioDTO> usuariosDTO = usuariosPage.getContent()
+                .stream()
+                .map(this::mapearAUsuarioDTO)
+                .toList();
+
+        // Crear y retornar el DTO con la información de paginación
+        return new UsuariosPaginadosDTO(
+                usuariosDTO,                    // lista de usuarios
+                usuariosPage.getNumber(),       // página actual (0-based)
+                usuariosPage.getTotalPages(),   // total de páginas
+                usuariosPage.getTotalElements(),// total de elementos
+                usuariosPage.isFirst(),         // si es la primera página
+                usuariosPage.isLast()           // si es la última página
+        );
+    }
+
+    private UsuarioDTO mapearAUsuarioDTO(Usuario usuario) {
+        UsuarioDTO usuarioDTO = modelMapper.map(usuario, UsuarioDTO.class);
+        usuarioDTO.setEsVendedor(usuarioRepository.tieneRol(usuario.getUsuarioId(), "Vendedor"));
+        return usuarioDTO;
+    }
+
+    private Usuario obtenerUsuarioConMensaje(Integer usuarioId, String mensajeError) {
+        return usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new UsuarioNoEncontradoException(mensajeError));
     }
 }

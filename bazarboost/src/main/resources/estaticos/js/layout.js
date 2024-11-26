@@ -21,8 +21,6 @@ function actualizarContadorCarrito() {
             const totalProductos = data.totalProductos;
             contadorCarrito.textContent = totalProductos;
 
-            console.log("Total productos: ", totalProductos);
-
             // Mostrar u ocultar el contador según si hay productos
             if (totalProductos > 0) {
                 contadorCarrito.innerText = totalProductos;

@@ -1,6 +1,8 @@
 package com.bazarboost.system.repository;
 
 import com.bazarboost.system.model.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +14,6 @@ import java.util.Optional;
  * Proyecto: Bazarboost
  * */
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-
     /**
      * Verifica si un usuario tiene un rol específico.
      *
@@ -35,4 +36,20 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
      * @return Optional conteniendo el usuario si existe, Optional.empty() si no existe
      */
     Optional<Usuario> findByCorreoElectronico(String correoElectronico);
+
+    /**
+     * Busca usuarios aplicando filtros en múltiples campos y retorna los resultados paginados.
+     * La búsqueda es case-insensitive y utiliza coincidencia parcial (LIKE %keyword%).
+     *
+     * @param keyword Término de búsqueda que se aplicará a todos los campos especificados
+     * @param pageable Objeto de paginación que especifica el número de página y tamaño
+     * @return Page<Usuario> Página de usuarios que coinciden con los criterios de búsqueda
+     */
+    @Query("SELECT DISTINCT u FROM Usuario u WHERE " +
+            "LOWER(u.nombre) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.apellidoPaterno) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.apellidoMaterno) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.correoElectronico) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.telefono) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Usuario> buscarUsuarios(@Param("keyword") String keyword, Pageable pageable);
 }

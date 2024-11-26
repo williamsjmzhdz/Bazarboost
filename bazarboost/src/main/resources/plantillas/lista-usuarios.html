@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="~{layout :: commonHead}"></head>
+
+<!-- Definir el fragmento con el título y los estilos específicos -->
+<th:block th:fragment="headExtras">
+  <title>BazarBoost - Usuarios</title>
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
+  <link rel="stylesheet" th:href="@{/estaticos/estilos/base-listas.css}">
+</th:block>
+  </head>
+
+  <body>
+    <!-- Incluir el Navbar -->
+    <div th:insert="~{layout :: navbar}"></div>
+
+    <!-- Main Content -->
+    <div class="container my-4 main-content" id="bodyContainer">
+      <h2 class="mb-4">Usuarios</h2>
+
+      <!-- Barra de búsqueda para filtrar usuarios -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <input
+          class="form-control"
+          id="searchBar"
+          placeholder="Buscar por correo o teléfono"
+          type="text"
+        />
+        <button class="btn btn-secondary ms-2">
+          Limpiar
+        </button>
+      </div>
+
+      <!-- Tabla de usuarios -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Nombre del Usuario</th>
+              <th scope="col">Correo Electrónico</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Vendedor</th>
+            </tr>
+          </thead>
+          <tbody id="userTable">
+            <!-- Usuarios cargados dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center" id="paginationContainer">
+          <!-- Botones de paginación cargados dinámicamente -->
+        </ul>
+      </nav>
+    </div>
+
+    <div th:insert="~{layout :: footer}"></div>
+
+    <th:block th:insert="layout :: commonScripts"></th:block>
+    <script th:src="@{/estaticos/js/mensajes-estado.js}" type="module"></script>
+    <script th:src="@{/estaticos/js/lista-usuarios.js}" type="module"></script>
+  </body>
+</html>
