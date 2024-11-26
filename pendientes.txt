@@ -37,7 +37,7 @@
 
 
 Fechas (limites) importantes:
-- 27 de NOV entrega de Ejercicio 3 M11
+ ✅ - 27 de NOV entrega de Ejercicio 3 M11
 - 06 de DIC entrega de Documento de especificación
 - 13 de DIC entrega de código fuente del Proyecto Final y Video del Proyecto Final.
 
@@ -52,8 +52,8 @@ Fechas (limites) importantes:
  ✅ - Funcionalidad: Filtros
 
 26 y 27 NOV
- - Funcionalidad "Mostrar usuarios" ordenados por nombre y paginados de 10 en 10
- - Funcionalidad: Agregar/quitar rol de vendedor
+ ✅ - Funcionalidad "Mostrar usuarios" ordenados por nombre y paginados de 10 en 10
+ ✅ - Funcionalidad: Agregar/quitar rol de vendedor
 
 28 y 29 NOV
  - Funcionalidad: READ de los datos del usuario
