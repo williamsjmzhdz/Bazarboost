@@ -56,8 +56,12 @@ Fechas (limites) importantes:
  ✅ - Funcionalidad: Agregar/quitar rol de vendedor
 
 28 y 29 NOV
- - Funcionalidad: READ de los datos del usuario
- - Funcionalidad: UPDATE de los datos del usuario
+ ✅ - Funcionalidad: READ de los datos del usuario
+ ✅ - Funcionalidad: UPDATE de los datos del usuario
+
+PENDIENTES:
+ - Hacer que se refleje el nuevo nombre en el navbar al actualizar la info. del usuari
+ - Manejar errores de correo y telefono existentes en el registro.
 
 30 y 1 DIC
 - Implementar Spring Security con Thymeleaf, cookies, loggin y tokens JWT.

@@ -52,4 +52,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
             "LOWER(u.correoElectronico) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(u.telefono) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Usuario> buscarUsuarios(@Param("keyword") String keyword, Pageable pageable);
+
+    /**
+     * Busca un usuario por su número telefónico.
+     *
+     * @param telefono Número telefónico a buscar
+     * @return Optional conteniendo el usuario si existe, Optional.empty() si no existe
+     */
+    Optional<Usuario> findByTelefono(String telefono);
 }

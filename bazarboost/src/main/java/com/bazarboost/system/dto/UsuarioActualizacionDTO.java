@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioRegistroDTO {
+public class UsuarioActualizacionDTO {
 
     @NotBlank(message = "El nombre es obligatorio.")
     @Size(max = 40, message = "El nombre no puede tener más de 40 caracteres.")
@@ -50,8 +50,10 @@ public class UsuarioRegistroDTO {
     @Email(message = "El correo electrónico debe tener un formato válido.")
     private String correoElectronico;
 
-    @NotBlank(message = "La contraseña es obligatoria.")
     @Size(min = 8, max = 60, message = "La contraseña debe tener entre 8 y 60 caracteres.")
     private String contrasenia;
+
+    @Size(min = 8, max = 60, message = "La confirmación de contraseña debe tener entre 8 y 60 caracteres.")
+    private String confirmacionContrasenia;
 
 }

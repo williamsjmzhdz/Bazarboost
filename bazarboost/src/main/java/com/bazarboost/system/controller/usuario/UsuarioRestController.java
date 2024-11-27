@@ -1,7 +1,11 @@
 package com.bazarboost.system.controller.usuario;
 
+import com.bazarboost.system.dto.PerfilUsuarioDTO;
+import com.bazarboost.system.dto.UsuarioActualizacionDTO;
 import com.bazarboost.system.dto.UsuariosPaginadosDTO;
 import com.bazarboost.system.service.UsuarioService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +35,20 @@ public class UsuarioRestController {
     public ResponseEntity<Void> actualizarRolVendedor(
             @PathVariable Integer usuarioId,
             @RequestBody Map<String, Boolean> request) {
-        System.out.println("ENTRÓ");
         boolean esVendedor = request.get("esVendedor");
         usuarioService.actualizarRolVendedor(usuarioId, esVendedor, USUARIO_ID_TEMPORAL);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/perfil")
+    public ResponseEntity<PerfilUsuarioDTO> obtenerPerfil() {
+        return ResponseEntity.ok(usuarioService.obtenerPerfil(USUARIO_ID_TEMPORAL));
+    }
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<String> actualizar(@RequestBody @Valid UsuarioActualizacionDTO request) {
+        usuarioService.actualizar(USUARIO_ID_TEMPORAL, request);
+        return ResponseEntity.ok("Perfil actualizado correctamente");
     }
 
 }

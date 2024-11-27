@@ -1,10 +1,11 @@
 package com.bazarboost.system.service;
 
 import com.bazarboost.shared.exception.*;
-import com.bazarboost.system.dto.UsuarioDTO;
-import com.bazarboost.system.dto.UsuarioRegistroDTO;
-import com.bazarboost.system.dto.UsuariosPaginadosDTO;
+import com.bazarboost.system.dto.*;
 import com.bazarboost.system.model.Usuario;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -55,5 +56,25 @@ public interface UsuarioService {
      * @throws RolNoEncontradoException si el rol que se intenta asignar no existe.
      */
     void actualizarRolVendedor(Integer usuarioId, Boolean esVendedor, Integer usuarioAdminId);
+
+    /**
+     * Obtiene los datos del usuario especificado.
+     *
+     * @param usuarioId ID del usuario a obtener los datos.
+     * @return DTO con los datos necesarios para la vista perfíl de usuario.
+     * @throws UsuarioNoEncontradoException si el usuario no existe.
+     */
+    PerfilUsuarioDTO obtenerPerfil(Integer usuarioId);
+
+    /**
+     * Actualiza los datos personales y credenciales de un usuario.
+     *
+     * @param usuarioId ID del usuario
+     * @param request Datos actualizados (nombre, apellidos, teléfono, correo, contraseña)
+     * @throws UsuarioNoEncontradoException Usuario no existe
+     * @throws CorreoElectronicoExistenteException Correo ya registrado por otro usuario
+     * @throws TelefonoExistenteException Teléfono ya registrado por otro usuario
+     */
+    void actualizar(Integer usuarioId, UsuarioActualizacionDTO request);
 
 }

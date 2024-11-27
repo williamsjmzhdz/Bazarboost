@@ -14,4 +14,10 @@ public class UsuarioController {
         model.addAttribute("requestURI", request.getRequestURI());
         return "lista-usuarios";
     }
+
+    @GetMapping("/perfil")
+    public String mostrarPerfilUsuario(Model model, HttpServletRequest request) {
+        model.addAttribute("requestURI", request.getRequestURI());
+        return "perfil-usuario";
+    }
 }

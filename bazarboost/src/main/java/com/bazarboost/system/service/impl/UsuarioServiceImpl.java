@@ -1,9 +1,7 @@
 package com.bazarboost.system.service.impl;
 
 import com.bazarboost.shared.exception.*;
-import com.bazarboost.system.dto.UsuarioDTO;
-import com.bazarboost.system.dto.UsuarioRegistroDTO;
-import com.bazarboost.system.dto.UsuariosPaginadosDTO;
+import com.bazarboost.system.dto.*;
 import com.bazarboost.system.model.Rol;
 import com.bazarboost.system.model.Usuario;
 import com.bazarboost.system.model.UsuarioRol;
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -139,6 +138,53 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PerfilUsuarioDTO obtenerPerfil(Integer usuarioId) {
+        Usuario usuario = obtenerUsuarioConMensaje(usuarioId, "No se encontró información del perfíl de usuario.");
+        return mapearAPerfilUsuarioDTO(usuario);
+    }
+
+    @Override
+    @Transactional
+    public void actualizar(Integer usuarioId, UsuarioActualizacionDTO request) {
+        Usuario usuario = obtenerUsuarioConMensaje(usuarioId,
+                "No se encontró información del usuario a actualizar.");
+
+        // Validar correo y teléfono duplicados si cambiaron
+        if (!usuario.getCorreoElectronico().equals(request.getCorreoElectronico())) {
+            usuarioRepository.findByCorreoElectronico(request.getCorreoElectronico())
+                    .ifPresent(u -> {
+                        throw new CorreoElectronicoExistenteException(
+                                "El correo electrónico ya está registrado por otro usuario.");
+                    });
+        }
+
+        if (!usuario.getTelefono().equals(request.getTelefono())) {
+            usuarioRepository.findByTelefono(request.getTelefono())
+                    .ifPresent(u -> {
+                        throw new TelefonoExistenteException(
+                                "El número telefónico ya está registrado por otro usuario.");
+                    });
+        }
+
+        usuario.setNombre(request.getNombre());
+        usuario.setApellidoPaterno(request.getApellidoPaterno());
+        usuario.setApellidoMaterno(request.getApellidoMaterno());
+        usuario.setTelefono(request.getTelefono());
+        usuario.setCorreoElectronico(request.getCorreoElectronico());
+
+        if (request.getContrasenia() != null && !request.getContrasenia().isEmpty()) {
+            if (!request.getContrasenia().equals(request.getConfirmacionContrasenia())) {
+                throw new ContraseniasNoCoincidentesException(
+                        "La contraseña y su confirmación no coinciden.");
+            }
+            usuario.setContrasenia(passwordEncoder.encode(request.getContrasenia()));
+        }
+
+        usuarioRepository.save(usuario);
+    }
+
     private Usuario obtenerUsuario(Integer usuarioId) {
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException("No se encontró información de su usuario. Inicie sesión nuevamente e inténtelo de nuevo."));
@@ -191,5 +237,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     private Usuario obtenerUsuarioConMensaje(Integer usuarioId, String mensajeError) {
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNoEncontradoException(mensajeError));
+    }
+
+    private PerfilUsuarioDTO mapearAPerfilUsuarioDTO(Usuario usuario) {
+        return modelMapper.map(usuario, PerfilUsuarioDTO.class);
     }
 }
