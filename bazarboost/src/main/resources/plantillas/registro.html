@@ -35,10 +35,10 @@
       <div></div>
     </div>
 
-    <!-- Sección para mensajes de error -->
-    <div class="alert alert-danger d-none" id="warning-danger">
-      <i class="bi bi-exclamation-triangle"></i>
-      <span id="warning-message"></span>
+    <!-- Mensaje de error -->
+    <div th:if="${mensajeError}" class="alert alert-danger">
+      <i class="bi bi-exclamation-circle-fill"></i>
+      <span th:text="${mensajeError}"></span>
     </div>
 
     <form th:action="@{/registro}" th:object="${usuario}" method="post">

@@ -49,16 +49,24 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public void guardarUsuario(UsuarioRegistroDTO usuarioDTO) {
+        String nombreRol = "Cliente";
+
         // Verificar si existe el correo
         if (usuarioRepository.findByCorreoElectronico(usuarioDTO.getCorreoElectronico()).isPresent()) {
             throw new CorreoElectronicoExistenteException(
                     "El correo electrónico " + usuarioDTO.getCorreoElectronico() + " ya está registrado");
         }
 
+        // Verificar si existe el correo
+        if (usuarioRepository.findByTelefono(usuarioDTO.getTelefono()).isPresent()) {
+            throw new TelefonoExistenteException(
+                    "El teléfono " + usuarioDTO.getTelefono() + " ya está registrado.");
+        }
+
         // Buscar rol Cliente
-        Rol rolCliente = rolRepository.findByNombre("Cliente")
+        Rol rolCliente = rolRepository.findByNombre(nombreRol)
                 .orElseThrow(() -> new RolNoEncontradoException(
-                        "Error en el sistema: No se encontró el rol Cliente"));
+                        "Error en el sistema: No se encontró el rol " + nombreRol));
 
         // Crear y guardar usuario
         Usuario usuario = new Usuario();
@@ -183,6 +191,13 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         usuarioRepository.save(usuario);
+    }
+
+    @Override
+    public UsuarioNombreDTO obtenerNombre(Integer usuarioId) {
+        Usuario usuario = obtenerUsuarioConMensaje(usuarioId,
+                "No se encontró información del usuario. Inicia sesión de nuevo y vuelve a intentarlo.");
+        return modelMapper.map(usuario, UsuarioNombreDTO.class);
     }
 
     private Usuario obtenerUsuario(Integer usuarioId) {

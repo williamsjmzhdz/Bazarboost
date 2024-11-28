@@ -73,7 +73,7 @@
                         <li class="nav-item dropdown ms-lg-4">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle"></i>
-                                <span sec:authentication="principal.usuario.nombre">Usuario</span>
+                                <span sec:authentication="principal.usuario.nombre" id="nombreUsuario"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>

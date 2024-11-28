@@ -100,6 +100,8 @@ export class PerfilUsuario {
        if (response.ok) {
            window.scrollTo({ top: 0, behavior: 'smooth' });
            mostrarMensajeExito(mensaje);
+           const nombre = document.getElementById('nombre').value;
+           document.getElementById("nombreUsuario").innerText = nombre;
            return;
        }
 

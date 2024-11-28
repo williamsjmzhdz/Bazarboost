@@ -1,5 +1,8 @@
 package com.bazarboost.auth.controller;
 
+import com.bazarboost.shared.exception.CorreoElectronicoExistenteException;
+import com.bazarboost.shared.exception.RolNoEncontradoException;
+import com.bazarboost.shared.exception.TelefonoExistenteException;
 import com.bazarboost.system.dto.UsuarioRegistroDTO;
 import com.bazarboost.system.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Controller
@@ -29,15 +33,18 @@ public class RegistroController {
     @PostMapping("/registro")
     public String registrar(@Valid @ModelAttribute("usuario") UsuarioRegistroDTO usuario,
                             BindingResult result,
-                            RedirectAttributes redirectAttributes) throws UnsupportedEncodingException {
+                            Model model) {
         if (result.hasErrors()) {
             return "registro";
         }
 
-        usuarioService.guardarUsuario(usuario);
-
-        // Codificar el mensaje de éxito
-        String encodedMessage = java.net.URLEncoder.encode("¡Registro exitoso! Ya puedes iniciar sesión.", StandardCharsets.UTF_8);
-        return "redirect:/inicio-sesion?mensajeExito=" + encodedMessage;
+        try {
+            usuarioService.guardarUsuario(usuario);
+            return "redirect:/inicio-sesion?mensajeExito=" +
+                    URLEncoder.encode("¡Registro exitoso!", StandardCharsets.UTF_8);
+        } catch (CorreoElectronicoExistenteException | TelefonoExistenteException | RolNoEncontradoException e) {
+            model.addAttribute("mensajeError", e.getMessage());
+            return "registro";
+        }
     }
 }

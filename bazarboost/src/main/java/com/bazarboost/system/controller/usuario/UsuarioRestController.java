@@ -2,10 +2,11 @@ package com.bazarboost.system.controller.usuario;
 
 import com.bazarboost.system.dto.PerfilUsuarioDTO;
 import com.bazarboost.system.dto.UsuarioActualizacionDTO;
+import com.bazarboost.system.dto.UsuarioNombreDTO;
 import com.bazarboost.system.dto.UsuariosPaginadosDTO;
+import com.bazarboost.system.model.Usuario;
 import com.bazarboost.system.service.UsuarioService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,5 +51,14 @@ public class UsuarioRestController {
         usuarioService.actualizar(USUARIO_ID_TEMPORAL, request);
         return ResponseEntity.ok("Perfil actualizado correctamente");
     }
+
+    @GetMapping("/obtenerNombre")
+    public ResponseEntity<UsuarioNombreDTO> obtenerNombre() {
+        System.out.println("Hola");
+        UsuarioNombreDTO dto = usuarioService.obtenerNombre(USUARIO_ID_TEMPORAL);
+        System.out.println("dto: " + dto);
+        return ResponseEntity.ok(dto);
+    }
+
 
 }

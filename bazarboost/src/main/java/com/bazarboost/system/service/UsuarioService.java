@@ -77,4 +77,13 @@ public interface UsuarioService {
      */
     void actualizar(Integer usuarioId, UsuarioActualizacionDTO request);
 
+    /**
+     * Obtiene el nombre del usuario especificado.
+     *
+     * @param usuarioId ID del usuario a recuperar el nombre.
+     * @return DTO con el nombre del usuario especificado.
+     * @throws UsuarioNoEncontradoException si el usuario no existe.
+     */
+    UsuarioNombreDTO obtenerNombre(Integer usuarioId);
+
 }

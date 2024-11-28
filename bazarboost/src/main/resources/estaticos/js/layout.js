@@ -35,5 +35,31 @@ function actualizarContadorCarrito() {
         });
 }
 
-// Actualizar el contador cuando se carga la página
-document.addEventListener('DOMContentLoaded', actualizarContadorCarrito);
+function actualizarNombreUsuario() {
+    const nombreUsuario = document.getElementById('nombreUsuario');
+
+    if (!nombreUsuario) {
+        console.error('No se encontró el elemento del nombre del usuario.');
+        return;
+    }
+
+    fetch('/api/usuarios/obtenerNombre')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al obtener el nombre del usuario.');
+        }
+        return response.json();
+    })
+    .then(usuario => {
+        nombreUsuario.innerText = usuario.nombre;
+    })
+    .catch(error => {
+        console.error(error);
+    })
+
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    actualizarContadorCarrito();
+    actualizarNombreUsuario();
+});
