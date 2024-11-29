@@ -3,6 +3,9 @@ package com.bazarboost.system.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /*
  * Alumno: Francisco Williams Jiménez Hernández
  * Proyecto: Bazarboost
@@ -37,4 +40,7 @@ public class Usuario {
 
     @Column(name = "contrasenia")
     private String contrasenia;
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    private Set<UsuarioRol> roles = new HashSet<>();
 }

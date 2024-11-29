@@ -11,9 +11,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "UsuariosRoles")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"usuario", "rol"})
+@EqualsAndHashCode(exclude = {"usuario", "rol"})
 public class UsuarioRol {
 
     @Id

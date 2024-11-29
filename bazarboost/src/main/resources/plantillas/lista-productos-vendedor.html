@@ -33,6 +33,13 @@
           <div th:text="${mensajeExito}"></div>
         </div>
 
+        <!-- Mensaje de no hay ventas -->
+        <div id="no-productos" class="alert alert-info text-center d-none">
+          <i class="bi bi-info-circle me-2"></i>
+          No tienes productos registrados aún.
+        </div>
+
+
         <!-- Alerta de error del servidor (Thymeleaf) -->
         <div
                 th:if="${mensajeError}"
@@ -58,7 +65,7 @@
       </div>
 
       <!-- Botón para añadir un nuevo producto -->
-      <div class="d-flex justify-content-end mb-3">
+      <div class="d-flex justify-content-end mb-3 btn-add">
         <a href="/productos/vendedor/crear" class="btn btn-success">
           <i class="bi bi-plus-lg"></i> Añadir Producto
         </a>
@@ -118,7 +125,10 @@
               Cancelar
             </button>
             <form id="deleteForm" method="POST" style="display: inline;">
+              <!-- Inclusión del método DELETE si es necesario -->
               <input type="hidden" name="_method" value="DELETE">
+              <!-- Inclusión del token CSRF -->
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
               <button type="submit" class="btn btn-danger">Eliminar</button>
             </form>
           </div>
@@ -154,6 +164,12 @@
             return response.json();
           })
           .then(data => {
+
+           if (data.length === 0) {
+               // Ocultar tabla y botón, mostrar mensaje.
+               document.querySelector(".table-responsive").classList.add('d-none');
+               document.getElementById("no-productos").classList.remove('d-none');
+           } else {
             const productosTbody = document.getElementById('productos-tbody');
             productosTbody.innerHTML = ''; // Limpiar el contenido anterior
 
@@ -182,6 +198,8 @@
                 </tr>`;
               productosTbody.insertAdjacentHTML('beforeend', productoHtml);
             });
+           }
+
           })
           .catch(error => {
             console.error('Error al cargar productos:', error); // Log detallado en la consola

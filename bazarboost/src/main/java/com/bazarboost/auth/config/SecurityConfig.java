@@ -23,6 +23,37 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/api/**"))  // Deshabilitar CSRF para APIs REST
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/registro", "/inicio-sesion", "/estaticos/**", "/estilos/**", "/js/**").permitAll()
+
+                        // API REST
+                        .requestMatchers("/api/usuarios/obtenerNombre").hasRole("CLIENTE")
+                        .requestMatchers("/api/usuarios/perfil").hasRole("CLIENTE")
+                        .requestMatchers("/api/usuarios/actualizar").hasRole("CLIENTE")
+                        .requestMatchers("/api/usuarios/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/api/ventas/**").hasRole("VENDEDOR")
+                        .requestMatchers("/api/resenias/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/producto-carrito/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/productos/mis-productos").hasRole("VENDEDOR")
+                        .requestMatchers("/api/productos/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/metodos-pago/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/facturas/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/direcciones/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/descuentos/**").hasRole("VENDEDOR")
+                        .requestMatchers("/api/categorias").hasAnyRole("CLIENTE", "ADMINISTRADOR")
+                        .requestMatchers("/api/categorias/**").hasRole("ADMINISTRADOR")
+
+                        // MVC
+                        .requestMatchers("/ventas/**").hasRole("VENDEDOR")
+                        .requestMatchers("/usuarios").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/usuarios/perfil").permitAll()
+                        .requestMatchers("/productos/vendedor/**", "/productos/guardar").hasRole("VENDEDOR")
+                        .requestMatchers("/productos", "/productos/detalle-producto/**").hasRole("CLIENTE")
+                        .requestMatchers("/carrito/**").hasRole("CLIENTE")
+                        .requestMatchers("/metodos-pago/**").hasRole("CLIENTE")
+                        .requestMatchers("/facturas/**").hasRole("CLIENTE")
+                        .requestMatchers("/direcciones/**").hasRole("CLIENTE")
+                        .requestMatchers("/descuentos/**").hasRole("VENDEDOR")
+                        .requestMatchers("/categorias/**").hasRole("ADMINISTRADOR")
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
@@ -30,13 +61,16 @@ public class SecurityConfig {
                                 new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                                 new AntPathRequestMatcher("/api/**")
                         )
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/productos");
+                        })
                 )
                 .formLogin(form -> form
                         .loginPage("/inicio-sesion")
                         .loginProcessingUrl("/login")  // Spring Security procesará POST a /login
                         .permitAll()
                         .defaultSuccessUrl("/", true)
-                ).httpBasic(Customizer.withDefaults())
+                )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/inicio-sesion")
                         .permitAll()

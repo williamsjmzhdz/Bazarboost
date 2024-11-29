@@ -7,6 +7,8 @@
     <title th:text="${modo == 'crear' ? 'BazarBoost - Crear Descuento' : 'BazarBoost - Editar Descuento'}"></title>
     <link rel="stylesheet" th:href="@{/estaticos/estilos/base.css}">
     <link rel="stylesheet" th:href="@{/estaticos/estilos/base-creacion-edicion.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   </th:block>
 
   <body>
@@ -35,7 +37,7 @@
       </div>
 
       <!-- Formulario de creación/edición -->
-      <form>
+      <form id="descuentoForm">
         <input type="hidden" id="modo" th:value="${modo}">
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre del Descuento</label>
@@ -80,7 +82,7 @@
           <a href="/descuentos" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Volver a la lista de descuentos
           </a>
-          <button type="submit" class="btn btn-success">
+          <button type="button" id="guardarDescuentoBtn" class="btn btn-success">
             <i class="bi bi-save"></i>
             <span th:text="${modo == 'crear' ? 'Guardar Descuento' : 'Actualizar Descuento'}"></span>
           </button>

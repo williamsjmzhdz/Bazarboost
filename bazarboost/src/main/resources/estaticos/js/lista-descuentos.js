@@ -30,6 +30,13 @@ function cargarDescuentosVendedor() {
             return response.json();
         })
         .then(data => {
+
+           if (data.length === 0) {
+               // Ocultar tabla y mostrar mensaje de no descuentos
+               document.querySelector(".table-responsive").classList.add('d-none');
+               // Mostrar mensaje
+               document.getElementById("no-descuentos").classList.remove('d-none');
+           } else {
             const descuentosTbody = document.getElementById('descuentos-tbody');
             descuentosTbody.innerHTML = '';
 
@@ -54,6 +61,9 @@ function cargarDescuentosVendedor() {
                     </tr>`;
                 descuentosTbody.insertAdjacentHTML('beforeend', descuentoHTML);
             });
+           }
+
+
         })
         .catch(error => {
             console.error('Error inesperado al cargar descuentos:', error);

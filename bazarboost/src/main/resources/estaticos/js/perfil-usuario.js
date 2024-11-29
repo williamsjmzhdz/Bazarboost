@@ -53,7 +53,7 @@ export class PerfilUsuario {
    } catch (error) {
      console.error('Error:', error);
      const mensajeError = "Error al cargar la información del perfil";
-     window.location.href = `/productos?mensajeError=${encodeURIComponent(mensajeError)}`;
+     //window.location.href = `/productos?mensajeError=${encodeURIComponent(mensajeError)}`;
    }
  }
 

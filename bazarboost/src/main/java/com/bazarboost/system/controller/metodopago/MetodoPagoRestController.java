@@ -1,5 +1,6 @@
 package com.bazarboost.system.controller.metodopago;
 
+import com.bazarboost.auth.model.UserDetailsImpl;
 import com.bazarboost.system.dto.MetodoPagoCreacionDTO;
 import com.bazarboost.system.dto.MetodoPagoDTO;
 import com.bazarboost.system.dto.MetodoPagoEdicionDTO;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,32 +20,41 @@ import java.util.List;
 @RequestMapping("/api/metodos-pago")
 public class MetodoPagoRestController {
 
-    private static final Integer USUARIO_ID = 1;
-
     @Autowired
     private MetodoPagoService metodoPagoService;
 
     @GetMapping("/{metodoPagoId}/edicion")
-    public ResponseEntity<MetodoPagoEdicionDTO> obtenerDatosEdicion(@PathVariable Integer metodoPagoId) {
-        MetodoPagoEdicionDTO metodoPago = metodoPagoService.obtenerDatosEdicion(metodoPagoId, USUARIO_ID);
+    public ResponseEntity<MetodoPagoEdicionDTO> obtenerDatosEdicion(
+            @PathVariable Integer metodoPagoId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        MetodoPagoEdicionDTO metodoPago = metodoPagoService.obtenerDatosEdicion(metodoPagoId, usuarioId);
         return ResponseEntity.ok(metodoPago);
     }
 
     @GetMapping
-    public ResponseEntity<List<MetodoPagoDTO>> obtenerTodos() {
-        List<MetodoPagoDTO> metodosPago = metodoPagoService.obtenerTodos(USUARIO_ID);
+    public ResponseEntity<List<MetodoPagoDTO>> obtenerTodos(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        List<MetodoPagoDTO> metodosPago = metodoPagoService.obtenerTodos(usuarioId);
         return ResponseEntity.ok(metodosPago);
     }
 
     @PostMapping
-    public ResponseEntity<Void> crear(@RequestBody @Valid MetodoPagoCreacionDTO metodoPagoCreacionDTO) {
-        metodoPagoService.crear(metodoPagoCreacionDTO, USUARIO_ID);
+    public ResponseEntity<Void> crear(
+            @RequestBody @Valid MetodoPagoCreacionDTO metodoPagoCreacionDTO,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        metodoPagoService.crear(metodoPagoCreacionDTO, usuarioId);
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Void> actualizar(@RequestBody @Valid MetodoPagoEdicionDTO dto) {
-        metodoPagoService.actualizar(dto, USUARIO_ID);
+    public ResponseEntity<Void> actualizar(
+            @RequestBody @Valid MetodoPagoEdicionDTO dto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        metodoPagoService.actualizar(dto, usuarioId);
         return ResponseEntity.ok().build();
     }
 
@@ -52,9 +63,11 @@ public class MetodoPagoRestController {
             @PathVariable
             @NotNull(message = "El ID del método de pago es requerido")
             @Min(value = 1, message = "El ID del método de pago debe ser un número positivo")
-            Integer metodoPagoId) {
+            Integer metodoPagoId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        metodoPagoService.eliminar(metodoPagoId, USUARIO_ID);
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        metodoPagoService.eliminar(metodoPagoId, usuarioId);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,5 +1,6 @@
 package com.bazarboost.system.controller.producto;
 
+import com.bazarboost.auth.model.UserDetailsImpl;
 import com.bazarboost.system.dto.ProductoDetalladoDTO;
 import com.bazarboost.system.dto.ProductoVendedorDTO;
 import com.bazarboost.system.dto.ProductosPaginadosDTO;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -25,7 +27,6 @@ import java.util.List;
 @RequestMapping("/api/productos")
 public class ProductoRestController {
 
-    private static final Integer USUARIO_ID_TEMPORAL = 1;
     private static final Integer TAMANIO_PAGINA_RESENIAS = 10;
 
     @Autowired
@@ -40,10 +41,11 @@ public class ProductoRestController {
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "categoria", required = false) String categoria,
             @RequestParam(value = "orden", required = false) String orden,
-            @RequestParam(value = "page", defaultValue = "0") int page
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        // Simplemente llamamos al servicio y retornamos el resultado
-        return productoService.buscarProductosConFiltros(keyword, categoria, orden, page, USUARIO_ID_TEMPORAL);
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        return productoService.buscarProductosConFiltros(keyword, categoria, orden, page, usuarioId);
     }
 
     @GetMapping("/imagenes/{nombreImagen}")
@@ -51,10 +53,9 @@ public class ProductoRestController {
         Path rutaImagen = Paths.get(directorioImagenes).resolve(nombreImagen);
         Resource recurso = new UrlResource(rutaImagen.toUri());
 
-        // Determina el tipo de contenido dinámicamente
         String contentType = Files.probeContentType(rutaImagen);
         if (contentType == null) {
-            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE; // Usa un tipo genérico si no se puede determinar
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
 
         return ResponseEntity.ok()
@@ -65,21 +66,24 @@ public class ProductoRestController {
 
     @GetMapping("/mis-productos")
     @ResponseBody
-    public List<ProductoVendedorDTO> obtenerMisProductos() {
-        return productoService.obtenerProductosPorVendedor(USUARIO_ID_TEMPORAL);
+    public List<ProductoVendedorDTO> obtenerMisProductos(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        return productoService.obtenerProductosPorVendedor(usuarioId);
     }
 
     @GetMapping("/detalle-producto/{id}")
     @ResponseBody
     public ResponseEntity<ProductoDetalladoDTO> obtenerProductoDetalle(
             @PathVariable Integer id,
-            @RequestParam(value = "page", defaultValue = "0") int page) {
-
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         Pageable pageable = PageRequest.of(page, TAMANIO_PAGINA_RESENIAS);
-        ProductoDetalladoDTO detalleDTO = productoService.obtenerProductoDetalle(id, USUARIO_ID_TEMPORAL, pageable);
-
+        ProductoDetalladoDTO detalleDTO = productoService.obtenerProductoDetalle(id, usuarioId, pageable);
         return ResponseEntity.ok().body(detalleDTO);
     }
-
 
 }

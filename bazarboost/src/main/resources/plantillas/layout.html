@@ -22,10 +22,10 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
+                        <li class="nav-item" sec:authorize="hasRole('CLIENTE')">
                             <a class="nav-link" th:href="@{/productos}" th:classappend="${requestURI == '/productos'} ? 'active'">Inicio</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" sec:authorize="hasRole('CLIENTE')">
                             <a class="nav-link" th:href="@{/carrito}" th:classappend="${requestURI == '/carrito'} ? 'active'">
                                 <i class="bi bi-cart"></i> Carrito
                                 <span class="badge bg-danger" id="cart-counter"></span>
@@ -33,7 +33,7 @@
                         </li>
 
                         <!-- Dropdown Cliente -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" sec:authorize="hasRole('CLIENTE')">
                             <a class="nav-link dropdown-toggle" href="#" id="clienteDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                                th:classappend="${(requestURI != null) and (requestURI.startsWith('/facturas') || requestURI.startsWith('/metodos-pago') || requestURI.startsWith('/direcciones'))} ? 'active'">
                                 Cliente
@@ -46,7 +46,7 @@
                         </li>
 
                         <!-- Dropdown Vendedor -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" sec:authorize="hasRole('VENDEDOR')">
                             <a class="nav-link dropdown-toggle" href="#" id="vendedorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                                th:classappend="${(requestURI != null) and (requestURI.startsWith('/ventas') || requestURI.startsWith('/productos/vendedor') || requestURI.startsWith('/descuentos'))} ? 'active'">
                                 Vendedor
@@ -59,7 +59,7 @@
                         </li>
 
                         <!-- Dropdown Administrador -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown" sec:authorize="hasRole('ADMINISTRADOR')">
                             <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                                th:classappend="${(requestURI != null) and (requestURI.startsWith('/usuarios') || requestURI.startsWith('/categorias'))} ? 'active'">
                                 Administrador
@@ -70,7 +70,7 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown ms-lg-4">
+                        <li class="nav-item dropdown ms-lg-4" sec:authorize="hasRole('CLIENTE')">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle"></i>
                                 <span sec:authentication="principal.usuario.nombre" id="nombreUsuario"></span>

@@ -1,5 +1,6 @@
 package com.bazarboost.system.controller.producto;
 
+import com.bazarboost.auth.model.UserDetailsImpl;
 import com.bazarboost.shared.exception.AccesoDenegadoException;
 import com.bazarboost.shared.exception.ProductoNoEncontradoException;
 import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
@@ -12,6 +13,7 @@ import com.bazarboost.shared.util.ProductoUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
-
 
 /**
  *
@@ -30,9 +31,6 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
-
-
-    private static final Integer VENDEDOR_ID_TEMPORAL = 1;
 
     @Autowired
     private ProductoService productoService;
@@ -59,33 +57,46 @@ public class ProductoController {
 
 
     @GetMapping("/vendedor")
-    public String mostrarListaProductosVendedor(Model model, HttpServletRequest request) {
+    public String mostrarListaProductosVendedor(
+            Model model,
+            HttpServletRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         model.addAttribute("requestURI", request.getRequestURI());
+        // Si necesitas pasar más datos específicos del vendedor, puedes agregarlos aquí
         return "lista-productos-vendedor";
     }
 
     @GetMapping("/vendedor/crear")
-    public String mostrarFormularioCrearProducto(Model model, HttpServletRequest request) {
+    public String mostrarFormularioCrearProducto(
+            Model model,
+            HttpServletRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         model.addAttribute("modo", "crear");
         model.addAttribute("producto", new Producto());
         model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
-        model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
+        model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(usuarioId));
         model.addAttribute("requestURI", request.getRequestURI());
         return "crear-editar-producto";
     }
 
     @GetMapping("/vendedor/editar/{productoId}")
-    public String mostrarFormularioCrearProducto(
+    public String mostrarFormularioEditarProducto(
             @PathVariable Integer productoId,
             Model model,
             HttpServletRequest request,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         try {
             model.addAttribute("modo", "editar");
-            model.addAttribute("producto", productoService.obtenerProductoPorId(productoId, VENDEDOR_ID_TEMPORAL ));
+            model.addAttribute("producto", productoService.obtenerProductoPorId(productoId, usuarioId));
             model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
-            model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
+            model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(usuarioId));
             model.addAttribute("requestURI", request.getRequestURI());
             return "crear-editar-producto";
         } catch (ProductoNoEncontradoException ex) {
@@ -98,12 +109,12 @@ public class ProductoController {
             redirectAttributes.addFlashAttribute("mensajeError", ex.getMessage());
             return "redirect:/productos/vendedor";
         }
-
     }
 
     @GetMapping("/detalle-producto/{id}")
-    public String mostrarDestalleProducto(Model model, HttpServletRequest request, @PathVariable Integer id) {
+    public String mostrarDetalleProducto(Model model, HttpServletRequest request, @PathVariable Integer id) {
         model.addAttribute("requestURI", request.getRequestURI());
+        // Asumo que aquí también podrías querer agregar detalles del producto
         return "detalle-producto";
     }
 
@@ -118,8 +129,10 @@ public class ProductoController {
             @RequestParam(value = "imagenArchivo", required = false) MultipartFile imagenArchivo,
             RedirectAttributes redirectAttributes,
             HttpServletRequest request,
-            Model model
+            Model model,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) throws IOException {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         boolean esEdicion = producto.getProductoId() != null;
 
         // Validación de imagen
@@ -138,7 +151,7 @@ public class ProductoController {
             model.addAttribute("producto", producto);
             model.addAttribute("categorias", categoriaService.obtenerTodasLasCategorias());
             model.addAttribute("descuentos",
-                    descuentoService.obtenerDescuentosDTOPorUsuario(VENDEDOR_ID_TEMPORAL));
+                    descuentoService.obtenerDescuentosDTOPorUsuario(usuarioId));
             model.addAttribute("requestURI", request.getRequestURI());
             model.addAttribute("errores", resultado.getAllErrors());
             return "crear-editar-producto";
@@ -147,15 +160,15 @@ public class ProductoController {
         try {
             // Si es edición, verificar que el producto pertenezca al vendedor
             if (esEdicion) {
-                productoService.obtenerProductoPorId(producto.getProductoId(), VENDEDOR_ID_TEMPORAL);
+                productoService.obtenerProductoPorId(producto.getProductoId(), usuarioId);
             }
 
             // Configurar las relaciones
-            producto.setUsuario(usuarioService.obtenerUsuarioPorId(VENDEDOR_ID_TEMPORAL));
+            producto.setUsuario(usuarioService.obtenerUsuarioPorId(usuarioId));
             producto.setCategoria(categoriaService.obtenerCategoriaPorId(categoriaId));
             if (descuentoId != null && descuentoId != -1) {
                 producto.setDescuento(descuentoService.obtenerDescuentoPorIdYUsuarioId(
-                        descuentoId, VENDEDOR_ID_TEMPORAL));
+                        descuentoId, usuarioId));
             } else {
                 producto.setDescuento(null); // Explícitamente establecemos null cuando no hay descuento
             }
@@ -166,7 +179,7 @@ public class ProductoController {
             }
 
             // Guardar el producto
-            productoService.guardarProducto(producto, VENDEDOR_ID_TEMPORAL);
+            productoService.guardarProducto(producto, usuarioId);
 
             // Mensaje de éxito
             String mensaje = esEdicion
@@ -192,10 +205,14 @@ public class ProductoController {
     public String eliminarProducto(
             @PathVariable Integer productoId,
             RedirectAttributes redirectAttributes,
-            HttpServletRequest request
+            HttpServletRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
+        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         try {
-            Producto producto = productoService.eliminarProductoPorId(productoId, VENDEDOR_ID_TEMPORAL);
+            System.out.println("Controlador 1");
+            Producto producto = productoService.eliminarProductoPorId(productoId, usuarioId);
+            System.out.println("Controlador 2");
             redirectAttributes.addFlashAttribute("mensajeExito", "¡Producto '" + producto.getNombre() + "' eliminado exitosamente!");
             return "redirect:/productos/vendedor";
         } catch (ProductoNoEncontradoException ex) {

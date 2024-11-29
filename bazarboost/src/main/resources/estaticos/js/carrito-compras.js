@@ -57,7 +57,7 @@ const crearFilaProducto = (producto) => {
         <td>${formatearMoneda(producto.descuentoTotal || 0)}</td>
         <td>${formatearMoneda(producto.totalFinal)}</td>
         <td>
-            <button class="btn btn-danger btn-sm" onclick="prepararEliminarProductoCarrito(${producto.productoCarritoId}, '${producto.nombre}')" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+            <button class="btn btn-danger btn-sm" onclick="prepararEliminarProductoCarrito(${producto.productoId}, '${producto.nombre}')" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                 Eliminar
             </button>
         </td>
