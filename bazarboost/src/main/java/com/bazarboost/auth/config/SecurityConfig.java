@@ -1,26 +1,50 @@
 package com.bazarboost.auth.config;
 
+import com.bazarboost.auth.filter.JwtAuthenticationFilter;
+import com.bazarboost.auth.model.UserDetailsImpl;
+import com.bazarboost.auth.service.JwtTokenProvider;
+import jakarta.servlet.http.Cookie;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtTokenProvider tokenProvider;
+    private final UserDetailsService userDetailsService;
+
+    @Value("${jwt.expiration}")
+    private Long jwtExpiration;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(tokenProvider, userDetailsService);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**"))  // Deshabilitar CSRF para APIs REST
+                        .ignoringRequestMatchers("/api/**"))
+                // Agregar filtro JWT antes del filtro de autenticación de usuario/contraseña
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider, userDetailsService),
+                        UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/registro", "/inicio-sesion", "/estaticos/**", "/estilos/**", "/js/**").permitAll()
 
@@ -55,6 +79,7 @@ public class SecurityConfig {
                         .requestMatchers("/categorias/**").hasRole("ADMINISTRADOR")
 
                         .anyRequest().authenticated()
+
                 )
                 .exceptionHandling(ex -> ex
                         .defaultAuthenticationEntryPointFor(
@@ -67,14 +92,36 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/inicio-sesion")
-                        .loginProcessingUrl("/login")  // Spring Security procesará POST a /login
+                        .loginProcessingUrl("/login")
+                        .successHandler((request, response, authentication) -> {
+                            // Generar token JWT al iniciar sesión exitosamente
+                            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+                            String token = tokenProvider.generateToken(userDetails);
+
+                            // Crear cookie con el token
+                            Cookie cookie = new Cookie("jwt-token", token);
+                            cookie.setHttpOnly(true);
+                            cookie.setSecure(true); // Solo HTTPS
+                            cookie.setPath("/");
+                            cookie.setMaxAge((int) (jwtExpiration / 1000)); // Convertir ms a segundos
+
+                            response.addCookie(cookie);
+                            response.sendRedirect("/");
+                        })
                         .permitAll()
-                        .defaultSuccessUrl("/", true)
                 )
                 .logout(logout -> logout
+                        .addLogoutHandler((request, response, authentication) -> {
+                            // Eliminar cookie JWT al cerrar sesión
+                            Cookie cookie = new Cookie("jwt-token", null);
+                            cookie.setMaxAge(0);
+                            cookie.setPath("/");
+                            response.addCookie(cookie);
+                        })
                         .logoutSuccessUrl("/inicio-sesion")
                         .permitAll()
                 );
+
         return http.build();
     }
 
@@ -83,4 +130,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
