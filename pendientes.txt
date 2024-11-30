@@ -35,12 +35,10 @@
 
 -- FIN DE CLASES --
 
-
 Fechas (limites) importantes:
  ✅ - 27 de NOV entrega de Ejercicio 3 M11
 - 06 de DIC entrega de Documento de especificación
 - 13 de DIC entrega de código fuente del Proyecto Final y Video del Proyecto Final.
-
 
 24 NOV
  ✅ - Reestructuración de código
@@ -62,12 +60,12 @@ Fechas (limites) importantes:
 PENDIENTES:
  ✅ - Hacer que se refleje el nuevo nombre en el navbar al actualizar la info. del usuario
  ✅ - Manejar errores de correo y telefono existentes en el registro.
-  - Cargar dinámicamente las categorias en la vista principal ("/productos"), ya que están hardcodeadas
+ ❌ - Cargar dinámicamente las categorias en la vista principal ("/productos"), ya que están hardcodeadas
 
 30 y 1 DIC
 ✅ - Implementar manejo de sesiones y roles con Thymeleaf
-- Implementar seguridad en endpoints con JWT y Cookies
-- Implementar Loggin con SL324 (o como se escriba)
+✅- Implementar seguridad en endpoints con JWT y Cookies
+⌛- Implementar Loggin con Slf4j
 
 2 - 5 DIC
 - Documento de especificación
