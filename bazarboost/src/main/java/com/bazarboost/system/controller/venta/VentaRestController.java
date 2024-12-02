@@ -3,6 +3,7 @@ package com.bazarboost.system.controller.venta;
 import com.bazarboost.auth.model.UserDetailsImpl;
 import com.bazarboost.system.dto.VentasPaginadasDTO;
 import com.bazarboost.system.service.FacturaService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/ventas")
+@Slf4j
 public class VentaRestController {
     private static final Integer TAMANO_PAGINA = 10;
 
@@ -27,6 +29,7 @@ public class VentaRestController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Listando ventas para usuario {}: página {}, orden {}", usuarioId, pagina, ordenarPor);
         VentasPaginadasDTO ventas = facturaService.obtenerVentasPaginadasYOrdenadas(
                 ordenarPor, direccionOrden, pagina, TAMANO_PAGINA, usuarioId);
         return ResponseEntity.ok(ventas);

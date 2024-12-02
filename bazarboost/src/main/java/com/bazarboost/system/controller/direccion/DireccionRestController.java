@@ -8,6 +8,7 @@ import com.bazarboost.system.service.DireccionService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/direcciones")
+@Slf4j
 public class DireccionRestController {
 
     @Autowired
@@ -28,6 +30,7 @@ public class DireccionRestController {
             @RequestBody @Valid DireccionCreacionDTO direccionCreacionDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Creando una dirección para el usuario {}.", usuarioId);
         direccionService.crear(direccionCreacionDTO, usuarioId);
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
@@ -36,6 +39,7 @@ public class DireccionRestController {
     public ResponseEntity<List<DireccionDTO>> obtenerTodas(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Obteniendo la lista completa de direcciones del usuario {}.", usuarioId);
         List<DireccionDTO> direcciones = direccionService.obtenerTodas(usuarioId);
         direcciones.forEach(System.out::println);
         return ResponseEntity.ok(direcciones);
@@ -46,6 +50,7 @@ public class DireccionRestController {
             @PathVariable Integer direccionId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Obteniendo los datos para la edición de la dirección {} del usuario {}.", direccionId, usuarioId);
         DireccionEdicionDTO direccion = direccionService.obtenerDatosEdicion(direccionId, usuarioId);
         return ResponseEntity.ok(direccion);
     }
@@ -68,6 +73,7 @@ public class DireccionRestController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Eliminando la direccion {} para el usuario {}.", direccionId, usuarioId);
         direccionService.eliminar(direccionId, usuarioId);
         return ResponseEntity.noContent().build();
     }

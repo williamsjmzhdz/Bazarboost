@@ -5,6 +5,7 @@ import com.bazarboost.shared.exception.DescuentoNoEncontradoException;
 import com.bazarboost.system.model.Descuento;
 import com.bazarboost.system.service.DescuentoService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/descuentos")
+@Slf4j
 public class DescuentoController {
 
     @Autowired
@@ -24,6 +26,7 @@ public class DescuentoController {
             Model model,
             HttpServletRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("Mostrando la plantilla de lista de descuentos.");
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         model.addAttribute("descuentos", descuentoService.obtenerDescuentosDTOPorUsuario(usuarioId));
         model.addAttribute("requestURI", request.getRequestURI());
@@ -35,16 +38,10 @@ public class DescuentoController {
             Model model,
             HttpServletRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        Integer usuarioId = userDetails.getUsuario().getUsuarioId();
-
+        log.debug("Mostrando la plantilla del formulario de creación de descuentos.");
         model.addAttribute("requestURI", request.getRequestURI());
-
         model.addAttribute("modo", "crear");
-
         model.addAttribute("descuento", new Descuento());
-
-        // Si necesitas pasar más datos específicos del usuario, puedes agregarlos aquí
         return "crear-editar-descuento";
     }
 
@@ -55,6 +52,7 @@ public class DescuentoController {
             RedirectAttributes redirectAttributes,
             @PathVariable Integer descuentoId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.debug("Mostrando la plantilla del formulario de edición de descuentos.");
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         try {
             Descuento descuento = descuentoService.obtenerDescuentoPorIdYUsuarioId(descuentoId, usuarioId);

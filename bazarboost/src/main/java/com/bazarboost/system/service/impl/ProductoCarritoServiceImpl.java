@@ -7,6 +7,7 @@ import com.bazarboost.system.dto.*;
 import com.bazarboost.system.model.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +21,25 @@ import java.util.Optional;
  * Implementación del servicio que maneja las operaciones relacionadas con el carrito de productos.
  */
 @Service
-@RequiredArgsConstructor
 public class ProductoCarritoServiceImpl implements ProductoCarritoService {
 
-    private final ProductoCarritoRepository productoCarritoRepository;
-    private final ProductoRepository productoRepository;
-    private final UsuarioRepository usuarioRepository;
-    private final MetodoPagoRepository metodoPagoRepository;
-    private final DireccionRepository direccionRepository;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private ProductoCarritoRepository productoCarritoRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private MetodoPagoRepository metodoPagoRepository;
+
+    @Autowired
+    private DireccionRepository direccionRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override

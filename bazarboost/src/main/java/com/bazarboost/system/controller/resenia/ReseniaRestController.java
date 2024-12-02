@@ -7,6 +7,7 @@ import com.bazarboost.system.dto.ReseniaEdicionDTO;
 import com.bazarboost.system.dto.ReseniaRespuestaDTO;
 import com.bazarboost.system.service.ReseniaService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/resenias")
+@Slf4j
 public class ReseniaRestController {
 
     @Autowired
@@ -26,6 +28,7 @@ public class ReseniaRestController {
             @Valid @RequestBody ReseniaCreacionDTO reseniaDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.info("Creando reseña por usuario {}", usuarioId);
         ReseniaRespuestaDTO respuesta = reseniaService.crearResenia(reseniaDTO, usuarioId);
         return new ResponseEntity<>(respuesta, HttpStatus.CREATED);
     }
@@ -38,6 +41,7 @@ public class ReseniaRestController {
     ) {
         reseniaDTO.setReseniaId(reseniaId);
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.info("Editando reseña {} por usuario {}", reseniaId, usuarioId);
         ReseniaRespuestaDTO respuesta = reseniaService.editarResenia(reseniaDTO, usuarioId);
         return ResponseEntity.ok(respuesta);
     }
@@ -48,6 +52,7 @@ public class ReseniaRestController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.info("Eliminando reseña {} por usuario {}", reseniaId, usuarioId);
         CalificacionPromedioDTO calificacionPromedioDTO = reseniaService.eliminarResenia(reseniaId, usuarioId);
         return ResponseEntity.ok(calificacionPromedioDTO);
     }

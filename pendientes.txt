@@ -67,10 +67,10 @@ PENDIENTES:
 ✅- Implementar seguridad en endpoints con JWT y Cookies
 ⌛- Implementar Loggin con Slf4j
 
-2 - 5 DIC
+4 - 6 DIC
 - Documento de especificación
 
-6 - 12 DIC
+7 - 12 DIC
 - Video y entrega final
 
 Dudas

@@ -5,6 +5,7 @@ import com.bazarboost.system.dto.ProductoDetalladoDTO;
 import com.bazarboost.system.dto.ProductoVendedorDTO;
 import com.bazarboost.system.dto.ProductosPaginadosDTO;
 import com.bazarboost.system.service.ProductoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
+@Slf4j
 public class ProductoRestController {
 
     private static final Integer TAMANIO_PAGINA_RESENIAS = 10;
@@ -44,24 +46,34 @@ public class ProductoRestController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
+        log.debug("Buscando productos: keyword='{}', categoria='{}', orden='{}', página={}",
+                keyword, categoria, orden, page);
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
         return productoService.buscarProductosConFiltros(keyword, categoria, orden, page, usuarioId);
     }
 
     @GetMapping("/imagenes/{nombreImagen}")
     public ResponseEntity<Resource> obtenerImagen(@PathVariable String nombreImagen) throws IOException {
+        log.debug("Obteniendo imagen: {}", nombreImagen);
         Path rutaImagen = Paths.get(directorioImagenes).resolve(nombreImagen);
-        Resource recurso = new UrlResource(rutaImagen.toUri());
+        try {
+            Resource recurso = new UrlResource(rutaImagen.toUri());
 
-        String contentType = Files.probeContentType(rutaImagen);
-        if (contentType == null) {
-            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            String contentType = Files.probeContentType(rutaImagen);
+            if (contentType == null) {
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+                log.warn("No se pudo determinar el tipo de contenido para {}", nombreImagen);
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + nombreImagen + "\"")
+                    .body(recurso);
+        } catch (IOException e) {
+            log.error("Error al obtener imagen {}: {}", nombreImagen, e.getMessage());
+            throw e;
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + nombreImagen + "\"")
-                .body(recurso);
     }
 
     @GetMapping("/mis-productos")
@@ -70,6 +82,7 @@ public class ProductoRestController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Obteniendo productos del vendedor {}", usuarioId);
         return productoService.obtenerProductosPorVendedor(usuarioId);
     }
 
@@ -81,6 +94,7 @@ public class ProductoRestController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         Integer usuarioId = userDetails.getUsuario().getUsuarioId();
+        log.debug("Obteniendo detalle del producto {} para usuario {}", id, usuarioId);
         Pageable pageable = PageRequest.of(page, TAMANIO_PAGINA_RESENIAS);
         ProductoDetalladoDTO detalleDTO = productoService.obtenerProductoDetalle(id, usuarioId, pageable);
         return ResponseEntity.ok().body(detalleDTO);
