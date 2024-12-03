@@ -1,17 +1,11 @@
 package com.bazarboost.system.service.impl;
 
-import com.bazarboost.system.dto.MetodoPagoBaseDTO;
-import com.bazarboost.system.dto.MetodoPagoCreacionDTO;
-import com.bazarboost.system.dto.MetodoPagoDTO;
-import com.bazarboost.system.dto.MetodoPagoEdicionDTO;
-import com.bazarboost.shared.exception.MetodoPagoNoEncontradoException;
-import com.bazarboost.shared.exception.NumeroTarjetaDuplicadoException;
-import com.bazarboost.shared.exception.UsuarioNoEncontradoException;
-import com.bazarboost.system.model.MetodoPago;
-import com.bazarboost.system.model.Usuario;
-import com.bazarboost.system.repository.MetodoPagoRepository;
-import com.bazarboost.system.repository.UsuarioRepository;
+import com.bazarboost.system.dto.*;
+import com.bazarboost.shared.exception.*;
+import com.bazarboost.system.model.*;
+import com.bazarboost.system.repository.*;
 import com.bazarboost.system.service.MetodoPagoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MetodoPagoServiceImpl implements MetodoPagoService {
 
     @Autowired
@@ -33,16 +28,24 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
     @Override
     @Transactional(readOnly = true)
     public List<MetodoPagoDTO> obtenerTodos(Integer usuarioId) {
+        log.debug("Obteniendo todos los métodos de pago para el usuario {}.", usuarioId);
         Usuario usuario = obtenerUsuario(usuarioId);
-        return metodoPagoRepository.findByUsuario(usuario).stream().map(this::convertirAMetodoPagoDTO).toList();
+        List<MetodoPagoDTO> metodoPagos = metodoPagoRepository.findByUsuario(usuario)
+                .stream()
+                .map(this::convertirAMetodoPagoDTO)
+                .toList();
+        log.debug("Se encontraron {} métodos de pago para el usuario {}.", metodoPagos.size(), usuarioId);
+        return metodoPagos;
     }
 
     @Override
     @Transactional
     public Void crear(MetodoPagoCreacionDTO dto, Integer usuarioId) {
+        log.debug("Creando nuevo método de pago para el usuario {}.", usuarioId);
         Usuario usuario = obtenerUsuario(usuarioId);
 
         if (metodoPagoRepository.existsByNumeroTarjeta(dto.getNumeroTarjeta())) {
+            log.debug("Intento de crear método de pago con número de tarjeta duplicado.");
             throw new NumeroTarjetaDuplicadoException("El número de tarjeta ya está registrado");
         }
 
@@ -51,45 +54,50 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
         metodoPago.setUsuario(usuario);
 
         metodoPagoRepository.save(metodoPago);
+        log.debug("Método de pago creado exitosamente para el usuario {}.", usuarioId);
         return null;
     }
 
     @Override
     @Transactional
     public Void actualizar(MetodoPagoEdicionDTO dto, Integer usuarioId) {
+        log.debug("Actualizando método de pago {} para el usuario {}.", dto.getMetodoPagoId(), usuarioId);
         Usuario usuario = obtenerUsuario(usuarioId);
         MetodoPago metodoPago = obtenerMetodoPago(dto.getMetodoPagoId(), usuario);
 
-        // Verificar duplicado solo si cambió el número de tarjeta
         if (!metodoPago.getNumeroTarjeta().equals(dto.getNumeroTarjeta()) &&
                 metodoPagoRepository.existsByNumeroTarjeta(dto.getNumeroTarjeta())) {
+            log.debug("Intento de actualizar método de pago con número de tarjeta duplicado.");
             throw new NumeroTarjetaDuplicadoException("El número de tarjeta ya está registrado");
         }
 
         mapearDatosComunes(dto, metodoPago);
         metodoPagoRepository.save(metodoPago);
+        log.debug("Método de pago {} actualizado exitosamente.", dto.getMetodoPagoId());
         return null;
     }
 
     @Override
     @Transactional
     public void eliminar(Integer metodoPagoId, Integer usuarioId) {
+        log.debug("Eliminando método de pago {} del usuario {}.", metodoPagoId, usuarioId);
         Usuario usuario = obtenerUsuario(usuarioId);
         MetodoPago metodoPago = obtenerMetodoPago(metodoPagoId, usuario);
         metodoPagoRepository.delete(metodoPago);
+        log.debug("Método de pago {} eliminado exitosamente.", metodoPagoId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public MetodoPagoEdicionDTO obtenerDatosEdicion(Integer metodoPagoId, Integer usuarioId) {
-
+        log.debug("Obteniendo datos de edición para el método de pago {} del usuario {}.", metodoPagoId, usuarioId);
         Usuario usuario = obtenerUsuario(usuarioId);
         MetodoPago metodoPago = obtenerMetodoPago(metodoPagoId, usuario);
-
         return convertirAMetodoPagoEdicionDTO(metodoPago);
     }
 
     private void mapearDatosComunes(MetodoPagoBaseDTO dto, MetodoPago metodoPago) {
+        log.debug("Mapeando datos comunes del DTO al modelo de método de pago.");
         metodoPago.setNombreTitular(dto.getNombreTitular());
         metodoPago.setNumeroTarjeta(dto.getNumeroTarjeta());
         metodoPago.setFechaExpiracion(dto.getFechaExpiracion());
@@ -98,25 +106,34 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
     }
 
     private Usuario obtenerUsuario(Integer usuarioId) {
+        log.debug("Buscando usuario con ID {}.", usuarioId);
         return usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado"));
+                .orElseThrow(() -> {
+                    log.debug("Usuario {} no encontrado.", usuarioId);
+                    return new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado");
+                });
     }
 
     private MetodoPago obtenerMetodoPago(Integer metodoPagoId, Usuario usuario) {
+        log.debug("Buscando método de pago {} para el usuario {}.", metodoPagoId, usuario.getUsuarioId());
         return metodoPagoRepository.findByMetodoPagoIdAndUsuario(metodoPagoId, usuario)
-                .orElseThrow(() -> new MetodoPagoNoEncontradoException(String.format(
-                        "No se encontró un método de pago con ID %d para el usuario con ID %d", metodoPagoId, usuario.getUsuarioId())));
+                .orElseThrow(() -> {
+                    log.debug("Método de pago {} no encontrado para el usuario {}.", metodoPagoId, usuario.getUsuarioId());
+                    return new MetodoPagoNoEncontradoException(String.format(
+                            "No se encontró un método de pago con ID %d para el usuario con ID %d",
+                            metodoPagoId, usuario.getUsuarioId()));
+                });
     }
 
     private MetodoPagoDTO convertirAMetodoPagoDTO(MetodoPago metodoPago) {
+        log.debug("Convirtiendo método de pago {} a DTO.", metodoPago.getMetodoPagoId());
         MetodoPagoDTO metodoPagoDTO = new MetodoPagoDTO();
         metodoPagoDTO.setMetodoPagoId(metodoPago.getMetodoPagoId());
-        metodoPagoDTO.setNombreTitular(metodoPago.getNombreTitular()); // Corregido: usaba DTO en lugar de entidad
+        metodoPagoDTO.setNombreTitular(metodoPago.getNombreTitular());
         metodoPagoDTO.setTerminacion(metodoPago.getNumeroTarjeta().substring(metodoPago.getNumeroTarjeta().length() - 4));
         metodoPagoDTO.setFechaExpiracion(metodoPago.getFechaExpiracion().format(DateTimeFormatter.ofPattern("MM/yyyy")));
         metodoPagoDTO.setTipo(metodoPago.getTipoTarjeta().name());
 
-        // Formateo del monto usando BigDecimal
         Double montoOriginal = metodoPago.getMonto();
         BigDecimal montoFormateado = new BigDecimal(montoOriginal)
                 .setScale(2, RoundingMode.HALF_UP);
@@ -126,6 +143,7 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
     }
 
     private MetodoPagoEdicionDTO convertirAMetodoPagoEdicionDTO(MetodoPago metodoPago) {
+        log.debug("Convirtiendo método de pago {} a DTO de edición.", metodoPago.getMetodoPagoId());
         MetodoPagoEdicionDTO metodoPagoEdicionDTO = new MetodoPagoEdicionDTO();
 
         metodoPagoEdicionDTO.setMetodoPagoId(metodoPago.getMetodoPagoId());

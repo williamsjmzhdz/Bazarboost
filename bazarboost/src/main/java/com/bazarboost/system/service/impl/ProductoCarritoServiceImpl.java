@@ -6,6 +6,7 @@ import com.bazarboost.system.service.ProductoCarritoService;
 import com.bazarboost.system.dto.*;
 import com.bazarboost.system.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Implementación del servicio que maneja las operaciones relacionadas con el carrito de productos.
- */
 @Service
+@Slf4j
 public class ProductoCarritoServiceImpl implements ProductoCarritoService {
 
     @Autowired
@@ -45,6 +44,7 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     @Override
     @Transactional
     public RespuestaCarritoDTO actualizarCarrito(SolicitudCarritoDTO solicitudCarritoDTO, Integer usuarioId) {
+        log.debug("Actualizando carrito para el usuario {}.", usuarioId);
         Producto producto = obtenerProducto(solicitudCarritoDTO.getProductoId());
         Usuario usuario = obtenerUsuario(usuarioId);
         String accion = solicitudCarritoDTO.getAccion().toLowerCase();
@@ -52,13 +52,17 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
         return switch (accion) {
             case "agregar" -> agregarProductoAlCarrito(usuario, producto);
             case "quitar" -> quitarProductoDelCarrito(usuario, producto);
-            default -> throw new AccionNoValidaException("Acción no válida: se esperaba 'agregar' o 'quitar'");
+            default -> {
+                log.debug("La acción '{}' no es válida.", accion);
+                throw new AccionNoValidaException("Acción no válida: se esperaba 'agregar' o 'quitar'");
+            }
         };
     }
 
     @Override
     @Transactional(readOnly = true)
     public Integer obtenerTotalProductosEnCarrito(Integer usuarioId) {
+        log.debug("Obteniendo el total de productos en el carrito del usuario {}.", usuarioId);
         Usuario usuario = obtenerUsuario(usuarioId);
         Integer total = productoCarritoRepository.totalProductosEnCarrito(usuario.getUsuarioId());
         return total != null ? total : 0;
@@ -67,6 +71,8 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     @Override
     @Transactional(readOnly = true)
     public CarritoDTO obtenerCarrito(Integer usuarioId) {
+        log.debug("Obteniendo información del carrito para el usuario {}.", usuarioId);
+
         Usuario usuario = obtenerUsuario(usuarioId);
 
         List<CarritoProductoDTO> carritoProductoDTOS = productoCarritoRepository.findByUsuarioUsuarioId(usuario.getUsuarioId())
@@ -91,23 +97,32 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     @Transactional
     public RespuestaCarritoDTO cambiarCantidadProducto(CarritoProductoCantidadDTO carritoProductoCantidadDTO, Integer usuarioId) {
 
+        log.debug("Cambiando la cantidad del producto {} a {} en el carrito del usuario {}.",
+                carritoProductoCantidadDTO.getProductoId(), carritoProductoCantidadDTO.getCantidad(), usuarioId);
+
         Usuario usuario = obtenerUsuario(usuarioId);
         Producto producto = obtenerProducto(carritoProductoCantidadDTO.getProductoId());
         ProductoCarrito productoCarrito = obtenerProductoCarrito(usuario, producto);
         productoCarrito.setCantidad(carritoProductoCantidadDTO.getCantidad());
         productoCarritoRepository.save(productoCarrito);
 
+        log.debug("Se cambió la cantidad del producto {} a {} en el carrito del usuario {} con éxito.",
+                carritoProductoCantidadDTO.getProductoId(), carritoProductoCantidadDTO.getCantidad(), usuarioId);
+
         return new RespuestaCarritoDTO(productoCarritoRepository.totalProductosEnCarrito(usuarioId));
 
     }
 
     private RespuestaCarritoDTO agregarProductoAlCarrito(Usuario usuario, Producto producto) {
+        log.debug("Agregando producto {} al carrito del usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
         if (producto.getUsuario().getUsuarioId().equals(usuario.getUsuarioId())) {
+            log.debug("El producto {} le pertenece al usuario {}; no puede agregarse a su carrito.", producto.getProductoId(), usuario.getUsuarioId());
             throw new ProductoPropioException("No puede agregar un producto propio a su carrito");
         }
 
         Optional<ProductoCarrito> productoExistente = productoCarritoRepository.findByUsuarioAndProducto(usuario, producto);
         if (productoExistente.isPresent()) {
+            log.debug("El producto {} ya se encuentra en el carrito del usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
             throw new ProductoYaEnCarritoException(
                     String.format("El producto con ID %d ya está en el carrito del usuario con ID %d",
                             producto.getProductoId(), usuario.getUsuarioId())
@@ -121,44 +136,73 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
         nuevoProductoCarrito.setTotal(producto.getPrecio());
 
         productoCarritoRepository.save(nuevoProductoCarrito);
+
+        log.debug("Carrito actualizado con éxito; se agregó el producto {} al carrito del usuario {}.", producto.getUsuario(), usuario.getUsuarioId());
+
         return obtenerRespuestaCarrito(usuario.getUsuarioId());
     }
 
     private RespuestaCarritoDTO quitarProductoDelCarrito(Usuario usuario, Producto producto) {
-        ProductoCarrito productoCarrito = productoCarritoRepository.findByUsuarioAndProducto(usuario, producto)
-                .orElseThrow(() -> new ProductoNoEnCarritoException(
-                        String.format("El producto con ID %d no está en el carrito del usuario con ID %d",
-                                producto.getProductoId(), usuario.getUsuarioId())
-                ));
+        log.debug("Quitando producto {} al carrito del usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
+
+        Optional<ProductoCarrito> productoCarritoOptional = productoCarritoRepository.findByUsuarioAndProducto(usuario, producto);
+        if (productoCarritoOptional.isEmpty()) {
+            log.debug("El producto {} no está en el carrito del usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
+            throw new ProductoNoEnCarritoException(
+                    String.format("El producto con ID %d no está en el carrito del usuario con ID %d",
+                            producto.getProductoId(), usuario.getUsuarioId())
+            );
+        }
+        ProductoCarrito productoCarrito = productoCarritoOptional.get();
+
 
         productoCarritoRepository.delete(productoCarrito);
+        log.debug("Producto {} eliminado con éxito del carrito del usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
+
         return obtenerRespuestaCarrito(usuario.getUsuarioId());
     }
 
     private Producto obtenerProducto(Integer productoId) {
-        return productoRepository.findById(productoId)
-                .orElseThrow(() -> new ProductoNoEncontradoException("Producto con ID " + productoId + " no encontrado"));
+        Optional<Producto> productoOptional = productoRepository.findById(productoId);
+        if (productoOptional.isEmpty()) {
+            log.debug("El producto {} no se encontró.", productoId);
+            throw new ProductoNoEncontradoException("Producto con ID " + productoId + " no encontrado");
+        }
+        return productoOptional.get();
     }
 
+
     private Usuario obtenerUsuario(Integer usuarioId) {
-        return usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado"));
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
+        if (usuarioOptional.isEmpty()) {
+            log.debug("El usuario {} no fue encontrado.", usuarioId);
+            throw new UsuarioNoEncontradoException("No se encontró información de su usuario. Inicie sesión nuevamente e inténtelo de nuevo.");
+        }
+        return usuarioOptional.get();
     }
 
     private ProductoCarrito obtenerProductoCarrito(Usuario usuario, Producto producto) {
-        return productoCarritoRepository.findByUsuarioAndProducto(usuario, producto)
-                .orElseThrow(() -> new ProductoNoEnCarritoException(
-                        String.format("El producto con ID %d no está en el carrito del usuario con ID %d",
-                        producto.getProductoId(), usuario.getUsuarioId()))
-                );
+        log.debug("Obteniendo el ProductoCarrito a partir del producto {} y el usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
+        Optional<ProductoCarrito> productoCarritoOptional = productoCarritoRepository.findByUsuarioAndProducto(usuario, producto);
+        if (productoCarritoOptional.isEmpty()) {
+            log.debug("El producto {} no está en el carrito del usuario {}.", producto.getProductoId(), usuario.getUsuarioId());
+            throw new ProductoNoEnCarritoException(
+                    String.format("El producto con ID %d no está en el carrito del usuario con ID %d",
+                            producto.getProductoId(), usuario.getUsuarioId()));
+        }
+        return productoCarritoOptional.get();
     }
 
     private RespuestaCarritoDTO obtenerRespuestaCarrito(Integer usuarioId) {
+        log.debug("Obteniendo el nuevo total de productos en el carrito del usuario {}.", usuarioId);
         Integer totalProductos = productoCarritoRepository.totalProductosEnCarrito(usuarioId);
         return new RespuestaCarritoDTO(totalProductos != null ? totalProductos : 0);
     }
 
     private CarritoProductoDTO convertirACarritoProductoDTO(ProductoCarrito productoCarrito) {
+
+        log.debug("Convirtiendo el ProductoCarrito {} a ProductoCarritoDTO.", productoCarrito.getProductoCarritoId());
+
         CarritoProductoDTO carritoProductoDTO = modelMapper.map(productoCarrito, CarritoProductoDTO.class);
 
         BigDecimal precio = productoCarrito.getProducto().getPrecio();
@@ -183,6 +227,9 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     }
 
     private CarritoDireccionDTO convertirACarritoDireccionDTO(Direccion direccion) {
+
+        log.debug("Convirtiendo la dirección {} a CarritoDireccionDTO.", direccion.getDireccionId());
+
         CarritoDireccionDTO carritoDireccionDTO = modelMapper.map(direccion, CarritoDireccionDTO.class);
 
         carritoDireccionDTO.setDireccion(
@@ -195,6 +242,9 @@ public class ProductoCarritoServiceImpl implements ProductoCarritoService {
     }
 
     private CarritoMetodoPagoDTO convertirACarritoMetodoPagoDTO(MetodoPago metodoPago) {
+
+        log.debug("Convirtiendo el método de pago {} a CarritoMetodoPagoDTO.", metodoPago.getMetodoPagoId());
+
         CarritoMetodoPagoDTO carritoMetodoPagoDTO = modelMapper.map(metodoPago, CarritoMetodoPagoDTO.class);
 
         carritoMetodoPagoDTO.setTipo(metodoPago.getTipoTarjeta().name());

@@ -60,12 +60,12 @@ Fechas (limites) importantes:
 PENDIENTES:
  ✅ - Hacer que se refleje el nuevo nombre en el navbar al actualizar la info. del usuario
  ✅ - Manejar errores de correo y telefono existentes en el registro.
- ❌ - Cargar dinámicamente las categorias en la vista principal ("/productos"), ya que están hardcodeadas
+ ✅ - Cargar dinámicamente las categorias en la vista principal ("/productos"), ya que están hardcodeadas
 
 30 y 1 DIC
 ✅ - Implementar manejo de sesiones y roles con Thymeleaf
 ✅- Implementar seguridad en endpoints con JWT y Cookies
-⌛- Implementar Loggin con Slf4j
+✅- Implementar Loggin con Slf4j
 
 4 - 6 DIC
 - Documento de especificación

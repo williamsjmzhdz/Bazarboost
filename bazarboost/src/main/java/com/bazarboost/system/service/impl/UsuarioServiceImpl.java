@@ -47,7 +47,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         log.debug("Buscando usuario con ID: {}", usuarioId);
         return usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> {
-                    log.error("Usuario no encontrado con ID: {}", usuarioId);
+                    log.debug("Usuario no encontrado con ID: {}", usuarioId);
                     return new UsuarioNoEncontradoException("Usuario con ID " + usuarioId + " no encontrado");
                 });
     }
@@ -58,14 +58,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         log.info("Iniciando registro de usuario: {}", usuarioDTO.getCorreoElectronico());
 
         if (usuarioRepository.findByCorreoElectronico(usuarioDTO.getCorreoElectronico()).isPresent()) {
-            log.error("Correo electrónico ya registrado: {}", usuarioDTO.getCorreoElectronico());
+            log.debug("Correo electrónico ya registrado: {}", usuarioDTO.getCorreoElectronico());
             throw new CorreoElectronicoExistenteException(
                     "El correo electrónico " + usuarioDTO.getCorreoElectronico() + " ya está registrado");
         }
 
         Rol rolCliente = rolRepository.findByNombre("Cliente")
                 .orElseThrow(() -> {
-                    log.error("Rol Cliente no encontrado");
+                    log.debug("Rol Cliente no encontrado");
                     return new RolNoEncontradoException("Error en el sistema: No se encontró el rol Cliente");
                 });
 
@@ -124,18 +124,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         Optional<Rol> rolOptional = rolRepository.findByNombre(nombreRol);
         if (rolOptional.isEmpty()) {
-            log.error("No se encontró el rol {}.", nombreRol);
+            log.debug("No se encontró el rol {}.", nombreRol);
             throw new RolNoEncontradoException("No se encontró el rol " + nombreRol);
         }
         Rol rolVendedor = rolOptional.get();
 
         boolean tieneRolVendedor = usuarioRepository.tieneRol(usuarioId, nombreRol);
         if (esVendedor && tieneRolVendedor) {
-            log.error("El usuario {} ya tiene el rol {}.", usuarioId, nombreRol);
+            log.debug("El usuario {} ya tiene el rol {}.", usuarioId, nombreRol);
             throw new AsignacionRolInvalidaException("El usuario ya tiene el rol de Vendedor asignado.");
         }
         if (!esVendedor && !tieneRolVendedor) {
-            log.error("El usuario {} no tiene el rol de {} para quitárselo.", usuarioId, nombreRol);
+            log.debug("El usuario {} no tiene el rol de {} para quitárselo.", usuarioId, nombreRol);
             throw new AsignacionRolInvalidaException("El usuario no tiene el rol de Vendedor para quitar.");
         }
 
@@ -170,7 +170,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (!usuario.getCorreoElectronico().equals(request.getCorreoElectronico())) {
             usuarioRepository.findByCorreoElectronico(request.getCorreoElectronico())
                     .ifPresent(u -> {
-                        log.error("El correo electrónico {} ya está registrado por otro usuario.", request.getCorreoElectronico());
+                        log.debug("El correo electrónico {} ya está registrado por otro usuario.", request.getCorreoElectronico());
                         throw new CorreoElectronicoExistenteException(
                                 "El correo electrónico ya está registrado por otro usuario.");
                     });
@@ -179,7 +179,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (!usuario.getTelefono().equals(request.getTelefono())) {
             usuarioRepository.findByTelefono(request.getTelefono())
                     .ifPresent(u -> {
-                        log.error("El número de teléfono {} ya está registrado por otro usuario.", request.getTelefono());
+                        log.debug("El número de teléfono {} ya está registrado por otro usuario.", request.getTelefono());
                         throw new TelefonoExistenteException(
                                 "El número telefónico ya está registrado por otro usuario.");
                     });
@@ -193,7 +193,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if (request.getContrasenia() != null && !request.getContrasenia().isEmpty()) {
             if (!request.getContrasenia().equals(request.getConfirmacionContrasenia())) {
-                log.error("La contraseña y su confirmación no coinciden para el usuario {}.", usuarioId);
+                log.debug("La contraseña y su confirmación no coinciden para el usuario {}.", usuarioId);
                 throw new ContraseniasNoCoincidentesException(
                         "La contraseña y su confirmación no coinciden.");
             }
@@ -214,7 +214,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private Usuario obtenerUsuario(Integer usuarioId) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
         if (optionalUsuario.isEmpty()) {
-            log.error("El usuario {} no fue encontrado.", usuarioId);
+            log.debug("El usuario {} no fue encontrado.", usuarioId);
             throw new UsuarioNoEncontradoException("No se encontró información de su usuario. Inicie sesión nuevamente e inténtelo de nuevo.");
         }
         return optionalUsuario.get();
@@ -222,7 +222,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private void validarRolAdministrador(Usuario usuario) {
         if (!usuarioRepository.tieneRol(usuario.getUsuarioId(), "ADMINISTRADOR")) {
-            log.error("El usuario {} no tiene el rol de ADMINISTRADOR.", usuario.getUsuarioId());
+            log.debug("El usuario {} no tiene el rol de ADMINISTRADOR.", usuario.getUsuarioId());
             throw new AccesoDenegadoException("No puedes acceder al panel de usuarios porque no tienes el rol de administrador.");
         }
     }
@@ -230,7 +230,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private void validarPaginacion(Integer pagina, Integer tamanioPagina, long totalRegistros) {
         int maximoPaginas = (int) Math.ceil((double) totalRegistros / tamanioPagina);
         if (pagina < 0 || pagina >= maximoPaginas) {
-            log.error("El número de página {} está fuera del rango: 0 - {}. El tamaño de página es {}.", pagina, maximoPaginas, tamanioPagina);
+            log.debug("El número de página {} está fuera del rango: 0 - {}. El tamaño de página es {}.", pagina, maximoPaginas, tamanioPagina);
             throw new PaginaFueraDeRangoException("Número de página fuera de rango.");
         }
     }
@@ -272,7 +272,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     private Usuario obtenerUsuarioConMensaje(Integer usuarioId, String mensajeError) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioId);
         if (optionalUsuario.isEmpty()) {
-            log.error("El usuario {} no fue encontrado.", usuarioId);
+            log.debug("El usuario {} no fue encontrado.", usuarioId);
             throw new UsuarioNoEncontradoException(mensajeError);
         }
         return optionalUsuario.get();

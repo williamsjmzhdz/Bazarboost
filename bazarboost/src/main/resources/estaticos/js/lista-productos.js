@@ -2,7 +2,6 @@
 import { actualizarPaginacion, cambiarPagina, getPaginaActual, setPaginaActual } from './paginacion.js';
 import { mostrarMensajeErrorURL } from './mensajes-estado.js';
 
-
 window.cambiarPaginaCallback = (pagina) => cambiarPagina(pagina, obtenerProductos);
 
 const barraBusqueda = document.getElementById('searchBar');
@@ -85,6 +84,24 @@ function obtenerProductos() {
         });
 }
 
+// Función para cargar las categorías dinámicamente
+function cargarCategorias() {
+    fetch('/api/categorias')
+        .then(response => response.json())
+        .then(categorias => {
+            filtroCategoria.innerHTML = '<option selected value="">Todas las Categorías</option>';
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria.nombre;
+                option.textContent = categoria.nombre;
+                filtroCategoria.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar las categorías:', error);
+        });
+}
+
 // Event Listeners
 barraBusqueda.addEventListener('input', () => {
     setPaginaActual(0);
@@ -108,4 +125,5 @@ window.obtenerProductos = obtenerProductos;  // Exportar globalmente
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     mostrarMensajeErrorURL();
+    cargarCategorias();
 });
