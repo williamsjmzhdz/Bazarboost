@@ -6,10 +6,6 @@ import com.bazarboost.system.model.UsuarioRol;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface UsuarioRolRepository extends JpaRepository<UsuarioRol, Integer> {
 
     /**

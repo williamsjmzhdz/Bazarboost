@@ -9,10 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     /**
      * Verifica si un usuario tiene un rol específico.

@@ -14,10 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface ProductoFacturaRepository extends JpaRepository<ProductoFactura, Integer> {
 
     /**

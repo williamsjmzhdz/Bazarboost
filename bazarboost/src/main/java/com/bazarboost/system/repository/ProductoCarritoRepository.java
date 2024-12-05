@@ -12,10 +12,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repositorio que gestiona las operaciones de persistencia para la entidad ProductoCarrito.
- * Proporciona métodos para buscar, guardar y eliminar productos del carrito.
- */
 public interface ProductoCarritoRepository extends CrudRepository<ProductoCarrito, Integer> {
 
     /**

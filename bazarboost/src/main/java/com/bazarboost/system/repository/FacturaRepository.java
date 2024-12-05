@@ -10,10 +10,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- */
 public interface FacturaRepository extends PagingAndSortingRepository<Factura, Integer>, CrudRepository<Factura, Integer> {
 
     /**

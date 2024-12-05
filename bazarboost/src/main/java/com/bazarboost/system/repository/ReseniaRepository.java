@@ -11,10 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface ReseniaRepository extends JpaRepository<Resenia, Integer> {
 
     /**

@@ -10,10 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface MetodoPagoRepository extends CrudRepository<MetodoPago, Integer> {
 
     /**

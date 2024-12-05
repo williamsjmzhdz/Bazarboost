@@ -3,10 +3,6 @@ package com.bazarboost.system.repository;
 import com.bazarboost.system.model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/*
- * Autor: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
 
     /**

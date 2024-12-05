@@ -7,10 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-/*
- * Alumno: Francisco Williams Jiménez Hernández
- * Proyecto: Bazarboost
- * */
 public interface DireccionRepository extends CrudRepository<Direccion, Integer> {
 
     /**
