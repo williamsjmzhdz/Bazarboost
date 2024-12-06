@@ -68,7 +68,7 @@ PENDIENTES:
 ✅- Implementar Loggin con Slf4j
 
 4 - 6 DIC
-- Documento de especificación
+✅- Documento de especificación
 
 7 - 12 DIC
 - Video y entrega final
