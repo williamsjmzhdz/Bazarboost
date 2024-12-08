@@ -62,7 +62,7 @@ BazarBoost es una plataforma e-commerce que implementa una arquitectura híbrida
 - Integridad transaccional
 - Indexación
 
-![Modelo Entidad-Relación](/Modelo_Relacional_BazarBoost.png)
+![Modelo Entidad-Relación](/modelo-relacional-bazarboost.png)
 
 ## Implementación de Seguridad
 
